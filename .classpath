@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="IMG"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="F:/Universidad/3º/1er Semestre/IPS/JUNIO PRACTICA/IPSL4-4-master/IPSL4-4-master/tools/hsqldb/hsqldb.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
