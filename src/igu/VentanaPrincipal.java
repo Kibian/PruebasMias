@@ -8,6 +8,7 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.border.EmptyBorder;
 
+import src.Cliente;
 import src.DatabaseManager;
 
 import javax.swing.JLabel;
@@ -70,6 +71,21 @@ public class VentanaPrincipal extends JFrame {
 	private JLabel label_6;
 	private JPanel panel_10;
 	private JButton btnRegistrarse_1;
+	private JPanel panelLogin;
+	private JPanel panel_11;
+	private JLabel label_7;
+	private JLabel label_8;
+	private JPanel panel_12;
+	private JLabel lblInicioDeSesin;
+	private JPanel panelLoginUser;
+	private JLabel lblDni;
+	private JTextField textField_5;
+	private JPanel panel_13;
+	private JPanel panelLoginPw;
+	private JLabel lblContrasea_1;
+	private JTextField textField_6;
+	private JPanel panel_14;
+	private JButton btnEntrarLogin;
 
 	/**
 	 * Launch the application.
@@ -99,6 +115,7 @@ public class VentanaPrincipal extends JFrame {
 		contentPane.setLayout(new CardLayout(0, 0));
 		contentPane.add(getPanelInicio(), "panelInicio");
 		contentPane.add(getPanelRegistro(), "panelRegistro");
+		contentPane.add(getPanelLogin(), "panelLogin");
 	}
 	private JLabel getLblAplicacinDeEntrega() {
 		if (lblAplicacinDeEntrega == null) {
@@ -110,6 +127,12 @@ public class VentanaPrincipal extends JFrame {
 	private JButton getBtnIniciarSesin() {
 		if (btnIniciarSesin == null) {
 			btnIniciarSesin = new JButton("Iniciar Sesi\u00F3n");
+			btnIniciarSesin.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					CardLayout card = (CardLayout) contentPane.getLayout();
+					card.show(contentPane, "panelLogin");
+				}
+			});
 		}
 		return btnIniciarSesin;
 	}
@@ -452,7 +475,6 @@ public class VentanaPrincipal extends JFrame {
 					boolean capitalLetter = false;
 					boolean minimalLetter = false;
 					boolean number = false;
-					boolean dniValido = false;
 					for(char ch : contrasenna.toCharArray()) {
 						if(Character.isUpperCase(ch)) {
 							capitalLetter = true;
@@ -526,5 +548,144 @@ public class VentanaPrincipal extends JFrame {
 			});
 		}
 		return btnRegistrarse_1;
+	}
+	private JPanel getPanelLogin() {
+		if (panelLogin == null) {
+			panelLogin = new JPanel();
+			panelLogin.setLayout(new GridLayout(0, 3, 0, 0));
+			panelLogin.add(getLabel_7());
+			panelLogin.add(getPanel_11());
+		}
+		return panelLogin;
+	}
+	private JPanel getPanel_11() {
+		if (panel_11 == null) {
+			panel_11 = new JPanel();
+			panel_11.setLayout(new GridLayout(3, 0, 0, -400));
+			panel_11.add(getLabel_8());
+			panel_11.add(getPanel_12());
+			panel_11.add(getPanel_13());
+		}
+		return panel_11;
+	}
+	private JLabel getLabel_7() {
+		if (label_7 == null) {
+			label_7 = new JLabel("");
+		}
+		return label_7;
+	}
+	private JLabel getLabel_8() {
+		if (label_8 == null) {
+			label_8 = new JLabel("");
+		}
+		return label_8;
+	}
+	private JPanel getPanel_12() {
+		if (panel_12 == null) {
+			panel_12 = new JPanel();
+			panel_12.setLayout(new GridLayout(4, 0, 0, 0));
+			panel_12.add(getLblInicioDeSesin());
+			panel_12.add(getPanelLoginUser());
+			panel_12.add(getPanelLoginPw());
+			panel_12.add(getPanel_14());
+		}
+		return panel_12;
+	}
+	private JLabel getLblInicioDeSesin() {
+		if (lblInicioDeSesin == null) {
+			lblInicioDeSesin = new JLabel("Inicio de sesi\u00F3n:");
+			lblInicioDeSesin.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 21));
+		}
+		return lblInicioDeSesin;
+	}
+	private JPanel getPanelLoginUser() {
+		if (panelLoginUser == null) {
+			panelLoginUser = new JPanel();
+			panelLoginUser.setLayout(null);
+			panelLoginUser.add(getLblDni());
+			panelLoginUser.add(getTextField_5());
+		}
+		return panelLoginUser;
+	}
+	private JLabel getLblDni() {
+		if (lblDni == null) {
+			lblDni = new JLabel("DNI:");
+			lblDni.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 19));
+			lblDni.setBounds(10, 47, 68, 30);
+		}
+		return lblDni;
+	}
+	private JTextField getTextField_5() {
+		if (textField_5 == null) {
+			textField_5 = new JTextField();
+			textField_5.setBounds(143, 47, 166, 30);
+			textField_5.setColumns(10);
+		}
+		return textField_5;
+	}
+	private JPanel getPanel_13() {
+		if (panel_13 == null) {
+			panel_13 = new JPanel();
+		}
+		return panel_13;
+	}
+	private JPanel getPanelLoginPw() {
+		if (panelLoginPw == null) {
+			panelLoginPw = new JPanel();
+			panelLoginPw.setLayout(null);
+			panelLoginPw.add(getLblContrasea_1());
+			panelLoginPw.add(getTextField_6());
+		}
+		return panelLoginPw;
+	}
+	private JLabel getLblContrasea_1() {
+		if (lblContrasea_1 == null) {
+			lblContrasea_1 = new JLabel("Contrase\u00F1a:");
+			lblContrasea_1.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 19));
+			lblContrasea_1.setBounds(10, 38, 123, 36);
+		}
+		return lblContrasea_1;
+	}
+	private JTextField getTextField_6() {
+		if (textField_6 == null) {
+			textField_6 = new JTextField();
+			textField_6.setBounds(143, 44, 166, 30);
+			textField_6.setColumns(10);
+		}
+		return textField_6;
+	}
+	private JPanel getPanel_14() {
+		if (panel_14 == null) {
+			panel_14 = new JPanel();
+			panel_14.setLayout(null);
+			panel_14.add(getBtnEntrarLogin());
+		}
+		return panel_14;
+	}
+	private JButton getBtnEntrarLogin() {
+		if (btnEntrarLogin == null) {
+			btnEntrarLogin = new JButton("Entrar");
+			btnEntrarLogin.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					try {
+						Cliente c = DatabaseManager.checkLogin(textField_5.getText(), textField_6.getText());
+						if(c==null) {
+							JOptionPane.showMessageDialog(null,
+									"El usuario no existe o es incorrecto.");
+							textField_5.setText("");
+							textField_6.setText("");
+						}
+						else {
+							//abre el panel de inicio
+						}
+					} catch (SQLException e1) {
+
+						e1.printStackTrace();
+					}
+				}
+			});
+			btnEntrarLogin.setBounds(106, 40, 106, 32);
+		}
+		return btnEntrarLogin;
 	}
 }

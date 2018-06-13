@@ -6,16 +6,16 @@ public class Cliente {
 	private String direccion;
 	private String provincia;
 	private String contrasenna;
-	private String usuario;
+	private String dni;
 	
-	public Cliente(String nombre, String apellidos, String direccion, String contrasenna, String usuario,
+	public Cliente(String nombre, String apellidos, String direccion, String contrasenna, String dni,
 			String provincia) {
 		super();
 		this.nombre = nombre;
 		this.apellidos = apellidos;
 		this.direccion = direccion;
 		this.contrasenna = contrasenna;
-		this.usuario = usuario;
+		this.dni = dni;
 		this.provincia = provincia;
 	}
 
@@ -51,12 +51,12 @@ public class Cliente {
 		this.contrasenna = contrasenna;
 	}
 
-	public String getUsuario() {
-		return usuario;
+	public String getDni() {
+		return dni;
 	}
 
-	public void setUsuario(String usuario) {
-		this.usuario = usuario;
+	public void setDni(String dni) {
+		this.dni = dni;
 	}
 
 	public String getProvincia() {

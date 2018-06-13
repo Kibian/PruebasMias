@@ -40,8 +40,13 @@ public class DatabaseManager {
 		PreparedStatement pst = null;
 		try {
 			getConnection();
-			pst = con.prepareStatement("insert into clientes values (" + DNI + ", " + nombre + ", " + 
-					apellidos + ", " + contrasenna + ", " + direccion + ", " + provincia +")");
+			pst = con.prepareStatement("insert into clientes values (?, ?, ?, ?, ?, ?, USER)");
+			pst.setString(1, DNI);
+			pst.setString(2, nombre);
+			pst.setString(3, apellidos);
+			pst.setString(4, contrasenna);
+			pst.setString(5, direccion);
+			pst.setString(6, provincia);
 			pst.executeQuery();
 		} catch(SQLException e) {
 			throw new SQLException(e);
@@ -55,13 +60,44 @@ public class DatabaseManager {
 		ResultSet rs = null;
 		try {
 			getConnection();
-			pst = con.prepareStatement("select * from clientes where dni = ?1");
+			pst = con.prepareStatement("select * from clientes where dni = ?");
 			pst.setString(1, dni);
 			rs = pst.executeQuery();
 			if(rs.next()) {
 				return true;
 			}
 			return false;
+		} catch(SQLException e) {
+			throw new SQLException(e);
+		}finally {
+			rs.close();
+			pst.close();
+			con.close();
+		}
+	}
+	
+	public static Cliente checkLogin(String dni, String password) throws SQLException {
+		PreparedStatement pst = null;
+		ResultSet rs = null;
+		try {
+			getConnection();
+			pst = con.prepareStatement("select nombre, apellidos, contrasenna, "
+					+ "direccion, provincia from clientes where dni = ?");
+			pst.setString(1, dni);
+			rs = pst.executeQuery();
+			String nombre, apellidos, pw, direccion, provincia;
+			Cliente c = null;
+			if(rs.next()) {
+				nombre = rs.getString(1);
+				apellidos = rs.getString(2);
+				pw = rs.getString(3);
+				direccion = rs.getString(4);
+				provincia = rs.getString(5);
+//				String nombre, String apellidos, String direccion, String contrasenna, String usuario,
+//				String provincia
+				c = new Cliente(nombre, apellidos, direccion, pw, dni, provincia);
+			}
+			return c;
 		} catch(SQLException e) {
 			throw new SQLException(e);
 		}finally {
