@@ -7,6 +7,7 @@ public class Envio {
 	private Transportista transportista;
 	private String provinciaDestino;
 	private String provinciaOrigen;
+	private double precio;
 	public Envio(boolean aDomicilio, Cliente receptor, Cliente emisor, Transportista transportista,
 			String provinciaDestino, String provinciaOrigen) {
 		super();
@@ -53,4 +54,14 @@ public class Envio {
 	public void setProvinciaOrigen(String provinciaOrigen) {
 		this.provinciaOrigen = provinciaOrigen;
 	}	
+	public double getPrecio() {
+		if(provinciaOrigen.equals(provinciaDestino)) {
+			precio = 5.0;
+		}
+		else {
+			precio = 11.5;
+		}
+		return precio;
+			
+	}
 }

@@ -26,6 +26,7 @@ import javax.swing.JComboBox;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.awt.event.ActionEvent;
+import java.awt.Color;
 
 public class VentanaPrincipal extends JFrame {
 
@@ -38,7 +39,7 @@ public class VentanaPrincipal extends JFrame {
 	private JButton btnIniciarSesin;
 	private JButton btnRegistrarse;
 	private JLabel label;
-	private JPanel panelInicio;
+	private JPanel panelInicioEntrada;
 	private JPanel panel_3;
 	private JPanel panel_4;
 	private JPanel panel;
@@ -86,6 +87,33 @@ public class VentanaPrincipal extends JFrame {
 	private JTextField textField_6;
 	private JPanel panel_14;
 	private JButton btnEntrarLogin;
+	private JPanel panelInicioUser;
+	private JLabel label_9;
+	private JPanel panel_15;
+	private JLabel lblOpcionesDeUsuario;
+	private JPanel panel_16;
+	private JLabel label_10;
+	private JButton btnCrearUnEnvo;
+	private JPanel panel_17;
+	private JLabel label_11;
+	private JPanel panel_18;
+	private JLabel label_12;
+	private JPanel panel_19;
+	private JLabel label_13;
+	private JButton btnConsultarEnvos;
+	private JPanel panel_20;
+	private JLabel label_14;
+	private JPanel panel_21;
+	private JLabel label_15;
+	private JButton btnListaAlmacenes;
+	private JPanel panel_22;
+	private JLabel label_16;
+	private JPanel panel_23;
+	private JLabel label_17;
+	private JButton btnDesconectar;
+	private JPanel panel_24;
+	private JPanel panel_25;
+	private JLabel lblNewLabel;
 
 	/**
 	 * Launch the application.
@@ -113,9 +141,10 @@ public class VentanaPrincipal extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(new CardLayout(0, 0));
-		contentPane.add(getPanelInicio(), "panelInicio");
+		contentPane.add(getPanelInicioEntrada(), "panelInicio");
 		contentPane.add(getPanelRegistro(), "panelRegistro");
 		contentPane.add(getPanelLogin(), "panelLogin");
+		contentPane.add(getPanelInicioUser(), "panelInicioUser");
 	}
 	private JLabel getLblAplicacinDeEntrega() {
 		if (lblAplicacinDeEntrega == null) {
@@ -155,14 +184,14 @@ public class VentanaPrincipal extends JFrame {
 		}
 		return label;
 	}
-	private JPanel getPanelInicio() {
-		if (panelInicio == null) {
-			panelInicio = new JPanel();
-			panelInicio.setLayout(new BorderLayout(0, 0));
-			panelInicio.add(getPanel_3(), BorderLayout.SOUTH);
-			panelInicio.add(getPanel_4());
+	private JPanel getPanelInicioEntrada() {
+		if (panelInicioEntrada == null) {
+			panelInicioEntrada = new JPanel();
+			panelInicioEntrada.setLayout(new BorderLayout(0, 0));
+			panelInicioEntrada.add(getPanel_3(), BorderLayout.SOUTH);
+			panelInicioEntrada.add(getPanel_4());
 		}
-		return panelInicio;
+		return panelInicioEntrada;
 	}
 	private JPanel getPanel_3() {
 		if (panel_3 == null) {
@@ -648,7 +677,7 @@ public class VentanaPrincipal extends JFrame {
 	}
 	private JTextField getTextField_6() {
 		if (textField_6 == null) {
-			textField_6 = new JTextField();
+			textField_6 = new JPasswordField();
 			textField_6.setBounds(143, 44, 166, 30);
 			textField_6.setColumns(10);
 		}
@@ -677,6 +706,8 @@ public class VentanaPrincipal extends JFrame {
 						}
 						else {
 							//abre el panel de inicio
+							CardLayout card = (CardLayout) contentPane.getLayout();
+							card.show(contentPane, "panelInicioUser");
 						}
 					} catch (SQLException e1) {
 
@@ -687,5 +718,222 @@ public class VentanaPrincipal extends JFrame {
 			btnEntrarLogin.setBounds(106, 40, 106, 32);
 		}
 		return btnEntrarLogin;
+	}
+	private JPanel getPanelInicioUser() {
+		if (panelInicioUser == null) {
+			panelInicioUser = new JPanel();
+			panelInicioUser.setLayout(new BorderLayout(0, 0));
+			panelInicioUser.add(getLabel_9(), BorderLayout.CENTER);
+			panelInicioUser.add(getPanel_15(), BorderLayout.EAST);
+		}
+		return panelInicioUser;
+	}
+	private JLabel getLabel_9() {
+		if (label_9 == null) {
+			label_9 = new JLabel("");
+		}
+		return label_9;
+	}
+	private JPanel getPanel_15() {
+		if (panel_15 == null) {
+			panel_15 = new JPanel();
+			panel_15.setLayout(new GridLayout(7, 0, 0, 0));
+			panel_15.add(getLblOpcionesDeUsuario());
+			panel_15.add(getPanel_16());
+			panel_15.add(getPanel_18());
+			panel_15.add(getPanel_20());
+			panel_15.add(getPanel_24());
+			panel_15.add(getPanel_25());
+			panel_15.add(getPanel_22());
+		}
+		return panel_15;
+	}
+	private JLabel getLblOpcionesDeUsuario() {
+		if (lblOpcionesDeUsuario == null) {
+			lblOpcionesDeUsuario = new JLabel("Opciones de usuario:                   ");
+			lblOpcionesDeUsuario.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 16));
+		}
+		return lblOpcionesDeUsuario;
+	}
+	private JPanel getPanel_16() {
+		if (panel_16 == null) {
+			panel_16 = new JPanel();
+			panel_16.setBackground(Color.WHITE);
+			panel_16.setLayout(new GridLayout(3, 0, 0, 0));
+			panel_16.add(getLabel_10());
+			panel_16.add(getPanel_17());
+		}
+		return panel_16;
+	}
+	private JLabel getLabel_10() {
+		if (label_10 == null) {
+			label_10 = new JLabel("");
+			label_10.setBackground(Color.WHITE);
+		}
+		return label_10;
+	}
+	private JButton getBtnCrearUnEnvo() {
+		if (btnCrearUnEnvo == null) {
+			btnCrearUnEnvo = new JButton("Crear un env\u00EDo");
+		}
+		return btnCrearUnEnvo;
+	}
+	private JPanel getPanel_17() {
+		if (panel_17 == null) {
+			panel_17 = new JPanel();
+			panel_17.setLayout(new GridLayout(0, 3, 0, 0));
+			panel_17.add(getLabel_11());
+			panel_17.add(getBtnCrearUnEnvo());
+		}
+		return panel_17;
+	}
+	private JLabel getLabel_11() {
+		if (label_11 == null) {
+			label_11 = new JLabel("");
+			label_11.setForeground(Color.WHITE);
+			label_11.setBackground(Color.WHITE);
+		}
+		return label_11;
+	}
+	private JPanel getPanel_18() {
+		if (panel_18 == null) {
+			panel_18 = new JPanel();
+			panel_18.setBackground(Color.WHITE);
+			panel_18.setLayout(new GridLayout(3, 0, 0, 0));
+			panel_18.add(getLabel_12());
+			panel_18.add(getPanel_19());
+		}
+		return panel_18;
+	}
+	private JLabel getLabel_12() {
+		if (label_12 == null) {
+			label_12 = new JLabel("");
+			label_12.setBackground(Color.WHITE);
+		}
+		return label_12;
+	}
+	private JPanel getPanel_19() {
+		if (panel_19 == null) {
+			panel_19 = new JPanel();
+			panel_19.setLayout(new GridLayout(0, 3, 0, 0));
+			panel_19.add(getLabel_13());
+			panel_19.add(getBtnConsultarEnvos());
+		}
+		return panel_19;
+	}
+	private JLabel getLabel_13() {
+		if (label_13 == null) {
+			label_13 = new JLabel("");
+			label_13.setForeground(Color.WHITE);
+			label_13.setBackground(Color.WHITE);
+		}
+		return label_13;
+	}
+	private JButton getBtnConsultarEnvos() {
+		if (btnConsultarEnvos == null) {
+			btnConsultarEnvos = new JButton("Consultar env\u00EDos");
+		}
+		return btnConsultarEnvos;
+	}
+	private JPanel getPanel_20() {
+		if (panel_20 == null) {
+			panel_20 = new JPanel();
+			panel_20.setBackground(Color.WHITE);
+			panel_20.setLayout(new GridLayout(3, 0, 0, 0));
+			panel_20.add(getLabel_14());
+			panel_20.add(getPanel_21());
+		}
+		return panel_20;
+	}
+	private JLabel getLabel_14() {
+		if (label_14 == null) {
+			label_14 = new JLabel("");
+			label_14.setBackground(Color.WHITE);
+		}
+		return label_14;
+	}
+	private JPanel getPanel_21() {
+		if (panel_21 == null) {
+			panel_21 = new JPanel();
+			panel_21.setLayout(new GridLayout(0, 3, 0, 0));
+			panel_21.add(getLabel_15());
+			panel_21.add(getBtnListaAlmacenes());
+		}
+		return panel_21;
+	}
+	private JLabel getLabel_15() {
+		if (label_15 == null) {
+			label_15 = new JLabel("");
+			label_15.setForeground(Color.WHITE);
+			label_15.setBackground(Color.WHITE);
+		}
+		return label_15;
+	}
+	private JButton getBtnListaAlmacenes() {
+		if (btnListaAlmacenes == null) {
+			btnListaAlmacenes = new JButton("Lista almacenes");
+		}
+		return btnListaAlmacenes;
+	}
+	private JPanel getPanel_22() {
+		if (panel_22 == null) {
+			panel_22 = new JPanel();
+			panel_22.setBackground(Color.WHITE);
+			panel_22.setLayout(new GridLayout(3, 0, 0, 0));
+			panel_22.add(getLabel_16());
+			panel_22.add(getPanel_23());
+		}
+		return panel_22;
+	}
+	private JLabel getLabel_16() {
+		if (label_16 == null) {
+			label_16 = new JLabel("");
+			label_16.setBackground(Color.WHITE);
+		}
+		return label_16;
+	}
+	private JPanel getPanel_23() {
+		if (panel_23 == null) {
+			panel_23 = new JPanel();
+			panel_23.setLayout(new GridLayout(0, 3, 0, 0));
+			panel_23.add(getLabel_17());
+			panel_23.add(getLblNewLabel());
+			panel_23.add(getBtnDesconectar());
+		}
+		return panel_23;
+	}
+	private JLabel getLabel_17() {
+		if (label_17 == null) {
+			label_17 = new JLabel("");
+			label_17.setForeground(Color.WHITE);
+			label_17.setBackground(Color.WHITE);
+		}
+		return label_17;
+	}
+	private JButton getBtnDesconectar() {
+		if (btnDesconectar == null) {
+			btnDesconectar = new JButton("Desconectar");
+		}
+		return btnDesconectar;
+	}
+	private JPanel getPanel_24() {
+		if (panel_24 == null) {
+			panel_24 = new JPanel();
+			panel_24.setBackground(Color.WHITE);
+		}
+		return panel_24;
+	}
+	private JPanel getPanel_25() {
+		if (panel_25 == null) {
+			panel_25 = new JPanel();
+			panel_25.setBackground(Color.WHITE);
+		}
+		return panel_25;
+	}
+	private JLabel getLblNewLabel() {
+		if (lblNewLabel == null) {
+			lblNewLabel = new JLabel("");
+		}
+		return lblNewLabel;
 	}
 }
