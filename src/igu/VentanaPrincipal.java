@@ -1226,24 +1226,6 @@ public class VentanaPrincipal extends JFrame {
 		}
 		return label_15;
 	}
-	private JLabel getLabel_19() {
-		if (label_19 == null) {
-			label_19 = new JLabel("");
-		}
-		return label_19;
-	}
-	private JLabel getLabel_20() {
-		if (label_20 == null) {
-			label_20 = new JLabel("");
-		}
-		return label_20;
-	}
-	private JLabel getLabel_21() {
-		if (label_21 == null) {
-			label_21 = new JLabel("");
-		}
-		return label_21;
-	}
 	private JPanel getPanel_31() {
 		if (panel_31 == null) {
 			panel_31 = new JPanel();
@@ -1269,6 +1251,40 @@ public class VentanaPrincipal extends JFrame {
 			panel_32.add(getBtnActualizar());
 		}
 		return panel_32;
+	}
+	private JLabel getLabel_19() {
+		if (label_19 == null) {
+			label_19 = new JLabel("");
+		}
+		return label_19;
+	}
+	private JLabel getLabel_20() {
+		if (label_20 == null) {
+			label_20 = new JLabel("");
+		}
+		return label_20;
+	}
+	private JLabel getLabel_21() {
+		if (label_21 == null) {
+			label_21 = new JLabel("");
+		}
+		return label_21;
+	}
+	private JButton getBtnActualizar() {
+		if (btnActualizar == null) {
+			btnActualizar = new JButton("Actualizar");
+			btnActualizar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					try {
+						actualizarModel();
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+			});
+		}
+		return btnActualizar;
 	}
 	private JButton getBtnModificar() {
 		if (btnModificar == null) {
@@ -1325,22 +1341,6 @@ public class VentanaPrincipal extends JFrame {
 			});
 		}
 		return btnModificar;
-	}
-	private JButton getBtnActualizar() {
-		if (btnActualizar == null) {
-			btnActualizar = new JButton("Actualizar");
-			btnActualizar.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					try {
-						actualizarModel();
-					} catch (SQLException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-				}
-			});
-		}
-		return btnActualizar;
 	}
 	private JTable getTable() {
 		if (table == null) {

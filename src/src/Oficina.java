@@ -4,6 +4,12 @@ public class Oficina {
 	private String provinciaLocalizacion;
 	private String nombre;
 	private Integer id;
+	public Oficina(Integer id, String provinciaLocalizacion, String nombre) {
+		super();
+		this.provinciaLocalizacion = provinciaLocalizacion;
+		this.nombre = nombre;
+		this.id = id;
+	}
 	public Oficina(String provinciaLocalizacion, String nombre) {
 		super();
 		this.provinciaLocalizacion = provinciaLocalizacion;
