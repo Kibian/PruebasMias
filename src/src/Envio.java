@@ -28,6 +28,21 @@ public class Envio {
 		this.setLugarEnvio(lugarEnvio);
 		this.setEstado(estado);
 	}
+	public Envio(boolean bad, boolean ead, String receptordni, String emisordni, String transportistadni,
+			String vehiculomatricula, String provinciadestino, String provinciaorigen, String lugarenvio,
+			String estado, Double precio) {
+		this.busquedaADomicilio = bad;
+		this.envioADomicilio = ead;
+		this.receptor = receptordni;
+		this.emisor = emisordni;
+		this.transportista = transportistadni;
+		this.vehiculo = vehiculomatricula;
+		this.provinciaDestino = provinciadestino;
+		this.provinciaOrigen = provinciaorigen;
+		this.lugarEnvio = lugarenvio;
+		this.estado = estado;
+		this.precio = precio;
+	}
 	public boolean isbusquedaADomicilio() {
 		return busquedaADomicilio;
 	}
@@ -70,7 +85,7 @@ public class Envio {
 	public void setProvinciaOrigen(String provinciaOrigen) {
 		this.provinciaOrigen = provinciaOrigen;
 	}	
-	public double getPrecio() {
+	public double calculaPrecio() {
 		if(provinciaOrigen.equals(provinciaDestino)) {
 			precio = 5.0;
 		}
@@ -84,7 +99,24 @@ public class Envio {
 			precio+=3.0;
 		}
 		return precio;
-			
+	}
+	public boolean isBusquedaADomicilio() {
+		return busquedaADomicilio;
+	}
+	public void setBusquedaADomicilio(boolean busquedaADomicilio) {
+		this.busquedaADomicilio = busquedaADomicilio;
+	}
+	public boolean isEnvioADomicilio() {
+		return envioADomicilio;
+	}
+	public void setEnvioADomicilio(boolean envioADomicilio) {
+		this.envioADomicilio = envioADomicilio;
+	}
+	public double getPrecio() {
+		return precio;
+	}
+	public void setPrecio(double precio) {
+		this.precio = precio;
 	}
 	public Integer getId() {
 		return id;

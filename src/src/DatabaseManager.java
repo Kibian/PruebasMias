@@ -130,13 +130,60 @@ public class DatabaseManager {
 			pst.close();
 		}
 	}
+	
+	public static Envio getEnvioById(Integer id) throws SQLException {
+		PreparedStatement pst = null;
+		ResultSet rs = null;
+		try {
+			getConnection();
+			pst = con.prepareStatement("select busquedaadomicilio, envioadomicilio, receptordni, "
+					+ "emisordni, transportistadni, vehiculomatricula, provinciadestino, provinciaorigen, "
+					+ "lugarenvio, estado, precio from envios where id = ?");
+			pst.setInt(1, id);
+			rs = pst.executeQuery();
+			String busquedaadomicilio, envioadomicilio, receptordni, emisordni, transportistadni,
+			vehiculomatricula, provinciadestino, provinciaorigen, lugarenvio, estado;
+			Double precio;
+			Envio e = null;
+			if(rs.next()) {
+				busquedaadomicilio = rs.getString(1);
+				envioadomicilio = rs.getString(2);
+				receptordni = rs.getString(3);
+				emisordni = rs.getString(4);
+				transportistadni = rs.getString(5);
+				vehiculomatricula = rs.getString(6);
+				provinciadestino = rs.getString(7);
+				provinciaorigen = rs.getString(8);
+				lugarenvio = rs.getString(9);
+				estado = rs.getString(10);
+				precio = rs.getDouble(11);
+				boolean bad = false;
+				boolean ead = false;
+				if(busquedaadomicilio.equals("Si")) {
+					bad = true;
+				}
+				if(envioadomicilio.equals("Si")) {
+					ead = true;
+				}
+				e = new Envio(bad, ead, receptordni, emisordni, 
+						transportistadni, vehiculomatricula, provinciadestino, provinciaorigen,
+						lugarenvio, estado, precio);
+			}
+			return e;
+		} catch(SQLException e) {
+			throw new SQLException(e);
+		}finally {
+			rs.close();
+			pst.close();
+		}
+	}
 
 	public static void registraEnvio(Envio envio) throws SQLException {
 		String emisor = envio.getEmisor();
 		String receptor = envio.getReceptor();
 		String estado = envio.getEstado();
 		String lugarEnvio = envio.getLugarEnvio();
-		double precio = envio.getPrecio();
+		double precio = envio.calculaPrecio();
 		String provinciaD = envio.getProvinciaDestino();
 		String provinciaO = envio.getProvinciaOrigen();
 		String transportistaDNI = envio.getTransportista();
@@ -146,18 +193,19 @@ public class DatabaseManager {
 		PreparedStatement pst = null;
 		try {
 			getConnection();
-			pst = con.prepareStatement("insert into envios values (?,?,?,?,?,?,?,?,?,?,?");
-			pst.setBoolean(1, bad);
-			pst.setBoolean(2, ead);
-			pst.setString(3, receptor);
-			pst.setString(4, emisor);
-			pst.setString(5, transportistaDNI);
-			pst.setString(6, vehiculoMatricula);
-			pst.setString(7, provinciaD);
-			pst.setString(8, provinciaO);
-			pst.setString(9, lugarEnvio);
-			pst.setString(10, estado);
-			pst.setDouble(11, precio);
+			pst = con.prepareStatement("insert into envios values (?,?,?,?,?,?,?,?,?,?,?)");
+			pst.setInt(1, maxId());
+			pst.setBoolean(2, bad);
+			pst.setBoolean(3, ead);
+			pst.setString(4, receptor);
+			pst.setString(5, emisor);
+			pst.setString(6, transportistaDNI);
+			pst.setString(7, vehiculoMatricula);
+			pst.setString(8, provinciaD);
+			pst.setString(9, provinciaO);
+			pst.setString(10, lugarEnvio);
+			pst.setString(11, estado);
+			pst.setDouble(12, precio);
 			
 			pst.executeQuery();
 		} catch(SQLException e) {
@@ -166,5 +214,73 @@ public class DatabaseManager {
 			pst.close();
 		}
 		
+	}
+	
+	public static int maxId() throws SQLException {
+		PreparedStatement pst = null;
+		ResultSet rs = null;
+		getConnection();
+		pst = con.prepareStatement("select max(id) from envios");
+		rs = pst.executeQuery();
+		rs.next();
+		return rs.getInt(1);
+	}
+
+	public static List<String[]> getEnviosEmisor(String dni) throws SQLException{
+		PreparedStatement pst = null;
+		ResultSet rs = null;
+		List<String[]> objects = new ArrayList<String[]>();
+		try {
+			getConnection();
+			pst = con.prepareStatement("select id, lugarenvio, estado, receptordni, precio from"
+					+ " envios where emisordni = ?");
+			pst.setString(1, dni);
+			rs = pst.executeQuery();
+			while(rs.next()) {
+				String[] o = {new Integer(rs.getInt(1)).toString(), rs.getString(2), rs.getString(3), rs.getString(4), new Double(rs.getDouble(5)).toString()};
+				objects.add(o);
+			}
+			return objects;
+		}catch(SQLException e) {
+			throw new SQLException(e);
+		}finally {
+			rs.close();
+			pst.close();
+		}
+	}
+	
+	public static void modifyEnvioById(String envioADomicilio, String lugarEnvio, Integer id) throws SQLException {
+		PreparedStatement pst = null;
+		getConnection();
+		pst = con.prepareStatement("update envios set envioadomicilio = ?, lugarenvio = ? from envios where id = ?");
+		pst.setString(1, envioADomicilio);
+		pst.setString(2, lugarEnvio);
+		pst.setInt(3, id);
+		pst.execute();
+	}
+
+	public static void updatePrecioEnvio(Integer id, Double precioNuevo) throws SQLException {
+		PreparedStatement pst = null;
+		getConnection();
+		pst = con.prepareStatement("update envios set precio = ? from envios where id = ?");
+		pst.setDouble(1, precioNuevo);
+		pst.setInt(2, id);
+		pst.execute();		
+	}
+	
+	public static List<Oficina> getOficinasByProvincia(String provincia) throws SQLException {
+		PreparedStatement pst = null;
+		ResultSet rs = null;
+		List<Oficina> result = new ArrayList<Oficina>();
+		getConnection();
+		pst = con.prepareStatement("select id, nombre, provincialocalizacion from oficinas "
+				+ "where provinciaLocalizacion = ?");
+		pst.setString(1, provincia);
+		rs = pst.executeQuery();
+		while(rs.next()) {
+			Oficina o = new Oficina(rs.getInt(1), rs.getString(3), rs.getString(2));
+			result.add(o);
+		}
+		return result;
 	}
 }

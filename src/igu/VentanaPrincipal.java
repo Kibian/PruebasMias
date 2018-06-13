@@ -11,6 +11,8 @@ import javax.swing.border.EmptyBorder;
 import src.Cliente;
 import src.DatabaseManager;
 import src.Envio;
+import src.MyTableModel;
+import src.Oficina;
 import src.Transportista;
 
 import javax.swing.JLabel;
@@ -28,9 +30,13 @@ import javax.swing.JComboBox;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 import java.awt.event.ActionEvent;
 import java.awt.Color;
 import javax.swing.JRadioButton;
+import javax.swing.JTable;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class VentanaPrincipal extends JFrame {
 
@@ -40,6 +46,7 @@ public class VentanaPrincipal extends JFrame {
 	
 	private Cliente clienteActual;
 	private List<Envio> enviosCreados;
+	MyTableModel modelEnviosEnviados;
 	
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
@@ -141,6 +148,23 @@ public class VentanaPrincipal extends JFrame {
 	private JLabel label_27;
 	private JRadioButton rdbtnRecogidaADomicilio;
 	private JRadioButton rdbtnEnvoADomicilio;
+	private JPanel panelConsultaEnvios;
+	private JPanel panelLista;
+	private JPanel panelInfo;
+	private JLabel label_15;
+	private JLabel label_19;
+	private JLabel label_20;
+	private JLabel label_21;
+	private JPanel panel_31;
+	private JLabel lblListaDeEnvos;
+	private JPanel panel_32;
+	private JButton btnModificar;
+	private JButton btnActualizar;
+	private JTable table;
+	private JLabel lblListado;
+	private JPanel panel_33;
+	private JRadioButton rdbtnADomicilio;
+	private JRadioButton rdbtnEnAlmacnU;
 
 	/**
 	 * Launch the application.
@@ -173,6 +197,7 @@ public class VentanaPrincipal extends JFrame {
 		contentPane.add(getPanelLogin(), "panelLogin");
 		contentPane.add(getPanelInicioUser(), "panelInicioUser");
 		contentPane.add(getPanelCrearEnvío(), "panelCrearEnvio");
+		contentPane.add(getPanelConsultaEnvios(), "name_188755787741299");
 	}
 	private JLabel getLblAplicacinDeEntrega() {
 		if (lblAplicacinDeEntrega == null) {
@@ -449,7 +474,7 @@ public class VentanaPrincipal extends JFrame {
 			comboBox.addItem("Ciudad Real");
 			comboBox.addItem("Córdoba");
 			comboBox.addItem("Cuenca");
-			comboBox.addItem("Gerona (Girona)");
+			comboBox.addItem("Girona");
 			comboBox.addItem("Granada");
 			comboBox.addItem("Guadalajara");
 			comboBox.addItem("Guipúzcoa");
@@ -1163,5 +1188,236 @@ public class VentanaPrincipal extends JFrame {
 			rdbtnEnvoADomicilio.setBounds(6, 29, 148, 17);
 		}
 		return rdbtnEnvoADomicilio;
+	}
+	private JPanel getPanelConsultaEnvios() {
+		if (panelConsultaEnvios == null) {
+			panelConsultaEnvios = new JPanel();
+			panelConsultaEnvios.setLayout(new BorderLayout(0, 0));
+			panelConsultaEnvios.add(getPanelLista(), BorderLayout.CENTER);
+			panelConsultaEnvios.add(getPanelInfo(), BorderLayout.EAST);
+		}
+		return panelConsultaEnvios;
+	}
+	private JPanel getPanelLista() {
+		if (panelLista == null) {
+			panelLista = new JPanel();
+			panelLista.setLayout(new BorderLayout(0, 0));
+			panelLista.add(getTable());
+			panelLista.add(getLblListado(), BorderLayout.NORTH);
+		}
+		return panelLista;
+	}
+	private JPanel getPanelInfo() {
+		if (panelInfo == null) {
+			panelInfo = new JPanel();
+			panelInfo.setLayout(new GridLayout(9, 0, 0, 0));
+			panelInfo.add(getLabel_15());
+			panelInfo.add(getLabel_19());
+			panelInfo.add(getLabel_20());
+			panelInfo.add(getLabel_21());
+			panelInfo.add(getPanel_31());
+			panelInfo.add(getPanel_33());
+		}
+		return panelInfo;
+	}
+	private JLabel getLabel_15() {
+		if (label_15 == null) {
+			label_15 = new JLabel("");
+		}
+		return label_15;
+	}
+	private JLabel getLabel_19() {
+		if (label_19 == null) {
+			label_19 = new JLabel("");
+		}
+		return label_19;
+	}
+	private JLabel getLabel_20() {
+		if (label_20 == null) {
+			label_20 = new JLabel("");
+		}
+		return label_20;
+	}
+	private JLabel getLabel_21() {
+		if (label_21 == null) {
+			label_21 = new JLabel("");
+		}
+		return label_21;
+	}
+	private JPanel getPanel_31() {
+		if (panel_31 == null) {
+			panel_31 = new JPanel();
+			panel_31.setLayout(new GridLayout(2, 0, 0, 0));
+			panel_31.add(getLblListaDeEnvos());
+			panel_31.add(getPanel_32());
+		}
+		return panel_31;
+	}
+	private JLabel getLblListaDeEnvos() {
+		if (lblListaDeEnvos == null) {
+			lblListaDeEnvos = new JLabel("Lista de env\u00EDos creados");
+			lblListaDeEnvos.setHorizontalAlignment(SwingConstants.CENTER);
+			lblListaDeEnvos.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 14));
+		}
+		return lblListaDeEnvos;
+	}
+	private JPanel getPanel_32() {
+		if (panel_32 == null) {
+			panel_32 = new JPanel();
+			panel_32.setLayout(new GridLayout(0, 2, 0, 0));
+			panel_32.add(getBtnModificar());
+			panel_32.add(getBtnActualizar());
+		}
+		return panel_32;
+	}
+	private JButton getBtnModificar() {
+		if (btnModificar == null) {
+			btnModificar = new JButton("Modificar direcci\u00F3n entrega");
+			btnModificar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					int x = table.getSelectedRow();
+					if(x==-1) {
+						JOptionPane.showMessageDialog(null,
+								"Ha de seleccionar uno de los envíos de la tabla.");
+					}
+					else {
+						if(!rdbtnADomicilio.isSelected() && !rdbtnEnAlmacnU.isSelected()) {
+							JOptionPane.showMessageDialog(null,
+									"Debe seleccionar el tipo de modificación de entrega.");
+						}
+						else {
+							try {
+								String dniReceptor = (String) modelEnviosEnviados.getValueAt(x, 3);
+								Cliente cReceptor= DatabaseManager.getCliente(dniReceptor);
+								if(rdbtnADomicilio.isSelected()) {		
+									//MODIFICA ENTREGA DEL ENVIO
+									DatabaseManager.modifyEnvioById("Si", cReceptor.getDireccion(), (Integer) modelEnviosEnviados.getValueAt(x, 1));
+									//MODIFICA EL PRECIO
+									Envio en = DatabaseManager.getEnvioById((Integer) modelEnviosEnviados.getValueAt(x, 1));
+									Double precioNuevo = en.calculaPrecio();
+									DatabaseManager.updatePrecioEnvio((Integer) modelEnviosEnviados.getValueAt(x, 1), precioNuevo);
+								}
+								else {
+									List<Oficina> lista = DatabaseManager.getOficinasByProvincia(cReceptor.getProvincia());
+									if(lista.size()==0) {
+										JOptionPane.showMessageDialog(null,
+												"No existen oficinas en la provincia del receptor.");
+									}
+									else {
+										//MODIFICA ENTREGA DEL ENVIO
+										int posRandom = ThreadLocalRandom.current().nextInt(0, lista.size());
+										Oficina oficinaSeleccionada = lista.get(posRandom);
+										DatabaseManager.modifyEnvioById("No", "Oficina-"+oficinaSeleccionada.getNombre()+"-"+
+										oficinaSeleccionada.getProvinciaLocalizacion(), (Integer) modelEnviosEnviados.getValueAt(x, 1));
+										//MODIFICA EL PRECIO
+										Envio en = DatabaseManager.getEnvioById((Integer) modelEnviosEnviados.getValueAt(x, 1));
+										Double precioNuevo = en.calculaPrecio();
+										DatabaseManager.updatePrecioEnvio((Integer) modelEnviosEnviados.getValueAt(x, 1), precioNuevo);
+									}
+								}
+							} catch (SQLException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
+						}
+					}
+				}
+			});
+		}
+		return btnModificar;
+	}
+	private JButton getBtnActualizar() {
+		if (btnActualizar == null) {
+			btnActualizar = new JButton("Actualizar");
+			btnActualizar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					try {
+						actualizarModel();
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+			});
+		}
+		return btnActualizar;
+	}
+	private JTable getTable() {
+		if (table == null) {
+			modelEnviosEnviados = new MyTableModel();
+			modelEnviosEnviados.addColumn("Id");
+			modelEnviosEnviados.addColumn("Destino");
+			modelEnviosEnviados.addColumn("Receptor");
+			modelEnviosEnviados.addColumn("Estado");
+			modelEnviosEnviados.addColumn("Precio");
+			String[] x = {"Id", "Destino", "DNI Receptor", "Estado", "Precio"};
+			modelEnviosEnviados.addRow(x);
+			table = new JTable(modelEnviosEnviados);
+		}
+		return table;
+	}
+	
+	private void addToModel(MyTableModel model, List<String[]> datos) {
+		for (String[] dato : datos) {
+			model.addRow(dato);
+		}
+	}
+
+	private void removeModelContent(MyTableModel model) {
+		if (model.getRowCount() > 0)
+			for (int i = model.getRowCount() - 1; i >= 0; i--)
+				model.removeRow(i);
+	}
+	
+	private void actualizarModel() throws SQLException {
+		removeModelContent(modelEnviosEnviados);
+		String[] x = {"Id", "Destino", "DNI Receptor", "Estado", "Precio"};
+		modelEnviosEnviados.addRow(x);
+		addToModel(modelEnviosEnviados, DatabaseManager.getEnviosEmisor(clienteActual.getDni()));
+	}
+	
+	private JLabel getLblListado() {
+		if (lblListado == null) {
+			lblListado = new JLabel("Listado:");
+			lblListado.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 15));
+		}
+		return lblListado;
+	}
+	private JPanel getPanel_33() {
+		if (panel_33 == null) {
+			panel_33 = new JPanel();
+			panel_33.setLayout(new GridLayout(2, 0, 0, 0));
+			panel_33.add(getRdbtnADomicilio());
+			panel_33.add(getRdbtnEnAlmacnU());
+		}
+		return panel_33;
+	}
+	private JRadioButton getRdbtnADomicilio() {
+		if (rdbtnADomicilio == null) {
+			rdbtnADomicilio = new JRadioButton("A domicilio");
+			rdbtnADomicilio.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent arg0) {
+					if(rdbtnADomicilio.isSelected()) {
+						rdbtnEnAlmacnU.setSelected(false);
+					}
+				}
+			});
+		}
+		return rdbtnADomicilio;
+	}
+	private JRadioButton getRdbtnEnAlmacnU() {
+		if (rdbtnEnAlmacnU == null) {
+			rdbtnEnAlmacnU = new JRadioButton("En almac\u00E9n u oficina");
+			rdbtnEnAlmacnU.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent arg0) {
+					if(rdbtnEnAlmacnU.isSelected()) {
+						rdbtnADomicilio.setSelected(false);
+					}
+				}
+			});
+		}
+		return rdbtnEnAlmacnU;
 	}
 }
