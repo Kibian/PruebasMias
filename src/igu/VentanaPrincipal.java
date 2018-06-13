@@ -1027,7 +1027,12 @@ public class VentanaPrincipal extends JFrame {
 	}
 	private JLabel getLabel_9_1() {
 		if (lblBienvenido == null) {
-			lblBienvenido = new JLabel("Bienvenido " + clienteActual.getNombre());
+			if(clienteActual != null) {
+				lblBienvenido = new JLabel("Bienvenido " + clienteActual.getNombre());
+			}
+			else {
+				lblBienvenido = new JLabel("Bienvenido");
+			}
 			lblBienvenido.setFont(new Font("Tahoma", Font.ITALIC, 18));
 		}
 		return lblBienvenido;
