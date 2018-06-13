@@ -5,8 +5,14 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.border.EmptyBorder;
+
+import src.DatabaseManager;
+
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import java.awt.GridLayout;
 import javax.swing.ImageIcon;
@@ -57,7 +63,7 @@ public class VentanaPrincipal extends JFrame {
 	private JTextField textField_4;
 	private JPanel panel_8;
 	private JLabel lblProvincia;
-	private JComboBox comboBox;
+	private JComboBox<String> comboBox;
 	private JLabel label_3;
 	private JPanel panel_9;
 	private JLabel label_5;
@@ -121,8 +127,8 @@ public class VentanaPrincipal extends JFrame {
 	}
 	private JLabel getLabel() {
 		if (label == null) {
-			ImageIcon im = new ImageIcon(getClass().getResource("/UO250788-IPS-JUNIO/img/CartelInicial.png"));
-			label = new JLabel(im);
+			label = new JLabel(new ImageIcon("/IMG/CartelInicial.png"));
+			label = new JLabel();
 		}
 		return label;
 	}
@@ -218,7 +224,7 @@ public class VentanaPrincipal extends JFrame {
 	}
 	private JLabel getLblNombre() {
 		if (lblNombre == null) {
-			lblNombre = new JLabel("Usuario: ");
+			lblNombre = new JLabel("DNI: ");
 			lblNombre.setBounds(10, 15, 159, 22);
 		}
 		return lblNombre;
@@ -226,7 +232,7 @@ public class VentanaPrincipal extends JFrame {
 	private JTextField getTextField() {
 		if (textField == null) {
 			textField = new JTextField();
-			textField.setBounds(74, 15, 235, 22);
+			textField.setBounds(89, 15, 220, 22);
 			textField.setColumns(10);
 		}
 		return textField;
@@ -249,9 +255,9 @@ public class VentanaPrincipal extends JFrame {
 	}
 	private JTextField getTextField_1() {
 		if (textField_1 == null) {
-			textField_1 = new JTextField();
+			textField_1 = new JPasswordField();
 			textField_1.setColumns(10);
-			textField_1.setBounds(74, 15, 235, 22);
+			textField_1.setBounds(89, 15, 220, 22);
 		}
 		return textField_1;
 	}
@@ -275,7 +281,7 @@ public class VentanaPrincipal extends JFrame {
 		if (textField_2 == null) {
 			textField_2 = new JTextField();
 			textField_2.setColumns(10);
-			textField_2.setBounds(74, 15, 235, 22);
+			textField_2.setBounds(89, 15, 220, 22);
 		}
 		return textField_2;
 	}
@@ -299,7 +305,7 @@ public class VentanaPrincipal extends JFrame {
 		if (textField_3 == null) {
 			textField_3 = new JTextField();
 			textField_3.setColumns(10);
-			textField_3.setBounds(74, 15, 235, 22);
+			textField_3.setBounds(89, 15, 220, 22);
 		}
 		return textField_3;
 	}
@@ -323,7 +329,7 @@ public class VentanaPrincipal extends JFrame {
 		if (textField_4 == null) {
 			textField_4 = new JTextField();
 			textField_4.setColumns(10);
-			textField_4.setBounds(74, 15, 235, 22);
+			textField_4.setBounds(89, 15, 220, 22);
 		}
 		return textField_4;
 	}
@@ -343,10 +349,60 @@ public class VentanaPrincipal extends JFrame {
 		}
 		return lblProvincia;
 	}
-	private JComboBox getComboBox() {
+	private JComboBox<String> getComboBox() {
 		if (comboBox == null) {
-			comboBox = new JComboBox();
-			comboBox.setBounds(74, 16, 235, 20);
+			comboBox = new JComboBox<String>();
+			comboBox.setBounds(89, 16, 220, 20);
+			comboBox.addItem("Álava");
+			comboBox.addItem("Albacete");
+			comboBox.addItem("Alicante");
+			comboBox.addItem("Almería");
+			comboBox.addItem("Asturias");
+			comboBox.addItem("Avila");
+			comboBox.addItem("Badajoz");
+			comboBox.addItem("Barcelona");
+			comboBox.addItem("Burgos");
+			comboBox.addItem("Cáceres");
+			comboBox.addItem("Cádiz");
+			comboBox.addItem("Cantabria");
+			comboBox.addItem("Castellón");
+			comboBox.addItem("Ciudad Real");
+			comboBox.addItem("Córdoba");
+			comboBox.addItem("Cuenca");
+			comboBox.addItem("Gerona (Girona)");
+			comboBox.addItem("Granada");
+			comboBox.addItem("Guadalajara");
+			comboBox.addItem("Guipúzcoa");
+			comboBox.addItem("Huelva");
+			comboBox.addItem("Huesca");
+			comboBox.addItem("Islas Baleares");
+			comboBox.addItem("Jaén");
+			comboBox.addItem("La Coruña");
+			comboBox.addItem("La Rioja");
+			comboBox.addItem("Las Palmas");
+			comboBox.addItem("León");
+			comboBox.addItem("Lérida");
+			comboBox.addItem("Lugo");
+			comboBox.addItem("Madrid");
+			comboBox.addItem("Málaga");
+			comboBox.addItem("Murcia");
+			comboBox.addItem("Navarra");
+			comboBox.addItem("Orense");
+			comboBox.addItem("Palencia");
+			comboBox.addItem("Pontevedra");
+			comboBox.addItem("Salamanca");
+			comboBox.addItem("Segovia");
+			comboBox.addItem("Sevilla");
+			comboBox.addItem("Soria");
+			comboBox.addItem("Tarragona");
+			comboBox.addItem("Tenerife");
+			comboBox.addItem("Teruel");
+			comboBox.addItem("Toledo");
+			comboBox.addItem("Valencia");
+			comboBox.addItem("Valladolid");
+			comboBox.addItem("Vizcaya");
+			comboBox.addItem("Zamora");
+			comboBox.addItem("Zaragoza");
 		}
 		return comboBox;
 	}
@@ -388,6 +444,86 @@ public class VentanaPrincipal extends JFrame {
 	private JButton getBtnRegistrarse_1() {
 		if (btnRegistrarse_1 == null) {
 			btnRegistrarse_1 = new JButton("Registrarse");
+			btnRegistrarse_1.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					String dniUsuario = textField.getText();
+					String contrasenna = textField_1.getText();
+					String direccion = textField_4.getText();
+					boolean capitalLetter = false;
+					boolean minimalLetter = false;
+					boolean number = false;
+					boolean dniValido = false;
+					for(char ch : contrasenna.toCharArray()) {
+						if(Character.isUpperCase(ch)) {
+							capitalLetter = true;
+						}
+						if(Character.isLowerCase(ch)) {
+							minimalLetter = true;
+						}
+						if(Character.isDigit(ch)) {
+							number = true;
+						}
+					}
+					if(dniUsuario.length()!=9)  {
+						JOptionPane.showMessageDialog(null,
+								"La longitud del DNI debe ser de 9 caracteres.");
+					}
+					else if(Character.isLetter(dniUsuario.charAt(8))==false) {
+						JOptionPane.showMessageDialog(null,
+								"El DNI debe contener una letra.");
+					}
+					else if(contrasenna.length()<5) {
+						JOptionPane.showMessageDialog(null,
+								"La contraseña debe de tener longitud 5 o más.");
+					}
+					else if(!capitalLetter && !minimalLetter && !number) {
+						JOptionPane.showMessageDialog(null,
+								"La contraseña debe poseer como mínimo una letra mayúscula, minúscula y un número.");
+					}
+					else if(direccion.length()<2) {
+						JOptionPane.showMessageDialog(null,
+								"La dirección debe de ser válida.");
+					}
+					else {
+						char letraMayuscula = (dniUsuario.substring(8).toUpperCase()).charAt(0);
+						boolean letraFinal = false;
+						int size = dniUsuario.length();
+						int contador = 0;
+						int contadorNumeros = 0;
+						for(char ch : dniUsuario.toCharArray()) {
+							contador++;
+							if(size!=contador) {
+								if(Character.isDigit(ch)) {
+									contadorNumeros++;
+								}
+							}
+							else {
+								if(ch == letraMayuscula)
+									letraFinal = true;
+							}
+						}
+						System.out.println(contadorNumeros + " " + letraFinal);
+						if(contadorNumeros!=8 && !letraFinal) {
+							JOptionPane.showMessageDialog(null,
+									"La estructura del DNI es incorrecta, deben ser 8 números y letra mayuscula al final.");
+						}
+						else {
+							try {
+								boolean yaExiste = DatabaseManager.existeClientePorDNI(dniUsuario);
+								if(yaExiste) {
+									JOptionPane.showMessageDialog(null,
+											"Ya existe un usuario con ese DNI.");
+								}
+								else {
+									DatabaseManager.registroCliente(dniUsuario, textField_2.getText(), textField_3.getText(), contrasenna, direccion, comboBox.getSelectedItem().toString());
+								}
+							} catch (SQLException e) {
+								e.printStackTrace();
+							}
+						}
+					}
+				}
+			});
 		}
 		return btnRegistrarse_1;
 	}
