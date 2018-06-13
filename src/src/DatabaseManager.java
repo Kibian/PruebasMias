@@ -75,7 +75,7 @@ public class DatabaseManager {
 		}
 	}
 	
-	public static Cliente checkLogin(String dni, String password) throws SQLException {
+	public static Cliente checkLoginCliente(String dni, String password) throws SQLException {
 		PreparedStatement pst = null;
 		ResultSet rs = null;
 		try {
@@ -95,6 +95,35 @@ public class DatabaseManager {
 				c = new Cliente(nombre, apellidos, direccion, password, dni, provincia);
 			}
 			return c;
+		} catch(SQLException e) {
+			throw new SQLException(e);
+		}finally {
+			rs.close();
+			pst.close();
+		}
+	}
+	
+	public static Transportista checkLoginTransportista(String dni, String password) throws SQLException {
+		PreparedStatement pst = null;
+		ResultSet rs = null;
+		try {
+			getConnection();
+			pst = con.prepareStatement("select dni, nombre, contrasenna, disponible "
+					+ "from transportistas where dni = ? and contrasenna = ?");
+			pst.setString(1, dni);
+			pst.setString(2, password);
+			rs = pst.executeQuery();
+			String nombre, contrasenna, dniObtenido;
+			boolean disponible;
+			Transportista t = null;
+			if(rs.next()) {
+				nombre = rs.getString(2);
+				dniObtenido = rs.getString(1);
+				contrasenna = rs.getString(3);
+				disponible = rs.getBoolean(4);
+				t = new Transportista(contrasenna, dniObtenido, nombre, disponible);
+			}
+			return t;
 		} catch(SQLException e) {
 			throw new SQLException(e);
 		}finally {

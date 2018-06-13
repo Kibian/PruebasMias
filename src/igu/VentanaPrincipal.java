@@ -47,6 +47,7 @@ public class VentanaPrincipal extends JFrame {
 	private Cliente clienteActual;
 	private List<Envio> enviosCreados;
 	MyTableModel modelEnviosEnviados;
+	private Transportista transportistaActual;
 	
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
@@ -165,6 +166,7 @@ public class VentanaPrincipal extends JFrame {
 	private JPanel panel_33;
 	private JRadioButton rdbtnADomicilio;
 	private JRadioButton rdbtnEnAlmacnU;
+	private JPanel panelInicioTransportista;
 
 	/**
 	 * Launch the application.
@@ -197,7 +199,8 @@ public class VentanaPrincipal extends JFrame {
 		contentPane.add(getPanelLogin(), "panelLogin");
 		contentPane.add(getPanelInicioUser(), "panelInicioUser");
 		contentPane.add(getPanelCrearEnvío(), "panelCrearEnvio");
-		contentPane.add(getPanelConsultaEnvios(), "name_188755787741299");
+		contentPane.add(getPanelConsultaEnvios(), "panelConsultaEnvios");
+		contentPane.add(getPanelInicioTransportista(), "panelInicioTransportista");
 	}
 	private JLabel getLblAplicacinDeEntrega() {
 		if (lblAplicacinDeEntrega == null) {
@@ -626,7 +629,7 @@ public class VentanaPrincipal extends JFrame {
 								else {
 									DatabaseManager.registroCliente(dniUsuario, textField_2.getText(), textField_3.getText(), contrasenna, direccion, comboBox.getSelectedItem().toString());
 									
-									clienteActual = DatabaseManager.checkLogin(dniUsuario, contrasenna);
+									clienteActual = DatabaseManager.checkLoginCliente(dniUsuario, contrasenna);
 									
 									CardLayout card = (CardLayout) contentPane.getLayout();
 									card.show(contentPane, "panelInicioUser");
@@ -760,17 +763,22 @@ public class VentanaPrincipal extends JFrame {
 			btnEntrarLogin.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					try {
-						clienteActual = DatabaseManager.checkLogin(textField_5.getText(), textField_6.getText());
-						if(clienteActual==null) {
+						clienteActual = DatabaseManager.checkLoginCliente(textField_5.getText(), textField_6.getText());
+						transportistaActual = DatabaseManager.checkLoginTransportista(textField_5.getText(), textField_6.getText());
+						if(clienteActual!=null) {
+							//abre el panel de inicio
+							CardLayout card = (CardLayout) contentPane.getLayout();
+							card.show(contentPane, "panelInicioUser");
+						}
+						else if(transportistaActual!=null) {
+							CardLayout card = (CardLayout) contentPane.getLayout();
+							card.show(contentPane, "panelInicioTransportista");
+						}
+						else {
 							JOptionPane.showMessageDialog(null,
 									"El usuario no existe o es incorrecto.");
 							textField_5.setText("");
 							textField_6.setText("");
-						}
-						else {
-							//abre el panel de inicio
-							CardLayout card = (CardLayout) contentPane.getLayout();
-							card.show(contentPane, "panelInicioUser");
 						}
 					} catch (SQLException e1) {
 
@@ -897,6 +905,12 @@ public class VentanaPrincipal extends JFrame {
 	private JButton getBtnConsultarEnvos() {
 		if (btnConsultarEnvos == null) {
 			btnConsultarEnvos = new JButton("Consultar env\u00EDos");
+			btnConsultarEnvos.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					CardLayout card = (CardLayout) contentPane.getLayout();
+					card.show(contentPane, "panelConsultaEnvios");
+				}
+			});
 		}
 		return btnConsultarEnvos;
 	}
@@ -1424,5 +1438,11 @@ public class VentanaPrincipal extends JFrame {
 			});
 		}
 		return rdbtnEnAlmacnU;
+	}
+	private JPanel getPanelInicioTransportista() {
+		if (panelInicioTransportista == null) {
+			panelInicioTransportista = new JPanel();
+		}
+		return panelInicioTransportista;
 	}
 }
