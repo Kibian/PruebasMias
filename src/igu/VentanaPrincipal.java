@@ -14,6 +14,7 @@ import src.Envio;
 import src.MyTableModel;
 import src.Oficina;
 import src.Transportista;
+import src.Vehiculo;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -1169,9 +1170,30 @@ public class VentanaPrincipal extends JFrame {
 						else {
 							Cliente receptor = DatabaseManager.getCliente(dniIntroducido);
 							//QUEDA ASIGNAR AL TRANSPORTISTA Y VEHICULO, Y PONER EL LUGAR DE ENVIO (OFICINA O DOMICILIO DEPENDE DEL RADIOBUTTON) 
-							Envio envio = new Envio(rdbtnRecogidaADomicilio.isSelected(), rdbtnEnvoADomicilio.isSelected(), dniIntroducido, clienteActual.getDni(),
-									"", "", receptor.getProvincia(), clienteActual.getProvincia(), "", "ESPERA-ENVIO");
-							DatabaseManager.registraEnvio(envio);
+							Envio envio = null;
+							List<Transportista> t = DatabaseManager.getTransportistas();
+							List<Vehiculo> v = DatabaseManager.getVehiculos();
+							int posRandomDos = ThreadLocalRandom.current().nextInt(0, t.size());
+							Transportista trans = t.get(posRandomDos);
+							int posRandomTres = ThreadLocalRandom.current().nextInt(0, v.size());
+							Vehiculo veh = v.get(posRandomTres);
+							if(rdbtnEnvoADomicilio.isSelected()) {
+								envio = new Envio(rdbtnRecogidaADomicilio.isSelected(), rdbtnEnvoADomicilio.isSelected(), dniIntroducido, clienteActual.getDni(),
+										trans.getDNI(), veh.getMatricula(), receptor.getProvincia(), clienteActual.getProvincia(), receptor.getDireccion(), "ESPERA-ENVIO");
+								envio.calculaPrecio();
+								DatabaseManager.registraEnvio(envio);
+							}
+							
+							else {
+								List<Oficina> x = DatabaseManager.getOficinasByProvincia(receptor.getProvincia());
+								int posRandom = ThreadLocalRandom.current().nextInt(0, x.size());
+								Oficina oficinaSeleccionada = x.get(posRandom);
+								envio = new Envio(rdbtnRecogidaADomicilio.isSelected(), rdbtnEnvoADomicilio.isSelected(), dniIntroducido, clienteActual.getDni(),
+										trans.getDNI(), veh.getMatricula(), receptor.getProvincia(), clienteActual.getProvincia(), "Oficina-"+oficinaSeleccionada.getNombre()+"-"+
+												oficinaSeleccionada.getProvinciaLocalizacion(), "ESPERA-ENVIO");
+								envio.calculaPrecio();
+								DatabaseManager.registraEnvio(envio);
+							}
 							JOptionPane.showMessageDialog(null,
 									"Se ha creado el envío correctamente.");
 							CardLayout card = (CardLayout) contentPane.getLayout();

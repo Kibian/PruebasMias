@@ -312,4 +312,36 @@ public class DatabaseManager {
 		}
 		return result;
 	}
+
+	public static List<Transportista> getTransportistas() throws SQLException {
+		PreparedStatement pst = null;
+		ResultSet rs = null;
+		List<Transportista> result = new ArrayList<Transportista>();
+		getConnection();
+		pst = con.prepareStatement("select dni, nombre, contrasenna, disponible "
+				+ "from transportistas");
+		rs=pst.executeQuery();
+		while(rs.next()) {
+			Transportista t = new Transportista(rs.getString(2), rs.getString(0),
+					rs.getString(1), rs.getBoolean(3));
+			result.add(t);
+		}
+		return result;
+	}
+
+	public static List<Vehiculo> getVehiculos() throws SQLException {
+		PreparedStatement pst = null;
+		ResultSet rs = null;
+		List<Vehiculo> result = new ArrayList<Vehiculo>();
+		getConnection();
+		pst = con.prepareStatement("select matricula, marca, tipo "
+				+ "from vehiculos");
+		rs=pst.executeQuery();
+		while(rs.next()) {
+			Vehiculo v = new Vehiculo(rs.getString(0), rs.getString(1),
+					rs.getString(2));
+			result.add(v);
+		}
+		return result;
+	}
 }
