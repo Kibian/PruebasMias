@@ -33,6 +33,9 @@ public class VentanaPrincipal extends JFrame {
 	/**
 	 * 
 	 */
+	
+	private Cliente clienteActual;
+	
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JLabel lblAplicacinDeEntrega;
@@ -88,7 +91,6 @@ public class VentanaPrincipal extends JFrame {
 	private JPanel panel_14;
 	private JButton btnEntrarLogin;
 	private JPanel panelInicioUser;
-	private JLabel label_9;
 	private JPanel panel_15;
 	private JLabel lblOpcionesDeUsuario;
 	private JPanel panel_16;
@@ -104,7 +106,6 @@ public class VentanaPrincipal extends JFrame {
 	private JPanel panel_20;
 	private JLabel label_14;
 	private JPanel panel_21;
-	private JLabel label_15;
 	private JButton btnListaAlmacenes;
 	private JPanel panel_22;
 	private JLabel label_16;
@@ -114,6 +115,11 @@ public class VentanaPrincipal extends JFrame {
 	private JPanel panel_24;
 	private JPanel panel_25;
 	private JLabel lblNewLabel;
+	private JPanel panel_26;
+	private JPanel panel_27;
+	private JPanel panel_28;
+	private JLabel lblBienvenido;
+	private JLabel label_9;
 
 	/**
 	 * Launch the application.
@@ -567,6 +573,11 @@ public class VentanaPrincipal extends JFrame {
 								}
 								else {
 									DatabaseManager.registroCliente(dniUsuario, textField_2.getText(), textField_3.getText(), contrasenna, direccion, comboBox.getSelectedItem().toString());
+									
+									clienteActual = DatabaseManager.checkLogin(dniUsuario, contrasenna);
+									
+									CardLayout card = (CardLayout) contentPane.getLayout();
+									card.show(contentPane, "panelInicioUser");
 								}
 							} catch (SQLException e) {
 								e.printStackTrace();
@@ -697,8 +708,8 @@ public class VentanaPrincipal extends JFrame {
 			btnEntrarLogin.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					try {
-						Cliente c = DatabaseManager.checkLogin(textField_5.getText(), textField_6.getText());
-						if(c==null) {
+						clienteActual = DatabaseManager.checkLogin(textField_5.getText(), textField_6.getText());
+						if(clienteActual==null) {
 							JOptionPane.showMessageDialog(null,
 									"El usuario no existe o es incorrecto.");
 							textField_5.setText("");
@@ -723,16 +734,10 @@ public class VentanaPrincipal extends JFrame {
 		if (panelInicioUser == null) {
 			panelInicioUser = new JPanel();
 			panelInicioUser.setLayout(new BorderLayout(0, 0));
-			panelInicioUser.add(getLabel_9(), BorderLayout.CENTER);
 			panelInicioUser.add(getPanel_15(), BorderLayout.EAST);
+			panelInicioUser.add(getPanel_28(), BorderLayout.CENTER);
 		}
 		return panelInicioUser;
-	}
-	private JLabel getLabel_9() {
-		if (label_9 == null) {
-			label_9 = new JLabel("");
-		}
-		return label_9;
 	}
 	private JPanel getPanel_15() {
 		if (panel_15 == null) {
@@ -781,6 +786,7 @@ public class VentanaPrincipal extends JFrame {
 	private JPanel getPanel_17() {
 		if (panel_17 == null) {
 			panel_17 = new JPanel();
+			panel_17.setBackground(Color.WHITE);
 			panel_17.setLayout(new GridLayout(0, 3, 0, 0));
 			panel_17.add(getLabel_11());
 			panel_17.add(getBtnCrearUnEnvo());
@@ -815,6 +821,7 @@ public class VentanaPrincipal extends JFrame {
 	private JPanel getPanel_19() {
 		if (panel_19 == null) {
 			panel_19 = new JPanel();
+			panel_19.setBackground(Color.WHITE);
 			panel_19.setLayout(new GridLayout(0, 3, 0, 0));
 			panel_19.add(getLabel_13());
 			panel_19.add(getBtnConsultarEnvos());
@@ -856,18 +863,11 @@ public class VentanaPrincipal extends JFrame {
 		if (panel_21 == null) {
 			panel_21 = new JPanel();
 			panel_21.setLayout(new GridLayout(0, 3, 0, 0));
-			panel_21.add(getLabel_15());
+			panel_21.add(getPanel_26());
 			panel_21.add(getBtnListaAlmacenes());
+			panel_21.add(getPanel_27());
 		}
 		return panel_21;
-	}
-	private JLabel getLabel_15() {
-		if (label_15 == null) {
-			label_15 = new JLabel("");
-			label_15.setForeground(Color.WHITE);
-			label_15.setBackground(Color.WHITE);
-		}
-		return label_15;
 	}
 	private JButton getBtnListaAlmacenes() {
 		if (btnListaAlmacenes == null) {
@@ -895,6 +895,7 @@ public class VentanaPrincipal extends JFrame {
 	private JPanel getPanel_23() {
 		if (panel_23 == null) {
 			panel_23 = new JPanel();
+			panel_23.setBackground(Color.WHITE);
 			panel_23.setLayout(new GridLayout(0, 3, 0, 0));
 			panel_23.add(getLabel_17());
 			panel_23.add(getLblNewLabel());
@@ -935,5 +936,41 @@ public class VentanaPrincipal extends JFrame {
 			lblNewLabel = new JLabel("");
 		}
 		return lblNewLabel;
+	}
+	private JPanel getPanel_26() {
+		if (panel_26 == null) {
+			panel_26 = new JPanel();
+			panel_26.setBackground(Color.WHITE);
+		}
+		return panel_26;
+	}
+	private JPanel getPanel_27() {
+		if (panel_27 == null) {
+			panel_27 = new JPanel();
+			panel_27.setBackground(Color.WHITE);
+		}
+		return panel_27;
+	}
+	private JPanel getPanel_28() {
+		if (panel_28 == null) {
+			panel_28 = new JPanel();
+			panel_28.setLayout(new BorderLayout(0, 0));
+			panel_28.add(getLabel_9_1(), BorderLayout.NORTH);
+			panel_28.add(getLabel_9_2(), BorderLayout.CENTER);
+		}
+		return panel_28;
+	}
+	private JLabel getLabel_9_1() {
+		if (lblBienvenido == null) {
+			lblBienvenido = new JLabel("Bienvenido ");
+			lblBienvenido.setFont(new Font("Tahoma", Font.ITALIC, 18));
+		}
+		return lblBienvenido;
+	}
+	private JLabel getLabel_9_2() {
+		if (label_9 == null) {
+			label_9 = new JLabel("");
+		}
+		return label_9;
 	}
 }
