@@ -2,15 +2,17 @@ package src;
 
 public class Transportista {
 	private String contrasenna;
-	private String usuario;
+	private String DNI;
 	private String nombre;
 	private Vehiculo vehiculo;
+	private boolean disponible;
 	
-	public Transportista(String contrasenna, String usuario, String nombre) {
+	public Transportista(String contrasenna, String DNI, String nombre, boolean disponible) {
 		super();
 		this.contrasenna = contrasenna;
-		this.usuario = usuario;
+		this.DNI = DNI;
 		this.nombre = nombre;
+		this.disponible = disponible;
 	}
 	public String getContrasenna() {
 		return contrasenna;
@@ -18,11 +20,11 @@ public class Transportista {
 	public void setContrasenna(String contrasenna) {
 		this.contrasenna = contrasenna;
 	}
-	public String getUsuario() {
-		return usuario;
+	public String getDNI() {
+		return DNI;
 	}
-	public void setUsuario(String usuario) {
-		this.usuario = usuario;
+	public void setDNI(String DNI) {
+		this.DNI = DNI;
 	}
 	public String getNombre() {
 		return nombre;
@@ -35,5 +37,11 @@ public class Transportista {
 	}
 	public void setVehiculo(Vehiculo vehiculo) {
 		this.vehiculo = vehiculo;
+	}
+	public boolean isDisponible() {
+		return disponible;
+	}
+	public void setDisponible(boolean disponible) {
+		this.disponible = disponible;
 	}
 }

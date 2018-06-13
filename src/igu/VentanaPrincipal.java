@@ -10,6 +10,8 @@ import javax.swing.border.EmptyBorder;
 
 import src.Cliente;
 import src.DatabaseManager;
+import src.Envio;
+import src.Transportista;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -25,8 +27,10 @@ import javax.swing.JTextField;
 import javax.swing.JComboBox;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
+import java.util.List;
 import java.awt.event.ActionEvent;
 import java.awt.Color;
+import javax.swing.JRadioButton;
 
 public class VentanaPrincipal extends JFrame {
 
@@ -35,6 +39,7 @@ public class VentanaPrincipal extends JFrame {
 	 */
 	
 	private Cliente clienteActual;
+	private List<Envio> enviosCreados;
 	
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
@@ -69,7 +74,7 @@ public class VentanaPrincipal extends JFrame {
 	private JPanel panel_8;
 	private JLabel lblProvincia;
 	private JComboBox<String> comboBox;
-	private JLabel label_3;
+	private JLabel lblCampoNo;
 	private JPanel panel_9;
 	private JLabel label_5;
 	private JLabel label_6;
@@ -120,6 +125,22 @@ public class VentanaPrincipal extends JFrame {
 	private JPanel panel_28;
 	private JLabel lblBienvenido;
 	private JLabel label_9;
+	private JPanel panelCrearEnvío;
+	private JLabel label_3;
+	private JPanel panel_29;
+	private JLabel lblCrearEnvo;
+	private JLabel label_18;
+	private JPanel panel_30;
+	private JLabel lblDniReceptor;
+	private JTextField textField_7;
+	private JPanel panel_35;
+	private JPanel panel_36;
+	private JLabel label_26;
+	private JPanel panel_37;
+	private JButton btnConfirmar;
+	private JLabel label_27;
+	private JRadioButton rdbtnRecogidaADomicilio;
+	private JRadioButton rdbtnEnvoADomicilio;
 
 	/**
 	 * Launch the application.
@@ -151,10 +172,11 @@ public class VentanaPrincipal extends JFrame {
 		contentPane.add(getPanelRegistro(), "panelRegistro");
 		contentPane.add(getPanelLogin(), "panelLogin");
 		contentPane.add(getPanelInicioUser(), "panelInicioUser");
+		contentPane.add(getPanelCrearEnvío(), "panelCrearEnvio");
 	}
 	private JLabel getLblAplicacinDeEntrega() {
 		if (lblAplicacinDeEntrega == null) {
-			lblAplicacinDeEntrega = new JLabel("Aplicaci\u00F3n de entrega de env\u00EDos");
+			lblAplicacinDeEntrega = new JLabel("Aplicaci\u00F3n de env\u00EDos");
 			lblAplicacinDeEntrega.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 18));
 		}
 		return lblAplicacinDeEntrega;
@@ -354,7 +376,7 @@ public class VentanaPrincipal extends JFrame {
 	}
 	private JLabel getLblApellidos() {
 		if (lblApellidos == null) {
-			lblApellidos = new JLabel("Apellidos: ");
+			lblApellidos = new JLabel("Apellidos(*): ");
 			lblApellidos.setBounds(10, 15, 159, 22);
 		}
 		return lblApellidos;
@@ -465,10 +487,11 @@ public class VentanaPrincipal extends JFrame {
 		return comboBox;
 	}
 	private JLabel getLabel_3_1() {
-		if (label_3 == null) {
-			label_3 = new JLabel("");
+		if (lblCampoNo == null) {
+			lblCampoNo = new JLabel("   (*): campo no obligatorio");
+			lblCampoNo.setVerticalAlignment(SwingConstants.BOTTOM);
 		}
-		return label_3;
+		return lblCampoNo;
 	}
 	private JPanel getPanel_9() {
 		if (panel_9 == null) {
@@ -525,9 +548,13 @@ public class VentanaPrincipal extends JFrame {
 						JOptionPane.showMessageDialog(null,
 								"La longitud del DNI debe ser de 9 caracteres.");
 					}
+					else if(textField_2.getText().length()<1) {
+						JOptionPane.showMessageDialog(null,
+								"Debe introducir al menos el nombre.");
+					}
 					else if(Character.isLetter(dniUsuario.charAt(8))==false) {
 						JOptionPane.showMessageDialog(null,
-								"El DNI debe contener una letra.");
+								"El DNI debe contener una letra al final.");
 					}
 					else if(contrasenna.length()<5) {
 						JOptionPane.showMessageDialog(null,
@@ -780,6 +807,12 @@ public class VentanaPrincipal extends JFrame {
 	private JButton getBtnCrearUnEnvo() {
 		if (btnCrearUnEnvo == null) {
 			btnCrearUnEnvo = new JButton("Crear un env\u00EDo");
+			btnCrearUnEnvo.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					CardLayout card = (CardLayout) contentPane.getLayout();
+					card.show(contentPane, "panelLogin");
+				}
+			});
 		}
 		return btnCrearUnEnvo;
 	}
@@ -914,6 +947,13 @@ public class VentanaPrincipal extends JFrame {
 	private JButton getBtnDesconectar() {
 		if (btnDesconectar == null) {
 			btnDesconectar = new JButton("Desconectar");
+			btnDesconectar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					CardLayout card = (CardLayout) contentPane.getLayout();
+					card.show(contentPane, "panelInicio");
+					clienteActual = null;
+				}
+			});
 		}
 		return btnDesconectar;
 	}
@@ -962,7 +1002,7 @@ public class VentanaPrincipal extends JFrame {
 	}
 	private JLabel getLabel_9_1() {
 		if (lblBienvenido == null) {
-			lblBienvenido = new JLabel("Bienvenido ");
+			lblBienvenido = new JLabel("Bienvenido " + clienteActual.getNombre());
 			lblBienvenido.setFont(new Font("Tahoma", Font.ITALIC, 18));
 		}
 		return lblBienvenido;
@@ -972,5 +1012,156 @@ public class VentanaPrincipal extends JFrame {
 			label_9 = new JLabel("");
 		}
 		return label_9;
+	}
+	private JPanel getPanelCrearEnvío() {
+		if (panelCrearEnvío == null) {
+			panelCrearEnvío = new JPanel();
+			panelCrearEnvío.setLayout(new GridLayout(0, 3, 0, 0));
+			panelCrearEnvío.add(getLabel_3());
+			panelCrearEnvío.add(getPanel_29());
+		}
+		return panelCrearEnvío;
+	}
+	private JLabel getLabel_3() {
+		if (label_3 == null) {
+			label_3 = new JLabel("");
+		}
+		return label_3;
+	}
+	private JPanel getPanel_29() {
+		if (panel_29 == null) {
+			panel_29 = new JPanel();
+			panel_29.setLayout(new GridLayout(10, 0, 0, 0));
+			panel_29.add(getLblCrearEnvo());
+			panel_29.add(getLabel_18());
+			panel_29.add(getPanel_30());
+			panel_29.add(getPanel_35());
+			panel_29.add(getPanel_36());
+		}
+		return panel_29;
+	}
+	private JLabel getLblCrearEnvo() {
+		if (lblCrearEnvo == null) {
+			lblCrearEnvo = new JLabel("Crear env\u00EDo");
+			lblCrearEnvo.setHorizontalAlignment(SwingConstants.CENTER);
+			lblCrearEnvo.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 20));
+		}
+		return lblCrearEnvo;
+	}
+	private JLabel getLabel_18() {
+		if (label_18 == null) {
+			label_18 = new JLabel("");
+		}
+		return label_18;
+	}
+	private JPanel getPanel_30() {
+		if (panel_30 == null) {
+			panel_30 = new JPanel();
+			panel_30.setLayout(null);
+			panel_30.add(getLblDniReceptor());
+			panel_30.add(getTextField_7());
+		}
+		return panel_30;
+	}
+	private JLabel getLblDniReceptor() {
+		if (lblDniReceptor == null) {
+			lblDniReceptor = new JLabel("DNI destinatario: ");
+			lblDniReceptor.setBounds(10, 15, 159, 22);
+		}
+		return lblDniReceptor;
+	}
+	private JTextField getTextField_7() {
+		if (textField_7 == null) {
+			textField_7 = new JTextField();
+			textField_7.setColumns(10);
+			textField_7.setBounds(106, 15, 203, 22);
+		}
+		return textField_7;
+	}
+	private JPanel getPanel_35() {
+		if (panel_35 == null) {
+			panel_35 = new JPanel();
+			panel_35.setLayout(null);
+			panel_35.add(getRdbtnRecogidaADomicilio());
+			panel_35.add(getRdbtnEnvoADomicilio());
+		}
+		return panel_35;
+	}
+	private JPanel getPanel_36() {
+		if (panel_36 == null) {
+			panel_36 = new JPanel();
+			panel_36.setLayout(new GridLayout(0, 3, 0, 0));
+			panel_36.add(getLabel_26());
+			panel_36.add(getPanel_37());
+			panel_36.add(getLabel_27());
+		}
+		return panel_36;
+	}
+	private JLabel getLabel_26() {
+		if (label_26 == null) {
+			label_26 = new JLabel("");
+		}
+		return label_26;
+	}
+	private JPanel getPanel_37() {
+		if (panel_37 == null) {
+			panel_37 = new JPanel();
+			panel_37.add(getBtnConfirmar());
+		}
+		return panel_37;
+	}
+	private JButton getBtnConfirmar() {
+		if (btnConfirmar == null) {
+			btnConfirmar = new JButton("Confirmar");
+			btnConfirmar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					String dniIntroducido = textField_7.getText();
+					try {
+						boolean existe = DatabaseManager.existeClientePorDNI(dniIntroducido);
+						if(!existe) {
+							JOptionPane.showMessageDialog(null,
+									"El destinatario no existe o es incorrecto.");
+						}
+						else {
+							Cliente receptor = DatabaseManager.getCliente(dniIntroducido);
+							//QUEDA ASIGNAR AL TRANSPORTISTA Y VEHICULO, Y PONER EL LUGAR DE ENVIO (OFICINA O DOMICILIO DEPENDE DEL RADIOBUTTON) 
+							Envio envio = new Envio(rdbtnRecogidaADomicilio.isSelected(), rdbtnEnvoADomicilio.isSelected(), dniIntroducido, clienteActual.getDni(),
+									"", "", receptor.getProvincia(), clienteActual.getProvincia(), "", "ESPERA-ENVIO");
+							DatabaseManager.registraEnvio(envio);
+							JOptionPane.showMessageDialog(null,
+									"Se ha creado el envío correctamente.");
+							CardLayout card = (CardLayout) contentPane.getLayout();
+							card.show(contentPane, "panelInicioUser");
+						}
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+			});
+		}
+		return btnConfirmar;
+	}
+	private JLabel getLabel_27() {
+		if (label_27 == null) {
+			label_27 = new JLabel("");
+		}
+		return label_27;
+	}
+	private JRadioButton getRdbtnRecogidaADomicilio() {
+		if (rdbtnRecogidaADomicilio == null) {
+			rdbtnRecogidaADomicilio = new JRadioButton("Recogida a domicilio");
+			rdbtnRecogidaADomicilio.setFont(new Font("Tahoma", Font.BOLD, 11));
+			rdbtnRecogidaADomicilio.setBounds(6, 7, 148, 17);
+		}
+		return rdbtnRecogidaADomicilio;
+	}
+	private JRadioButton getRdbtnEnvoADomicilio() {
+		if (rdbtnEnvoADomicilio == null) {
+			rdbtnEnvoADomicilio = new JRadioButton("Env\u00EDo a domicilio");
+			rdbtnEnvoADomicilio.setFont(new Font("Tahoma", Font.BOLD, 11));
+			rdbtnEnvoADomicilio.setBounds(6, 29, 148, 17);
+		}
+		return rdbtnEnvoADomicilio;
 	}
 }
