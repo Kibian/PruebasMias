@@ -10,6 +10,7 @@ import javax.swing.border.EmptyBorder;
 
 import src.Cliente;
 import src.DatabaseManager;
+import src.Edificio;
 import src.Envio;
 import src.MyTableModel;
 import src.Oficina;
@@ -1042,11 +1043,9 @@ public class VentanaPrincipal extends JFrame {
 	}
 	private JLabel getLabel_9_1() {
 		if (lblBienvenido == null) {
+			lblBienvenido = new JLabel("Bienvenido");
 			if(clienteActual != null) {
 				lblBienvenido = new JLabel("Bienvenido " + clienteActual.getNombre());
-			}
-			else {
-				lblBienvenido = new JLabel("Bienvenido");
 			}
 			lblBienvenido.setFont(new Font("Tahoma", Font.ITALIC, 18));
 		}
@@ -1177,22 +1176,27 @@ public class VentanaPrincipal extends JFrame {
 							Transportista trans = t.get(posRandomDos);
 							int posRandomTres = ThreadLocalRandom.current().nextInt(0, v.size());
 							Vehiculo veh = v.get(posRandomTres);
-							if(rdbtnEnvoADomicilio.isSelected()) {
+							if(rdbtnEnvoADomicilio.isSelected()) {	//SI EL ENVIO ES A DOMICILIO NO HACE FALTA ASIGNAR UN EDIFICIO
 								envio = new Envio(rdbtnRecogidaADomicilio.isSelected(), rdbtnEnvoADomicilio.isSelected(), dniIntroducido, clienteActual.getDni(),
 										trans.getDNI(), veh.getMatricula(), receptor.getProvincia(), clienteActual.getProvincia(), receptor.getDireccion(), "ESPERA-ENVIO");
 								envio.calculaPrecio();
 								DatabaseManager.registraEnvio(envio);
 							}
 							
-							else {
-								List<Oficina> x = DatabaseManager.getOficinasByProvincia(receptor.getProvincia());
-								int posRandom = ThreadLocalRandom.current().nextInt(0, x.size());
-								Oficina oficinaSeleccionada = x.get(posRandom);
-								envio = new Envio(rdbtnRecogidaADomicilio.isSelected(), rdbtnEnvoADomicilio.isSelected(), dniIntroducido, clienteActual.getDni(),
-										trans.getDNI(), veh.getMatricula(), receptor.getProvincia(), clienteActual.getProvincia(), "Oficina-"+oficinaSeleccionada.getNombre()+"-"+
-												oficinaSeleccionada.getProvinciaLocalizacion(), "ESPERA-ENVIO");
-								envio.calculaPrecio();
-								DatabaseManager.registraEnvio(envio);
+							else {			//SI NO LO ES ENTONCES SI
+								List<Edificio> x = DatabaseManager.getEdificiosByProvincia(receptor.getProvincia());
+								if(x.size()==0) {
+									JOptionPane.showMessageDialog(null,
+											"No existen oficinas en la provincia del receptor.");
+								}else {
+									int posRandom = ThreadLocalRandom.current().nextInt(0, x.size());
+									Edificio edificioSeleccionado= x.get(posRandom);
+									envio = new Envio(rdbtnRecogidaADomicilio.isSelected(), rdbtnEnvoADomicilio.isSelected(), dniIntroducido, clienteActual.getDni(),
+											trans.getDNI(), veh.getMatricula(), receptor.getProvincia(), clienteActual.getProvincia(), edificioSeleccionado.getTipo()+
+											"-"+edificioSeleccionado.getNombre()+"-"+edificioSeleccionado.getProvinciaLocalizacion(), "ESPERA-ENVIO");
+									envio.calculaPrecio();
+									DatabaseManager.registraEnvio(envio);
+								}
 							}
 							JOptionPane.showMessageDialog(null,
 									"Se ha creado el envío correctamente.");
@@ -1355,7 +1359,7 @@ public class VentanaPrincipal extends JFrame {
 									DatabaseManager.updatePrecioEnvio((Integer) modelEnviosEnviados.getValueAt(x, 1), precioNuevo);
 								}
 								else {
-									List<Oficina> lista = DatabaseManager.getOficinasByProvincia(cReceptor.getProvincia());
+									List<Edificio> lista = DatabaseManager.getEdificiosByProvincia(cReceptor.getProvincia());
 									if(lista.size()==0) {
 										JOptionPane.showMessageDialog(null,
 												"No existen oficinas en la provincia del receptor.");
@@ -1363,9 +1367,9 @@ public class VentanaPrincipal extends JFrame {
 									else {
 										//MODIFICA ENTREGA DEL ENVIO
 										int posRandom = ThreadLocalRandom.current().nextInt(0, lista.size());
-										Oficina oficinaSeleccionada = lista.get(posRandom);
-										DatabaseManager.modifyEnvioById("No", "Oficina-"+oficinaSeleccionada.getNombre()+"-"+
-										oficinaSeleccionada.getProvinciaLocalizacion(), (Integer) modelEnviosEnviados.getValueAt(x, 1));
+										Edificio edificioSeleccionado = lista.get(posRandom);
+										DatabaseManager.modifyEnvioById("No", edificioSeleccionado.getTipo()+"-"+edificioSeleccionado.getNombre()+"-"+
+										edificioSeleccionado.getProvinciaLocalizacion(), (Integer) modelEnviosEnviados.getValueAt(x, 1));
 										//MODIFICA EL PRECIO
 										Envio en = DatabaseManager.getEnvioById((Integer) modelEnviosEnviados.getValueAt(x, 1));
 										Double precioNuevo = en.calculaPrecio();

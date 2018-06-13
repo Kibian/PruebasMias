@@ -297,18 +297,25 @@ public class DatabaseManager {
 		pst.execute();		
 	}
 	
-	public static List<Oficina> getOficinasByProvincia(String provincia) throws SQLException {
+	public static List<Edificio> getEdificiosByProvincia(String provincia) throws SQLException {
 		PreparedStatement pst = null;
 		ResultSet rs = null;
-		List<Oficina> result = new ArrayList<Oficina>();
+		List<Edificio> result = new ArrayList<Edificio>();
 		getConnection();
-		pst = con.prepareStatement("select id, nombre, provincialocalizacion from oficinas "
+		pst = con.prepareStatement("select id, nombre, provincialocalizacion, tipo from edificios "
 				+ "where provinciaLocalizacion = ?");
 		pst.setString(1, provincia);
 		rs = pst.executeQuery();
 		while(rs.next()) {
-			Oficina o = new Oficina(rs.getInt(1), rs.getString(3), rs.getString(2));
-			result.add(o);
+			if(rs.getString(3).equals("Oficina")) {
+				Edificio e = new Oficina(rs.getInt(0), rs.getString(2), rs.getString(1));
+				result.add(e);
+			}
+			else if(rs.getString(3).equals("Almacen")) {
+				Edificio e = new Almacen(rs.getInt(0), rs.getString(2), rs.getString(1));
+				result.add(e);
+			}
+			
 		}
 		return result;
 	}

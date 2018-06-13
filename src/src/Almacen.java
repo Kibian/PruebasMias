@@ -1,17 +1,17 @@
 package src;
 
-public class Oficina implements Edificio{
+public class Almacen implements Edificio{
 	private String provinciaLocalizacion;
 	private String nombre;
 	private Integer id;
-	private String tipo = "Oficina";
-	public Oficina(Integer id, String provinciaLocalizacion, String nombre) {
+	private String tipo = "Almacen";
+	public Almacen(Integer id, String provinciaLocalizacion, String nombre) {
 		super();
 		this.provinciaLocalizacion = provinciaLocalizacion;
 		this.nombre = nombre;
 		this.id = id;
 	}
-	public Oficina(String provinciaLocalizacion, String nombre) {
+	public Almacen(String provinciaLocalizacion, String nombre) {
 		super();
 		this.provinciaLocalizacion = provinciaLocalizacion;
 		this.nombre = nombre;
