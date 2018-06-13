@@ -13,7 +13,6 @@ import src.DatabaseManager;
 import src.Edificio;
 import src.Envio;
 import src.MyTableModel;
-import src.Oficina;
 import src.Transportista;
 import src.Vehiculo;
 
@@ -25,7 +24,6 @@ import java.awt.GridLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.CardLayout;
-import java.awt.FlowLayout;
 import javax.swing.SwingConstants;
 import javax.swing.JTextField;
 import javax.swing.JComboBox;
@@ -47,7 +45,6 @@ public class VentanaPrincipal extends JFrame {
 	 */
 	
 	private Cliente clienteActual;
-	private List<Envio> enviosCreados;
 	MyTableModel modelEnviosEnviados;
 	private Transportista transportistaActual;
 	
