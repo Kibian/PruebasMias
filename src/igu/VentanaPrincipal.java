@@ -218,6 +218,34 @@ public class VentanaPrincipal extends JFrame {
 	private JRadioButton rdbtnEntregafallida_1;
 	private MyTableModel modelEnviosARepartir;
 	private JRadioButton rdbtnEntregadoedificiosalida;
+	private JPanel panelInicioAdmin;
+	private JPanel panel_59;
+	private JLabel lblOpcionesDeAdministrador;
+	private JPanel panel_60;
+	private JLabel label_37;
+	private JPanel panel_61;
+	private JLabel label_38;
+	private JButton btnListadoDeEnvios;
+	private JPanel panel_62;
+	private JLabel label_39;
+	private JPanel panel_63;
+	private JLabel label_40;
+	private JButton btnListadoVehculos;
+	private JPanel panel_64;
+	private JLabel label_41;
+	private JPanel panel_65;
+	private JPanel panel_66;
+	private JButton btnEntregasFallidas;
+	private JPanel panel_67;
+	private JPanel panel_68;
+	private JPanel panel_69;
+	private JPanel panel_70;
+	private JLabel label_42;
+	private JPanel panel_71;
+	private JLabel label_43;
+	private JLabel label_44;
+	private JButton button_4;
+	private JPanel panel_72;
 
 	/**
 	 * Launch the application.
@@ -252,7 +280,8 @@ public class VentanaPrincipal extends JFrame {
 		contentPane.add(getPanelCrearEnvío(), "panelCrearEnvio");
 		contentPane.add(getPanelConsultaEnvios(), "panelConsultaEnvios");
 		contentPane.add(getPanelInicioTransportista(), "panelInicioTransportista");
-		contentPane.add(getPanelConsultaEnviosAsignados(), "name_43260553668029");
+		contentPane.add(getPanelConsultaEnviosAsignados(), "panelConsultaEnviosAsignados");
+		contentPane.add(getPanelInicioAdmin(), "panelInicioAdmin");
 	}
 	private JLabel getLblAplicacinDeEntrega() {
 		if (lblAplicacinDeEntrega == null) {
@@ -826,6 +855,10 @@ public class VentanaPrincipal extends JFrame {
 						else if(transportistaActual!=null) {
 							CardLayout card = (CardLayout) contentPane.getLayout();
 							card.show(contentPane, "panelInicioTransportista");
+						}
+						else if(textField_5.getText().equals("SA") && textField_6.getText().equals("SA")) {
+							CardLayout card = (CardLayout) contentPane.getLayout();
+							card.show(contentPane, "panelInicioAdmin");
 						}
 						else {
 							JOptionPane.showMessageDialog(null,
@@ -1716,6 +1749,8 @@ public class VentanaPrincipal extends JFrame {
 			btnListadoDeEnvos = new JButton("Listado de env\u00EDos asignados");
 			btnListadoDeEnvos.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
+					CardLayout card = (CardLayout) contentPane.getLayout();
+					card.show(contentPane, "panelConsultaEnviosAsignados");
 					
 				}
 			});
@@ -2594,5 +2629,238 @@ public class VentanaPrincipal extends JFrame {
 			});
 		}
 		return rdbtnEntregadoedificiosalida;
+	}
+	private JPanel getPanelInicioAdmin() {
+		if (panelInicioAdmin == null) {
+			panelInicioAdmin = new JPanel();
+			panelInicioAdmin.add(getPanel_59());
+			panelInicioAdmin.add(getPanel_72());
+		}
+		return panelInicioAdmin;
+	}
+	private JPanel getPanel_59() {
+		if (panel_59 == null) {
+			panel_59 = new JPanel();
+			panel_59.setLayout(new GridLayout(7, 0, 0, 0));
+			panel_59.add(getLblOpcionesDeAdministrador());
+			panel_59.add(getPanel_60());
+			panel_59.add(getPanel_62());
+			panel_59.add(getPanel_64());
+			panel_59.add(getPanel_68());
+			panel_59.add(getPanel_69());
+			panel_59.add(getPanel_70());
+		}
+		return panel_59;
+	}
+	private JLabel getLblOpcionesDeAdministrador() {
+		if (lblOpcionesDeAdministrador == null) {
+			lblOpcionesDeAdministrador = new JLabel("Opciones de administrador:                   ");
+			lblOpcionesDeAdministrador.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 16));
+		}
+		return lblOpcionesDeAdministrador;
+	}
+	private JPanel getPanel_60() {
+		if (panel_60 == null) {
+			panel_60 = new JPanel();
+			panel_60.setBackground(Color.WHITE);
+			panel_60.setLayout(new GridLayout(3, 0, 0, 0));
+			panel_60.add(getLabel_37());
+			panel_60.add(getPanel_61());
+		}
+		return panel_60;
+	}
+	private JLabel getLabel_37() {
+		if (label_37 == null) {
+			label_37 = new JLabel("");
+			label_37.setBackground(Color.WHITE);
+		}
+		return label_37;
+	}
+	private JPanel getPanel_61() {
+		if (panel_61 == null) {
+			panel_61 = new JPanel();
+			panel_61.setBackground(Color.WHITE);
+			panel_61.setLayout(new GridLayout(0, 3, 0, 0));
+			panel_61.add(getLabel_38());
+			panel_61.add(getBtnListadoDeEnvios());
+		}
+		return panel_61;
+	}
+	private JLabel getLabel_38() {
+		if (label_38 == null) {
+			label_38 = new JLabel("");
+			label_38.setForeground(Color.WHITE);
+			label_38.setBackground(Color.WHITE);
+		}
+		return label_38;
+	}
+	private JButton getBtnListadoDeEnvios() {
+		if (btnListadoDeEnvios == null) {
+			btnListadoDeEnvios = new JButton("Listado de envios");
+		}
+		return btnListadoDeEnvios;
+	}
+	private JPanel getPanel_62() {
+		if (panel_62 == null) {
+			panel_62 = new JPanel();
+			panel_62.setBackground(Color.WHITE);
+			panel_62.setLayout(new GridLayout(3, 0, 0, 0));
+			panel_62.add(getLabel_39());
+			panel_62.add(getPanel_63());
+		}
+		return panel_62;
+	}
+	private JLabel getLabel_39() {
+		if (label_39 == null) {
+			label_39 = new JLabel("");
+			label_39.setBackground(Color.WHITE);
+		}
+		return label_39;
+	}
+	private JPanel getPanel_63() {
+		if (panel_63 == null) {
+			panel_63 = new JPanel();
+			panel_63.setBackground(Color.WHITE);
+			panel_63.setLayout(new GridLayout(0, 3, 0, 0));
+			panel_63.add(getLabel_40());
+			panel_63.add(getBtnListadoVehculos());
+		}
+		return panel_63;
+	}
+	private JLabel getLabel_40() {
+		if (label_40 == null) {
+			label_40 = new JLabel("");
+			label_40.setForeground(Color.WHITE);
+			label_40.setBackground(Color.WHITE);
+		}
+		return label_40;
+	}
+	private JButton getBtnListadoVehculos() {
+		if (btnListadoVehculos == null) {
+			btnListadoVehculos = new JButton("Listado veh\u00EDculos");
+		}
+		return btnListadoVehculos;
+	}
+	private JPanel getPanel_64() {
+		if (panel_64 == null) {
+			panel_64 = new JPanel();
+			panel_64.setBackground(Color.WHITE);
+			panel_64.setLayout(new GridLayout(3, 0, 0, 0));
+			panel_64.add(getLabel_41());
+			panel_64.add(getPanel_65());
+		}
+		return panel_64;
+	}
+	private JLabel getLabel_41() {
+		if (label_41 == null) {
+			label_41 = new JLabel("");
+			label_41.setBackground(Color.WHITE);
+		}
+		return label_41;
+	}
+	private JPanel getPanel_65() {
+		if (panel_65 == null) {
+			panel_65 = new JPanel();
+			panel_65.setLayout(new GridLayout(0, 3, 0, 0));
+			panel_65.add(getPanel_66());
+			panel_65.add(getBtnEntregasFallidas());
+			panel_65.add(getPanel_67());
+		}
+		return panel_65;
+	}
+	private JPanel getPanel_66() {
+		if (panel_66 == null) {
+			panel_66 = new JPanel();
+			panel_66.setBackground(Color.WHITE);
+		}
+		return panel_66;
+	}
+	private JButton getBtnEntregasFallidas() {
+		if (btnEntregasFallidas == null) {
+			btnEntregasFallidas = new JButton("Entregas fallidas");
+		}
+		return btnEntregasFallidas;
+	}
+	private JPanel getPanel_67() {
+		if (panel_67 == null) {
+			panel_67 = new JPanel();
+			panel_67.setBackground(Color.WHITE);
+		}
+		return panel_67;
+	}
+	private JPanel getPanel_68() {
+		if (panel_68 == null) {
+			panel_68 = new JPanel();
+			panel_68.setBackground(Color.WHITE);
+		}
+		return panel_68;
+	}
+	private JPanel getPanel_69() {
+		if (panel_69 == null) {
+			panel_69 = new JPanel();
+			panel_69.setBackground(Color.WHITE);
+		}
+		return panel_69;
+	}
+	private JPanel getPanel_70() {
+		if (panel_70 == null) {
+			panel_70 = new JPanel();
+			panel_70.setBackground(Color.WHITE);
+			panel_70.setLayout(new GridLayout(3, 0, 0, 0));
+			panel_70.add(getLabel_42());
+			panel_70.add(getPanel_71());
+		}
+		return panel_70;
+	}
+	private JLabel getLabel_42() {
+		if (label_42 == null) {
+			label_42 = new JLabel("");
+			label_42.setBackground(Color.WHITE);
+		}
+		return label_42;
+	}
+	private JPanel getPanel_71() {
+		if (panel_71 == null) {
+			panel_71 = new JPanel();
+			panel_71.setBackground(Color.WHITE);
+			panel_71.setLayout(new GridLayout(0, 3, 0, 0));
+			panel_71.add(getLabel_43());
+			panel_71.add(getLabel_44());
+			panel_71.add(getButton_4());
+		}
+		return panel_71;
+	}
+	private JLabel getLabel_43() {
+		if (label_43 == null) {
+			label_43 = new JLabel("");
+			label_43.setForeground(Color.WHITE);
+			label_43.setBackground(Color.WHITE);
+		}
+		return label_43;
+	}
+	private JLabel getLabel_44() {
+		if (label_44 == null) {
+			label_44 = new JLabel("");
+		}
+		return label_44;
+	}
+	private JButton getButton_4() {
+		if (button_4 == null) {
+			button_4 = new JButton("Desconectar");
+			button_4.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					CardLayout card = (CardLayout) contentPane.getLayout();
+					card.show(contentPane, "panelInicio");
+				}
+			});
+		}
+		return button_4;
+	}
+	private JPanel getPanel_72() {
+		if (panel_72 == null) {
+			panel_72 = new JPanel();
+			panel_72.setLayout(new BorderLayout(0, 0));
+		}
+		return panel_72;
 	}
 }
