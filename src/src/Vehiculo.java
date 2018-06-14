@@ -4,13 +4,20 @@ public class Vehiculo {
 	private String matricula;
 	private String marca;
 	private String tipo;
-	private Transportista transportista;
+	private Integer edificioId;
 	
 	public Vehiculo(String matricula, String marca, String tipo) {
 		super();
 		this.matricula = matricula;
 		this.marca = marca;
 		this.tipo = tipo;
+	}
+	public Vehiculo(String matricula, String marca, String tipo, int edificioId) {
+		super();
+		this.matricula = matricula;
+		this.marca = marca;
+		this.tipo = tipo;
+		this.edificioId = edificioId;
 	}
 	public String getMatricula() {
 		return matricula;
@@ -24,11 +31,11 @@ public class Vehiculo {
 	public void setMarca(String marca) {
 		this.marca = marca;
 	}
-	public Transportista getTransportista() {
-		return transportista;
+	public int getEdificioId() {
+		return edificioId;
 	}
-	public void setTransportista(Transportista transportista) {
-		this.transportista = transportista;
+	public void setEdificioId(int edificioId) {
+		this.edificioId = edificioId;
 	}
 	public String getTipo() {
 		return tipo;

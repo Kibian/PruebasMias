@@ -7,15 +7,16 @@ public class Envio {
 	private String emisor;
 	private String transportista;
 	private String vehiculo;
-	private String provinciaDestino;
-	private String provinciaOrigen;
+	private String provinciaEnvio;
+	private String provinciaRecogida;
 	private String lugarEnvio;
+	private String lugarRecogida;
 	private double precio;
 	private Integer id;
 	private String estado;	//CREADO-ESPERA-VYT, ESPERA-ENVIO, EN-CAMINO, FALLO-UNO, FALLO-DOS, FALLO-TRES, ENTREGADO-DOMICILIO, ENTREGADO-OFICINA
 	
 	public Envio(boolean busquedaADomicilio, boolean envioADomicilio, String receptor, String emisor, String transportista, String vehiculo,
-			String provinciaDestino, String provinciaOrigen, String lugarEnvio, String estado) {
+			String provinciaDestino, String provinciaOrigen, String lugarEnvio, String lugarRecogida, String estado) {
 		super();
 		this.busquedaADomicilio = busquedaADomicilio;
 		this.envioADomicilio = envioADomicilio;
@@ -23,37 +24,44 @@ public class Envio {
 		this.emisor = emisor;
 		this.transportista = transportista;
 		this.vehiculo = vehiculo;
-		this.provinciaDestino = provinciaDestino;
-		this.provinciaOrigen = provinciaOrigen;
+		this.provinciaEnvio = provinciaDestino;
+		this.provinciaRecogida = provinciaOrigen;
+		this.lugarRecogida = lugarRecogida;
 		this.setLugarEnvio(lugarEnvio);
 		this.setEstado(estado);
 	}
 	public Envio(boolean bad, boolean ead, String receptordni, String emisordni, String transportistadni,
-			String vehiculomatricula, String provinciadestino, String provinciaorigen, String lugarenvio,
-			String estado, Double precio) {
+			String vehiculomatricula, String provinciaenvio, String provinciarecogida, String lugarenvio,
+			String lugarRecogida, String estado, Double precio) {
 		this.busquedaADomicilio = bad;
 		this.envioADomicilio = ead;
 		this.receptor = receptordni;
 		this.emisor = emisordni;
 		this.transportista = transportistadni;
 		this.vehiculo = vehiculomatricula;
-		this.provinciaDestino = provinciadestino;
-		this.provinciaOrigen = provinciaorigen;
+		this.provinciaEnvio = provinciaenvio;
+		this.provinciaRecogida = provinciarecogida;
 		this.lugarEnvio = lugarenvio;
 		this.estado = estado;
 		this.precio = precio;
+		this.lugarRecogida = lugarRecogida;
 	}
-	public boolean isbusquedaADomicilio() {
-		return busquedaADomicilio;
-	}
-	public void setbusquedaADomicilio(boolean busquedaADomicilio) {
+	public Envio(Integer id, boolean busquedaADomicilio, boolean envioADomicilio, String receptor, String emisor, String transportista, String vehiculo,
+			String provinciaDestino, String provinciaOrigen, String lugarEnvio, String lugarRecogida, String estado, Double precio) {
+		super();
+		this.id = id;
 		this.busquedaADomicilio = busquedaADomicilio;
-	}
-	public boolean isenvioADomicilio() {
-		return envioADomicilio;
-	}
-	public void setenvioADomicilio(boolean envioADomicilio) {
 		this.envioADomicilio = envioADomicilio;
+		this.receptor = receptor;
+		this.emisor = emisor;
+		this.transportista = transportista;
+		this.vehiculo = vehiculo;
+		this.provinciaEnvio = provinciaDestino;
+		this.provinciaRecogida = provinciaOrigen;
+		this.setLugarEnvio(lugarEnvio);
+		this.setEstado(estado);
+		this.precio = precio;
+		this.lugarRecogida = lugarRecogida;
 	}
 	public String getReceptor() {
 		return receptor;
@@ -74,19 +82,19 @@ public class Envio {
 		this.transportista = transportista;
 	}
 	public String getProvinciaDestino() {
-		return provinciaDestino;
+		return provinciaEnvio;
 	}
 	public void setProvinciaDestino(String provinciaDestino) {
-		this.provinciaDestino = provinciaDestino;
+		this.provinciaEnvio = provinciaDestino;
 	}
 	public String getProvinciaOrigen() {
-		return provinciaOrigen;
+		return provinciaRecogida;
 	}
 	public void setProvinciaOrigen(String provinciaOrigen) {
-		this.provinciaOrigen = provinciaOrigen;
+		this.provinciaRecogida = provinciaOrigen;
 	}	
 	public double calculaPrecio() {
-		if(provinciaOrigen.equals(provinciaDestino)) {
+		if(provinciaRecogida.equals(provinciaEnvio)) {
 			precio = 5.0;
 		}
 		else {
@@ -141,5 +149,11 @@ public class Envio {
 	}
 	public void setVehiculo(String vehiculo) {
 		this.vehiculo = vehiculo;
+	}
+	public String getLugarRecogida() {
+		return lugarRecogida;
+	}
+	public void setLugarRecogida(String lugarRecogida) {
+		this.lugarRecogida = lugarRecogida;
 	}
 }
