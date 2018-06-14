@@ -37,6 +37,7 @@ import javax.swing.JRadioButton;
 import javax.swing.JTable;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import javax.swing.JTextPane;
 
 public class VentanaPrincipal extends JFrame {
 
@@ -217,6 +218,7 @@ public class VentanaPrincipal extends JFrame {
 	private JRadioButton rdbtnEntregafallida;
 	private JRadioButton rdbtnEntregafallida_1;
 	private MyTableModel modelEnviosARepartir;
+	private MyTableModel modelVehiculosAMostrar;
 	private JRadioButton rdbtnEntregadoedificiosalida;
 	private JPanel panelInicioAdmin;
 	private JPanel panel_59;
@@ -225,7 +227,6 @@ public class VentanaPrincipal extends JFrame {
 	private JLabel label_37;
 	private JPanel panel_61;
 	private JLabel label_38;
-	private JButton btnListadoDeEnvios;
 	private JPanel panel_62;
 	private JLabel label_39;
 	private JPanel panel_63;
@@ -234,9 +235,7 @@ public class VentanaPrincipal extends JFrame {
 	private JPanel panel_64;
 	private JLabel label_41;
 	private JPanel panel_65;
-	private JPanel panel_66;
 	private JButton btnEntregasFallidas;
-	private JPanel panel_67;
 	private JPanel panel_68;
 	private JPanel panel_69;
 	private JPanel panel_70;
@@ -246,6 +245,25 @@ public class VentanaPrincipal extends JFrame {
 	private JLabel label_44;
 	private JButton button_4;
 	private JPanel panel_72;
+	private JLabel lblBienvenidoAdministrador;
+	private JPanel panelListadoVehiculos;
+	private JPanel panel_73;
+	private JLabel lblListadoVehculos;
+	private JPanel panel_74;
+	private JTable table_2;
+	private JPanel panel_75;
+	private JLabel lblDatosVehculoSeleccionado;
+	private JPanel panel_76;
+	private JTextPane textPane;
+	private JPanel panel_77;
+	private JButton btnVolver;
+	private JPanel panel_78;
+	private JButton btnMostrarDatosVehculo;
+	private JLabel label_36;
+	private JPanel panel_66;
+	private JPanel panel_67;
+	private JLabel label_45;
+	private JButton btnModificarDatosUsuario;
 
 	/**
 	 * Launch the application.
@@ -282,6 +300,7 @@ public class VentanaPrincipal extends JFrame {
 		contentPane.add(getPanelInicioTransportista(), "panelInicioTransportista");
 		contentPane.add(getPanelConsultaEnviosAsignados(), "panelConsultaEnviosAsignados");
 		contentPane.add(getPanelInicioAdmin(), "panelInicioAdmin");
+		contentPane.add(getPanelListadoVehiculos(), "panelListadoVehiculos");
 	}
 	private JLabel getLblAplicacinDeEntrega() {
 		if (lblAplicacinDeEntrega == null) {
@@ -1086,6 +1105,9 @@ public class VentanaPrincipal extends JFrame {
 		if (panel_24 == null) {
 			panel_24 = new JPanel();
 			panel_24.setBackground(Color.WHITE);
+			panel_24.setLayout(new GridLayout(3, 0, 0, 0));
+			panel_24.add(getPanel_66());
+			panel_24.add(getPanel_67());
 		}
 		return panel_24;
 	}
@@ -1564,15 +1586,15 @@ public class VentanaPrincipal extends JFrame {
 						}
 						else {
 							try {
-								String dniReceptor = (String) modelEnviosEnviados.getValueAt(x, 3);
+								String dniReceptor = (String) modelEnviosEnviados.getValueAt(x, 2);
 								Cliente cReceptor= DatabaseManager.getCliente(dniReceptor);
 								if(rdbtnADomicilio.isSelected()) {		
 									//MODIFICA ENTREGA DEL ENVIO
-									DatabaseManager.modifyEnvioById("Si", cReceptor.getDireccion(), (Integer) modelEnviosEnviados.getValueAt(x, 1));
+									DatabaseManager.modifyEnvioById("Si", cReceptor.getDireccion(), (Integer) modelEnviosEnviados.getValueAt(x, 0));
 									//MODIFICA EL PRECIO
-									Envio en = DatabaseManager.getEnvioById((Integer) modelEnviosEnviados.getValueAt(x, 1));
+									Envio en = DatabaseManager.getEnvioById((Integer) modelEnviosEnviados.getValueAt(x, 0));
 									Double precioNuevo = en.calculaPrecio();
-									DatabaseManager.updatePrecioEnvio((Integer) modelEnviosEnviados.getValueAt(x, 1), precioNuevo);
+									DatabaseManager.updatePrecioEnvio((Integer) modelEnviosEnviados.getValueAt(x, 0), precioNuevo);
 								}
 								else {
 									List<Edificio> lista = DatabaseManager.getEdificiosByProvincia(cReceptor.getProvincia());
@@ -1585,11 +1607,11 @@ public class VentanaPrincipal extends JFrame {
 										int posRandom = ThreadLocalRandom.current().nextInt(0, lista.size());
 										Edificio edificioSeleccionado = lista.get(posRandom);
 										DatabaseManager.modifyEnvioById("No", edificioSeleccionado.getTipo()+"-"+edificioSeleccionado.getNombre()+"-"+
-										edificioSeleccionado.getProvinciaLocalizacion(), (Integer) modelEnviosEnviados.getValueAt(x, 1));
+										edificioSeleccionado.getProvinciaLocalizacion(), (Integer) modelEnviosEnviados.getValueAt(x, 0));
 										//MODIFICA EL PRECIO
-										Envio en = DatabaseManager.getEnvioById((Integer) modelEnviosEnviados.getValueAt(x, 1));
+										Envio en = DatabaseManager.getEnvioById((Integer) modelEnviosEnviados.getValueAt(x, 0));
 										Double precioNuevo = en.calculaPrecio();
-										DatabaseManager.updatePrecioEnvio((Integer) modelEnviosEnviados.getValueAt(x, 1), precioNuevo);
+										DatabaseManager.updatePrecioEnvio((Integer) modelEnviosEnviados.getValueAt(x, 0), precioNuevo);
 									}
 								}
 							} catch (SQLException e1) {
@@ -1883,13 +1905,16 @@ public class VentanaPrincipal extends JFrame {
 			panel_50 = new JPanel();
 			panel_50.setLayout(new BorderLayout(0, 0));
 			panel_50.add(getLabel_33(), BorderLayout.NORTH);
-			panel_50.add(getLabel_34(), BorderLayout.SOUTH);
+			panel_50.add(getLabel_34(), BorderLayout.CENTER);
 		}
 		return panel_50;
 	}
 	private JLabel getLabel_33() {
 		if (label_33 == null) {
 			label_33 = new JLabel("Bienvenido");
+			if(transportistaActual != null) {
+				lblBienvenido = new JLabel("Bienvenido " + transportistaActual.getNombre());
+			}
 			label_33.setFont(new Font("Tahoma", Font.ITALIC, 18));
 		}
 		return label_33;
@@ -2030,7 +2055,7 @@ public class VentanaPrincipal extends JFrame {
 							//si es valida la opcion cogemos el envío de la base de datos, lo modificamos y actualizamos
 							else if(rdbtnEncamino.isSelected()) {
 								try {
-									int envioId = (int) table_1.getValueAt(x, 1); //el id del envío
+									int envioId = (int) table_1.getValueAt(x, 0); //el id del envío
 									Envio envio = DatabaseManager.getEnvioById(envioId);
 									envio.setEstado(rdbtnEncamino.getText());
 									DatabaseManager.updateEstadoEnvio(envio);
@@ -2044,7 +2069,7 @@ public class VentanaPrincipal extends JFrame {
 							//SI LA ENTREGA ES A DOMICILIO
 							else if(rdbtnEntregadoedificiosalida.isSelected()) {
 								try {
-									int envioId = (int) table_1.getValueAt(x, 1); //el id del envío
+									int envioId = (int) table_1.getValueAt(x, 0); //el id del envío
 									Envio envio = DatabaseManager.getEnvioById(envioId);
 									
 									//AHORA CALCULAMOS UN NUEVO TRANSPORTISTA Y UN NUEVO VEHICULO
@@ -2119,7 +2144,7 @@ public class VentanaPrincipal extends JFrame {
 							}
 							else if(rdbtnEsperaEnvio.isSelected()) {
 								try {
-									int envioId = (int) table_1.getValueAt(x, 1); //el id del envío
+									int envioId = (int) table_1.getValueAt(x, 0); //el id del envío
 									Envio envio = DatabaseManager.getEnvioById(envioId);
 									envio.setEstado(rdbtnEsperaEnvio.getText());
 									DatabaseManager.updateEstadoEnvio(envio);
@@ -2151,7 +2176,7 @@ public class VentanaPrincipal extends JFrame {
 							}
 							else if(rdbtnEncamino.isSelected()) {
 								try {
-									int envioId = (int) table_1.getValueAt(x, 1); //el id del envío
+									int envioId = (int) table_1.getValueAt(x, 0); //el id del envío
 									Envio envio = DatabaseManager.getEnvioById(envioId);
 									envio.setEstado(rdbtnEncamino.getText());
 									DatabaseManager.updateEstadoEnvio(envio);
@@ -2164,7 +2189,7 @@ public class VentanaPrincipal extends JFrame {
 							else if(rdbtnEntregadodomicilio.isSelected()) {
 								//en este caso el envio ya esta entregado, se debe desvincular el transportista y el vehiculo
 								try {
-									int envioId = (int) table_1.getValueAt(x, 1); //el id del envío
+									int envioId = (int) table_1.getValueAt(x, 0); //el id del envío
 									Envio envio = DatabaseManager.getEnvioById(envioId);
 									envio.setEstado(rdbtnEntregadodomicilio.getText());
 									envio.setTransportista("");
@@ -2182,7 +2207,7 @@ public class VentanaPrincipal extends JFrame {
 							else if(rdbtnEntregadoedificio.isSelected()) {
 								//este caso solo se dará si se producen 4 fallos y se devuelve al almacen (cambiar el lugar de recogida)
 								try {
-									int envioId = (int) table_1.getValueAt(x, 1); //el id del envío
+									int envioId = (int) table_1.getValueAt(x, 0); //el id del envío
 									Envio envio = DatabaseManager.getEnvioById(envioId);
 									envio.setEstado(rdbtnEntregadoedificio.getText());
 									envio.setTransportista("");
@@ -2206,7 +2231,7 @@ public class VentanaPrincipal extends JFrame {
 							}
 							else if(rdbtnFallida.isSelected()) { //FALLO 1
 								try {
-									int envioId = (int) table_1.getValueAt(x, 1); //el id del envío
+									int envioId = (int) table_1.getValueAt(x, 0); //el id del envío
 									Envio envio = DatabaseManager.getEnvioById(envioId);
 									envio.setEstado(rdbtnFallida.getText());
 									DatabaseManager.updateEstadoEnvio(envio);
@@ -2218,7 +2243,7 @@ public class VentanaPrincipal extends JFrame {
 							}
 							else if(rdbtnEntregafallida.isSelected()) { //FALLO 2
 								try {
-									int envioId = (int) table_1.getValueAt(x, 1); //el id del envío
+									int envioId = (int) table_1.getValueAt(x,0); //el id del envío
 									Envio envio = DatabaseManager.getEnvioById(envioId);
 									envio.setEstado(rdbtnEntregafallida.getText());
 									DatabaseManager.updateEstadoEnvio(envio);
@@ -2230,7 +2255,7 @@ public class VentanaPrincipal extends JFrame {
 							}
 							else if(rdbtnEntregafallida_1.isSelected()) { //FALLO 3
 								try {
-									int envioId = (int) table_1.getValueAt(x, 1); //el id del envío
+									int envioId = (int) table_1.getValueAt(x, 0); //el id del envío
 									Envio envio = DatabaseManager.getEnvioById(envioId);
 									envio.setEstado(rdbtnEntregafallida_1.getText());
 									DatabaseManager.updateEstadoEnvio(envio);
@@ -2242,7 +2267,7 @@ public class VentanaPrincipal extends JFrame {
 							}
 							else if(rdbtnEsperaEnvio.isSelected()) {
 								try {
-									int envioId = (int) table_1.getValueAt(x, 1); //el id del envío
+									int envioId = (int) table_1.getValueAt(x, 0); //el id del envío
 									Envio envio = DatabaseManager.getEnvioById(envioId);
 									envio.setEstado(rdbtnEsperaEnvio.getText());
 									DatabaseManager.updateEstadoEnvio(envio);
@@ -2273,7 +2298,7 @@ public class VentanaPrincipal extends JFrame {
 							}
 							else if(rdbtnEncamino.isSelected()) {
 								try {
-									int envioId = (int) table_1.getValueAt(x, 1); //el id del envío
+									int envioId = (int) table_1.getValueAt(x, 0); //el id del envío
 									Envio envio = DatabaseManager.getEnvioById(envioId);
 									envio.setEstado(rdbtnEncamino.getText());
 									DatabaseManager.updateEstadoEnvio(envio);
@@ -2286,7 +2311,7 @@ public class VentanaPrincipal extends JFrame {
 							else if(rdbtnEntregadodomicilio.isSelected()) {
 								//en este caso el envio ya esta entregado, se debe desvincular el transportista y el vehiculo
 								try {
-									int envioId = (int) table_1.getValueAt(x, 1); //el id del envío
+									int envioId = (int) table_1.getValueAt(x, 0); //el id del envío
 									Envio envio = DatabaseManager.getEnvioById(envioId);
 									envio.setEstado(rdbtnEntregadodomicilio.getText());
 									envio.setTransportista("");
@@ -2303,7 +2328,7 @@ public class VentanaPrincipal extends JFrame {
 							else if(rdbtnEntregadoedificio.isSelected()) {
 								//este caso solo se dará si se producen 4 fallos y se devuelve al almacen (cambiar el lugar de recogida)
 								try {
-									int envioId = (int) table_1.getValueAt(x, 1); //el id del envío
+									int envioId = (int) table_1.getValueAt(x, 0); //el id del envío
 									Envio envio = DatabaseManager.getEnvioById(envioId);
 									envio.setEstado(rdbtnEntregadoedificio.getText());
 									envio.setTransportista("");
@@ -2327,7 +2352,7 @@ public class VentanaPrincipal extends JFrame {
 							}
 							else if(rdbtnFallida.isSelected()) { //FALLO 1
 								try {
-									int envioId = (int) table_1.getValueAt(x, 1); //el id del envío
+									int envioId = (int) table_1.getValueAt(x, 0); //el id del envío
 									Envio envio = DatabaseManager.getEnvioById(envioId);
 									envio.setEstado(rdbtnFallida.getText());
 									DatabaseManager.updateEstadoEnvio(envio);
@@ -2339,7 +2364,7 @@ public class VentanaPrincipal extends JFrame {
 							}
 							else if(rdbtnEntregafallida.isSelected()) { //FALLO 2
 								try {
-									int envioId = (int) table_1.getValueAt(x, 1); //el id del envío
+									int envioId = (int) table_1.getValueAt(x,0); //el id del envío
 									Envio envio = DatabaseManager.getEnvioById(envioId);
 									envio.setEstado(rdbtnEntregafallida.getText());
 									DatabaseManager.updateEstadoEnvio(envio);
@@ -2351,7 +2376,7 @@ public class VentanaPrincipal extends JFrame {
 							}
 							else if(rdbtnEntregafallida_1.isSelected()) { //FALLO 3
 								try {
-									int envioId = (int) table_1.getValueAt(x, 1); //el id del envío
+									int envioId = (int) table_1.getValueAt(x, 0); //el id del envío
 									Envio envio = DatabaseManager.getEnvioById(envioId);
 									envio.setEstado(rdbtnEntregafallida_1.getText());
 									DatabaseManager.updateEstadoEnvio(envio);
@@ -2363,7 +2388,7 @@ public class VentanaPrincipal extends JFrame {
 							}
 							else if(rdbtnEsperaEnvio.isSelected()) {
 								try {
-									int envioId = (int) table_1.getValueAt(x, 1); //el id del envío
+									int envioId = (int) table_1.getValueAt(x, 0); //el id del envío
 									Envio envio = DatabaseManager.getEnvioById(envioId);
 									envio.setEstado(rdbtnEsperaEnvio.getText());
 									DatabaseManager.updateEstadoEnvio(envio);
@@ -2633,7 +2658,8 @@ public class VentanaPrincipal extends JFrame {
 	private JPanel getPanelInicioAdmin() {
 		if (panelInicioAdmin == null) {
 			panelInicioAdmin = new JPanel();
-			panelInicioAdmin.add(getPanel_59());
+			panelInicioAdmin.setLayout(new BorderLayout(0, 0));
+			panelInicioAdmin.add(getPanel_59(), BorderLayout.EAST);
 			panelInicioAdmin.add(getPanel_72());
 		}
 		return panelInicioAdmin;
@@ -2682,7 +2708,7 @@ public class VentanaPrincipal extends JFrame {
 			panel_61.setBackground(Color.WHITE);
 			panel_61.setLayout(new GridLayout(0, 3, 0, 0));
 			panel_61.add(getLabel_38());
-			panel_61.add(getBtnListadoDeEnvios());
+			panel_61.add(getBtnListadoVehculos());
 		}
 		return panel_61;
 	}
@@ -2693,12 +2719,6 @@ public class VentanaPrincipal extends JFrame {
 			label_38.setBackground(Color.WHITE);
 		}
 		return label_38;
-	}
-	private JButton getBtnListadoDeEnvios() {
-		if (btnListadoDeEnvios == null) {
-			btnListadoDeEnvios = new JButton("Listado de envios");
-		}
-		return btnListadoDeEnvios;
 	}
 	private JPanel getPanel_62() {
 		if (panel_62 == null) {
@@ -2723,7 +2743,7 @@ public class VentanaPrincipal extends JFrame {
 			panel_63.setBackground(Color.WHITE);
 			panel_63.setLayout(new GridLayout(0, 3, 0, 0));
 			panel_63.add(getLabel_40());
-			panel_63.add(getBtnListadoVehculos());
+			panel_63.add(getBtnEntregasFallidas());
 		}
 		return panel_63;
 	}
@@ -2761,32 +2781,16 @@ public class VentanaPrincipal extends JFrame {
 	private JPanel getPanel_65() {
 		if (panel_65 == null) {
 			panel_65 = new JPanel();
+			panel_65.setBackground(Color.WHITE);
 			panel_65.setLayout(new GridLayout(0, 3, 0, 0));
-			panel_65.add(getPanel_66());
-			panel_65.add(getBtnEntregasFallidas());
-			panel_65.add(getPanel_67());
 		}
 		return panel_65;
-	}
-	private JPanel getPanel_66() {
-		if (panel_66 == null) {
-			panel_66 = new JPanel();
-			panel_66.setBackground(Color.WHITE);
-		}
-		return panel_66;
 	}
 	private JButton getBtnEntregasFallidas() {
 		if (btnEntregasFallidas == null) {
 			btnEntregasFallidas = new JButton("Entregas fallidas");
 		}
 		return btnEntregasFallidas;
-	}
-	private JPanel getPanel_67() {
-		if (panel_67 == null) {
-			panel_67 = new JPanel();
-			panel_67.setBackground(Color.WHITE);
-		}
-		return panel_67;
 	}
 	private JPanel getPanel_68() {
 		if (panel_68 == null) {
@@ -2860,7 +2864,203 @@ public class VentanaPrincipal extends JFrame {
 		if (panel_72 == null) {
 			panel_72 = new JPanel();
 			panel_72.setLayout(new BorderLayout(0, 0));
+			panel_72.add(getLblBienvenidoAdministrador(), BorderLayout.NORTH);
+			panel_72.add(getLabel_36(), BorderLayout.CENTER);
 		}
 		return panel_72;
+	}
+	private JLabel getLblBienvenidoAdministrador() {
+		if (lblBienvenidoAdministrador == null) {
+			lblBienvenidoAdministrador = new JLabel("Bienvenido administrador");
+			lblBienvenidoAdministrador.setFont(new Font("Tahoma", Font.ITALIC, 18));
+		}
+		return lblBienvenidoAdministrador;
+	}
+	private JPanel getPanelListadoVehiculos() {
+		if (panelListadoVehiculos == null) {
+			panelListadoVehiculos = new JPanel();
+			panelListadoVehiculos.setLayout(new GridLayout(0, 2, 0, 0));
+			panelListadoVehiculos.add(getPanel_73());
+			panelListadoVehiculos.add(getPanel_75());
+		}
+		return panelListadoVehiculos;
+	}
+	private JPanel getPanel_73() {
+		if (panel_73 == null) {
+			panel_73 = new JPanel();
+			panel_73.setLayout(new BorderLayout(0, 0));
+			panel_73.add(getLblListadoVehculos(), BorderLayout.NORTH);
+			panel_73.add(getPanel_74(), BorderLayout.CENTER);
+			panel_73.add(getPanel_78(), BorderLayout.SOUTH);
+		}
+		return panel_73;
+	}
+	private JLabel getLblListadoVehculos() {
+		if (lblListadoVehculos == null) {
+			lblListadoVehculos = new JLabel("Listado veh\u00EDculos");
+			lblListadoVehculos.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 18));
+		}
+		return lblListadoVehculos;
+	}
+	private JPanel getPanel_74() {
+		if (panel_74 == null) {
+			panel_74 = new JPanel();
+			panel_74.setLayout(new BorderLayout(0, 0));
+			panel_74.add(getTable_2());
+		}
+		return panel_74;
+	}
+	private JTable getTable_2() {
+		if (table_2 == null) {
+			modelVehiculosAMostrar = new MyTableModel();
+			modelVehiculosAMostrar.addColumn("Matrícula");
+			modelVehiculosAMostrar.addColumn("Marca");
+			String[] x = {"Matrícula", "Marca"};
+			modelVehiculosAMostrar.addRow(x);
+			table_2 = new JTable(modelVehiculosAMostrar);
+		}
+		return table_2;
+	}
+	private JPanel getPanel_75() {
+		if (panel_75 == null) {
+			panel_75 = new JPanel();
+			panel_75.setLayout(new BorderLayout(0, 0));
+			panel_75.add(getLblDatosVehculoSeleccionado(), BorderLayout.NORTH);
+			panel_75.add(getPanel_76(), BorderLayout.CENTER);
+			panel_75.add(getPanel_77(), BorderLayout.SOUTH);
+		}
+		return panel_75;
+	}
+	private JLabel getLblDatosVehculoSeleccionado() {
+		if (lblDatosVehculoSeleccionado == null) {
+			lblDatosVehculoSeleccionado = new JLabel("Datos veh\u00EDculo seleccionado");
+			lblDatosVehculoSeleccionado.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 18));
+		}
+		return lblDatosVehculoSeleccionado;
+	}
+	private JPanel getPanel_76() {
+		if (panel_76 == null) {
+			panel_76 = new JPanel();
+			panel_76.setLayout(new BorderLayout(0, 0));
+			panel_76.add(getTextPane());
+		}
+		return panel_76;
+	}
+	private JTextPane getTextPane() {
+		if (textPane == null) {
+			textPane = new JTextPane();
+			textPane.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		}
+		return textPane;
+	}
+	private JPanel getPanel_77() {
+		if (panel_77 == null) {
+			panel_77 = new JPanel();
+			panel_77.setLayout(new BorderLayout(0, 0));
+			panel_77.add(getBtnVolver(), BorderLayout.EAST);
+		}
+		return panel_77;
+	}
+	private JButton getBtnVolver() {
+		if (btnVolver == null) {
+			btnVolver = new JButton("Volver");
+		}
+		return btnVolver;
+	}
+	private JPanel getPanel_78() {
+		if (panel_78 == null) {
+			panel_78 = new JPanel();
+			panel_78.setLayout(new BorderLayout(0, 0));
+			panel_78.add(getBtnMostrarDatosVehculo(), BorderLayout.EAST);
+		}
+		return panel_78;
+	}
+	private JButton getBtnMostrarDatosVehculo() {
+		if (btnMostrarDatosVehculo == null) {
+			btnMostrarDatosVehculo = new JButton("Mostrar datos veh\u00EDculo");
+			btnMostrarDatosVehculo.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					int pos = table_2.getSelectedRow();
+					if(pos==-1) {
+						JOptionPane.showMessageDialog(null,
+								"Debe seleccionar un elemento de la tabla");
+					}
+					else {
+						try {
+							String matriculaElegida = (String) table_2.getValueAt(pos, 0);
+							Vehiculo v = DatabaseManager.getVehiculoByMatricula(matriculaElegida);
+							Envio envio = DatabaseManager.getEnvioByMatricula(matriculaElegida);
+							Edificio edificio = DatabaseManager.getEdificioById(v.getEdificioId());
+							if(envio!=null) {
+								if(envio.getTransportista().equals("") || envio.getVehiculo().equals("")) {
+									textPane.setText("Datos del vehículo con matrícula " + matriculaElegida+ ":\n"
+											+ "Marca: " + v.getMarca() + "\n"
+											+ "Tipo: " +v.getTipo() + "\n" 
+											+ "Id del edificio en el que opera: " + v.getEdificioId() + "\n"
+											+ "Provincia en la que opera: " + edificio.getProvinciaLocalizacion() + "\n");
+								}
+								else {
+									textPane.setText("Datos del vehículo con matrícula " + matriculaElegida+ ":\n"
+											+ "Marca: " + v.getMarca() + "\n"
+											+ "Tipo: " +v.getTipo() + "\n" 
+											+ "Id del edificio en el que opera: " + v.getEdificioId() + "\n"
+											+ "Provincia en la que opera: " + edificio.getProvinciaLocalizacion() + "\n"
+											+ "Transportista actual: "+ envio.getTransportista() +"\n"
+											+ "Envio actual: " + envio.getId());
+								}
+							}
+							else {
+								JOptionPane.showMessageDialog(null,
+										"Se ha producido un problema mostrando los datos del vehículo.");
+							}
+						} catch (SQLException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				}
+			});
+		}
+		return btnMostrarDatosVehculo;
+	}
+	private JLabel getLabel_36() {
+		if (label_36 == null) {
+			label_36 = new JLabel("");
+		}
+		return label_36;
+	}
+	private JPanel getPanel_66() {
+		if (panel_66 == null) {
+			panel_66 = new JPanel();
+			panel_66.setBackground(Color.WHITE);
+		}
+		return panel_66;
+	}
+	private JPanel getPanel_67() {
+		if (panel_67 == null) {
+			panel_67 = new JPanel();
+			panel_67.setBackground(Color.WHITE);
+			panel_67.setLayout(new GridLayout(0, 3, 0, 0));
+			panel_67.add(getLabel_45());
+			panel_67.add(getBtnModificarDatosUsuario());
+		}
+		return panel_67;
+	}
+	private JLabel getLabel_45() {
+		if (label_45 == null) {
+			label_45 = new JLabel("");
+		}
+		return label_45;
+	}
+	private JButton getBtnModificarDatosUsuario() {
+		if (btnModificarDatosUsuario == null) {
+			btnModificarDatosUsuario = new JButton("Modificar datos usuario");
+			btnModificarDatosUsuario.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					
+				}
+			});
+		}
+		return btnModificarDatosUsuario;
 	}
 }

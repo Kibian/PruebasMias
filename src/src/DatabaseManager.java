@@ -497,5 +497,69 @@ public class DatabaseManager {
 		pst.setInt(2, id);
 		pst.executeQuery();
 	}
+
+	public static Vehiculo getVehiculoByMatricula(String matriculaElegida) throws SQLException {
+		PreparedStatement pst = null;
+		ResultSet rs = null;
+		getConnection();
+		pst = con.prepareStatement("select marca, tipo, edificioid from vehiculos "
+				+ "where matricula = ?");
+		pst.setString(1, matriculaElegida);
+		rs = pst.executeQuery();
+		Vehiculo v = null;
+		if(rs.next()) {
+			v = new Vehiculo(matriculaElegida, rs.getString(1), rs.getString(2), rs.getInt(3));
+		}
+		return v;
+	}
+	
+	public static Envio getEnvioByMatricula(String matriculaElegida) throws SQLException {
+		PreparedStatement pst = null;
+		ResultSet rs = null;
+		getConnection();
+		pst = con.prepareStatement("select id, busquedaadomicilio, envioadomicilio, receptordni,"
+				+ " emisordni, transportistadni, provinciadestino, provinciaorigen, lugarenvio, "
+				+ "estado, precio, lugarrecogida from envios "
+				+ "where vehiculomatricula = ?");
+		pst.setString(1, matriculaElegida);
+		rs = pst.executeQuery();
+		Envio e = null;
+		if(rs.next()) {
+			boolean bad = false;
+			boolean ead = false;
+			if(rs.getString(2).equals("Si")) {
+				bad = true;
+			}
+			if(rs.getString(3).equals("Si")) {
+				ead = true;
+			}
+//			Integer id, boolean busquedaADomicilio, boolean envioADomicilio, String receptor, String emisor, String transportista, String vehiculo,
+//			String provinciaDestino, String provinciaOrigen, String lugarEnvio, String lugarRecogida, String estado, Double precio
+			e = new Envio(rs.getInt(1), bad, ead, rs.getString(4), rs.getString(5), rs.getString(6), matriculaElegida, rs.getString(7), rs.getString(8),
+					rs.getString(9), rs.getString(12), rs.getString(10), rs.getDouble(11));
+			
+		}
+		return e;
+		
+	}
+
+	public static Edificio getEdificioById(int edificioId) throws SQLException {
+		PreparedStatement pst = null;
+		ResultSet rs = null;
+		getConnection();
+		pst = con.prepareStatement("select id, nombre, provincialocalizacion, tipo from edificios "
+				+ "where id = ?");
+		pst.setInt(1, edificioId);
+		rs = pst.executeQuery();
+		Edificio e = null;
+		if(rs.next()) {
+			if(rs.getString(4).equals("Oficina"))
+				e = new Oficina(edificioId, rs.getString(3), rs.getString(2));
+			else if (rs.getString(4).equals("Almacen")) {
+				e = new Almacen(edificioId, rs.getString(3), rs.getString(2));
+			}
+		}
+		return e;
+	}
 }
 	
