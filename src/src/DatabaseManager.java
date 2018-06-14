@@ -561,5 +561,74 @@ public class DatabaseManager {
 		}
 		return e;
 	}
+	
+	public static boolean enviosPendientes(String dni) throws SQLException {
+		PreparedStatement pst = null;
+		PreparedStatement pst2 = null;
+		ResultSet rs = null;
+		ResultSet rs2 = null;
+		boolean result = false;
+		getConnection();
+		pst = con.prepareStatement("select id, estado from envios "
+				+ "where emisordni = ?");
+		pst.setString(1, dni);
+		rs = pst.executeQuery();
+		pst2 = con.prepareStatement("select id, estado from envios "
+				+ "where receptordni = ?");
+		rs2 = pst2.executeQuery();
+		while(rs.next()) {
+			String estado = rs.getString(2);
+			if(estado.equals("Entregado-Domicilio") || estado.equals("Entregado-Edificio")) { //si esta entregado en la casa o en el almacen sea porque es ahi o por fallos
+				result = true;
+			}
+		}
+		while(rs2.next()) {
+			String estado = rs.getString(2);
+			if(estado.equals("Entregado-Domicilio") || estado.equals("Entregado-Edificio")) { //si esta entregado en la casa o en el almacen sea porque es ahi o por fallos
+				result = true;
+			}
+		}
+		return result;
+	}
+	
+	public static void updateCliente(String dni, String nombre, String apellidos, String password, String direccion, String provincia) throws SQLException {
+		PreparedStatement pst = null;
+		getConnection();
+		if(nombre.length()==0 && apellidos.length()==0 && password.length() == 0 && direccion.length()==0 && provincia.length()==0) {
+			
+		}
+		else {
+			if(nombre.length()!=0) {
+				pst = con.prepareStatement("update clientes set nombre = ? where dni = ?");
+				pst.setString(1, nombre);
+				pst.setString(2, dni);
+				pst.executeQuery();
+			}
+			if(apellidos.length()!=0) {
+				pst = con.prepareStatement("update clientes set apellidos = ? where dni = ?");
+				pst.setString(1, apellidos);
+				pst.setString(2, dni);
+				pst.executeQuery();
+			}
+			if(password.length()!=0) {
+				pst = con.prepareStatement("update clientes set contrasenna = ? where dni = ?");
+				pst.setString(1, password);
+				pst.setString(2, dni);
+				pst.executeQuery();
+			}
+			if(direccion.length()!=0) {
+				pst = con.prepareStatement("update clientes set direccion = ? where dni = ?");
+				pst.setString(1, direccion);
+				pst.setString(2, dni);
+				pst.executeQuery();
+			}
+			if(provincia.length()!=0) {
+				pst = con.prepareStatement("update clientes set provincia = ? where dni = ?");
+				pst.setString(1, provincia);
+				pst.setString(2, dni);pst.executeQuery();
+			}
+		}
+		
+	}
 }
 	

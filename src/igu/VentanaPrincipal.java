@@ -264,6 +264,35 @@ public class VentanaPrincipal extends JFrame {
 	private JPanel panel_67;
 	private JLabel label_45;
 	private JButton btnModificarDatosUsuario;
+	private JPanel panelCambioDatos;
+	private JLabel label_46;
+	private JPanel panel_79;
+	private JLabel lblCambioDeDatos;
+	private JLabel label_48;
+	private JPanel panel_80;
+	private JLabel label_49;
+	private JTextField txtNoEditable;
+	private JPanel panel_81;
+	private JLabel label_50;
+	private JTextField passwordField;
+	private JPanel panel_82;
+	private JLabel label_51;
+	private JTextField textField_9;
+	private JPanel panel_83;
+	private JLabel label_52;
+	private JTextField textField_10;
+	private JPanel panel_84;
+	private JLabel label_53;
+	private JTextField textField_11;
+	private JPanel panel_85;
+	private JLabel label_54;
+	private JComboBox<String> comboBox_1;
+	private JLabel label_55;
+	private JPanel panel_86;
+	private JLabel label_56;
+	private JPanel panel_87;
+	private JButton btnModificarDatos;
+	private JLabel label_57;
 
 	/**
 	 * Launch the application.
@@ -283,8 +312,9 @@ public class VentanaPrincipal extends JFrame {
 
 	/**
 	 * Create the frame.
+	 * @throws SQLException 
 	 */
-	public VentanaPrincipal() {
+	public VentanaPrincipal() throws SQLException {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 985, 584);
 		contentPane = new JPanel();
@@ -301,6 +331,7 @@ public class VentanaPrincipal extends JFrame {
 		contentPane.add(getPanelConsultaEnviosAsignados(), "panelConsultaEnviosAsignados");
 		contentPane.add(getPanelInicioAdmin(), "panelInicioAdmin");
 		contentPane.add(getPanelListadoVehiculos(), "panelListadoVehiculos");
+		contentPane.add(getPanelCambioDatos(), "panelCambioDatos");
 	}
 	private JLabel getLblAplicacinDeEntrega() {
 		if (lblAplicacinDeEntrega == null) {
@@ -2205,17 +2236,29 @@ public class VentanaPrincipal extends JFrame {
 								
 							}
 							else if(rdbtnEntregadoedificio.isSelected()) {
-								//este caso solo se dará si se producen 4 fallos y se devuelve al almacen (cambiar el lugar de recogida)
+								//este caso solo se dará si se producen 4 fallos y se devuelve al almacen (cambiar el lugar de recogida) o si no hay entrega a domicilio
 								try {
 									int envioId = (int) table_1.getValueAt(x, 0); //el id del envío
 									Envio envio = DatabaseManager.getEnvioById(envioId);
+									
 									envio.setEstado(rdbtnEntregadoedificio.getText());
 									envio.setTransportista("");
 									envio.setVehiculo("");
+									String lugarEntrega = envio.getLugarEnvio();
+									String[] partes = lugarEntrega.split("-");
+									
+//									edificioSeleccionado.getTipo()+
+//									"-"+edificioSeleccionado.getNombre()+"-"+edificioSeleccionado.getProvinciaLocalizacion()
 									//calculamos el edificio
 									List<Edificio> edificios = DatabaseManager.getEdificiosByProvincia(envio.getProvinciaDestino());
 									int posRandomE = ThreadLocalRandom.current().nextInt(0, edificios.size());
-									Edificio edificioElegido = edificios.get(posRandomE);
+									Edificio edificioElegido = edificios.get(posRandomE); //inicialmente elegimos el random si es que ha fallado
+									for(Edificio edif : edificios) {
+										if(edif.getTipo().equals(partes[0]) && edif.getNombre().equals(partes[1]) && edif.getProvinciaLocalizacion().equals(partes[2])) {
+											edificioElegido = edif; //pero en caso de que no venga de fallos y la localizacion final sea un almacen entonces se sustituye
+										}
+									}
+									
 									
 									envio.setLugarEnvio(edificioElegido.getTipo()+"-"+edificioElegido.getNombre()+"-"+
 											edificioElegido.getProvinciaLocalizacion());
@@ -2535,7 +2578,7 @@ public class VentanaPrincipal extends JFrame {
 	}
 	private JRadioButton getRdbtnEntregadoedificio() {
 		if (rdbtnEntregadoedificio == null) {
-			rdbtnEntregadoedificio = new JRadioButton("Entregado-Edificio-Por-Fallos");
+			rdbtnEntregadoedificio = new JRadioButton("Entregado-Edificio");
 			rdbtnEntregadoedificio.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
@@ -2758,6 +2801,12 @@ public class VentanaPrincipal extends JFrame {
 	private JButton getBtnListadoVehculos() {
 		if (btnListadoVehculos == null) {
 			btnListadoVehculos = new JButton("Listado veh\u00EDculos");
+			btnListadoVehculos.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					CardLayout card = (CardLayout) contentPane.getLayout();
+					card.show(contentPane, "panelListadoVehiculos");
+				}
+			});
 		}
 		return btnListadoVehculos;
 	}
@@ -3057,10 +3106,358 @@ public class VentanaPrincipal extends JFrame {
 			btnModificarDatosUsuario = new JButton("Modificar datos usuario");
 			btnModificarDatosUsuario.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					
+					CardLayout card = (CardLayout) contentPane.getLayout();
+					card.show(contentPane, "panelCambioDatos");
 				}
 			});
 		}
 		return btnModificarDatosUsuario;
+	}
+	private JPanel getPanelCambioDatos() throws SQLException {
+		if (panelCambioDatos == null) {
+			panelCambioDatos = new JPanel();
+			panelCambioDatos.setLayout(new GridLayout(0, 3, 0, 0));
+			panelCambioDatos.add(getLabel_46());
+			panelCambioDatos.add(getPanel_79());
+		}
+		return panelCambioDatos;
+	}
+	private JLabel getLabel_46() {
+		if (label_46 == null) {
+			label_46 = new JLabel("");
+		}
+		return label_46;
+	}
+	private JPanel getPanel_79() throws SQLException {
+		if (panel_79 == null) {
+			panel_79 = new JPanel();
+			panel_79.setLayout(new GridLayout(10, 0, 0, 0));
+			panel_79.add(getLblCambioDeDatos());
+			panel_79.add(getLabel_48());
+			panel_79.add(getPanel_80());
+			panel_79.add(getPanel_81());
+			panel_79.add(getPanel_82());
+			panel_79.add(getPanel_83());
+			panel_79.add(getPanel_84());
+			panel_79.add(getPanel_85());
+			panel_79.add(getLabel_55());
+			panel_79.add(getPanel_86());
+		}
+		return panel_79;
+	}
+	private JLabel getLblCambioDeDatos() {
+		if (lblCambioDeDatos == null) {
+			lblCambioDeDatos = new JLabel("Cambio de datos");
+			lblCambioDeDatos.setHorizontalAlignment(SwingConstants.CENTER);
+			lblCambioDeDatos.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 20));
+		}
+		return lblCambioDeDatos;
+	}
+	private JLabel getLabel_48() {
+		if (label_48 == null) {
+			label_48 = new JLabel("");
+		}
+		return label_48;
+	}
+	private JPanel getPanel_80() {
+		if (panel_80 == null) {
+			panel_80 = new JPanel();
+			panel_80.setLayout(null);
+			panel_80.add(getLabel_49());
+			panel_80.add(getTxtNoEditable());
+		}
+		return panel_80;
+	}
+	private JLabel getLabel_49() {
+		if (label_49 == null) {
+			label_49 = new JLabel("DNI: ");
+			label_49.setBounds(10, 15, 159, 22);
+		}
+		return label_49;
+	}
+	private JTextField getTxtNoEditable() {
+		if (txtNoEditable == null) {
+			txtNoEditable = new JTextField();
+			txtNoEditable.setText("No editable");
+			txtNoEditable.setEditable(false);
+			txtNoEditable.setEnabled(false);
+			txtNoEditable.setColumns(10);
+			txtNoEditable.setBounds(89, 15, 220, 22);
+		}
+		return txtNoEditable;
+	}
+	private JPanel getPanel_81() {
+		if (panel_81 == null) {
+			panel_81 = new JPanel();
+			panel_81.setLayout(null);
+			panel_81.add(getLabel_50());
+			panel_81.add(getPasswordField());
+		}
+		return panel_81;
+	}
+	private JLabel getLabel_50() {
+		if (label_50 == null) {
+			label_50 = new JLabel("Contrase\u00F1a: ");
+			label_50.setBounds(10, 15, 159, 22);
+		}
+		return label_50;
+	}
+	private JTextField getPasswordField() {
+		if (passwordField == null) {
+			passwordField = new JPasswordField();
+			passwordField.setColumns(10);
+			passwordField.setBounds(89, 15, 220, 22);
+		}
+		return passwordField;
+	}
+	private JPanel getPanel_82() {
+		if (panel_82 == null) {
+			panel_82 = new JPanel();
+			panel_82.setLayout(null);
+			panel_82.add(getLabel_51());
+			panel_82.add(getTextField_9());
+		}
+		return panel_82;
+	}
+	private JLabel getLabel_51() {
+		if (label_51 == null) {
+			label_51 = new JLabel("Nombre: ");
+			label_51.setBounds(10, 15, 159, 22);
+		}
+		return label_51;
+	}
+	private JTextField getTextField_9() {
+		if (textField_9 == null) {
+			textField_9 = new JTextField();
+			textField_9.setColumns(10);
+			textField_9.setBounds(89, 15, 220, 22);
+		}
+		return textField_9;
+	}
+	private JPanel getPanel_83() {
+		if (panel_83 == null) {
+			panel_83 = new JPanel();
+			panel_83.setLayout(null);
+			panel_83.add(getLabel_52());
+			panel_83.add(getTextField_10());
+		}
+		return panel_83;
+	}
+	private JLabel getLabel_52() {
+		if (label_52 == null) {
+			label_52 = new JLabel("Apellidos(*): ");
+			label_52.setBounds(10, 15, 159, 22);
+		}
+		return label_52;
+	}
+	private JTextField getTextField_10() {
+		if (textField_10 == null) {
+			textField_10 = new JTextField();
+			textField_10.setColumns(10);
+			textField_10.setBounds(89, 15, 220, 22);
+		}
+		return textField_10;
+	}
+	private JPanel getPanel_84() throws SQLException {
+		if (panel_84 == null) {
+			panel_84 = new JPanel();
+			panel_84.setLayout(null);
+			panel_84.add(getLabel_53());
+			panel_84.add(getTextField_11());
+		}
+		return panel_84;
+	}
+	private JLabel getLabel_53() {
+		if (label_53 == null) {
+			label_53 = new JLabel("Direcci\u00F3n: ");
+			label_53.setBounds(10, 15, 159, 22);
+		}
+		return label_53;
+	}
+	private JTextField getTextField_11() throws SQLException {
+		if (textField_11 == null) {
+			textField_11 = new JTextField();
+			textField_11.setColumns(10);
+			textField_11.setBounds(89, 15, 220, 22);
+			if(DatabaseManager.enviosPendientes(clienteActual.getDni())) { //si tiene envios pendientes que no hayan acabado entonces el enabled pasa a false
+				textField_11.setEnabled(false);
+			}
+		}
+		return textField_11;
+	}
+	private JPanel getPanel_85() throws SQLException {
+		if (panel_85 == null) {
+			panel_85 = new JPanel();
+			panel_85.setLayout(null);
+			panel_85.add(getLabel_54());
+			panel_85.add(getComboBox_1());
+		}
+		return panel_85;
+	}
+	private JLabel getLabel_54() {
+		if (label_54 == null) {
+			label_54 = new JLabel("Provincia: ");
+			label_54.setBounds(10, 15, 159, 22);
+		}
+		return label_54;
+	}
+	private JComboBox<String> getComboBox_1() throws SQLException {
+		if (comboBox_1 == null) {
+			comboBox_1 = new JComboBox<String>();
+			comboBox_1.setBounds(89, 16, 220, 20);
+			comboBox_1.addItem("");
+			comboBox_1.addItem("Álava");
+			comboBox_1.addItem("Albacete");
+			comboBox_1.addItem("Alicante");
+			comboBox_1.addItem("Almería");
+			comboBox_1.addItem("Asturias");
+			comboBox_1.addItem("Avila");
+			comboBox_1.addItem("Badajoz");
+			comboBox_1.addItem("Barcelona");
+			comboBox_1.addItem("Burgos");
+			comboBox_1.addItem("Cáceres");
+			comboBox_1.addItem("Cádiz");
+			comboBox_1.addItem("Cantabria");
+			comboBox_1.addItem("Castellón");
+			comboBox_1.addItem("Ciudad Real");
+			comboBox_1.addItem("Córdoba");
+			comboBox_1.addItem("Cuenca");
+			comboBox_1.addItem("Girona");
+			comboBox_1.addItem("Granada");
+			comboBox_1.addItem("Guadalajara");
+			comboBox_1.addItem("Guipúzcoa");
+			comboBox_1.addItem("Huelva");
+			comboBox_1.addItem("Huesca");
+			comboBox_1.addItem("Islas Baleares");
+			comboBox_1.addItem("Jaén");
+			comboBox_1.addItem("La Coruña");
+			comboBox_1.addItem("La Rioja");
+			comboBox_1.addItem("Las Palmas");
+			comboBox_1.addItem("León");
+			comboBox_1.addItem("Lérida");
+			comboBox_1.addItem("Lugo");
+			comboBox_1.addItem("Madrid");
+			comboBox_1.addItem("Málaga");
+			comboBox_1.addItem("Murcia");
+			comboBox_1.addItem("Navarra");
+			comboBox_1.addItem("Orense");
+			comboBox_1.addItem("Palencia");
+			comboBox_1.addItem("Pontevedra");
+			comboBox_1.addItem("Salamanca");
+			comboBox_1.addItem("Segovia");
+			comboBox_1.addItem("Sevilla");
+			comboBox_1.addItem("Soria");
+			comboBox_1.addItem("Tarragona");
+			comboBox_1.addItem("Tenerife");
+			comboBox_1.addItem("Teruel");
+			comboBox_1.addItem("Toledo");
+			comboBox_1.addItem("Valencia");
+			comboBox_1.addItem("Valladolid");
+			comboBox_1.addItem("Vizcaya");
+			comboBox_1.addItem("Zamora");
+			comboBox_1.addItem("Zaragoza");
+			if(DatabaseManager.enviosPendientes(clienteActual.getDni())) { //si tiene envios pendientes que no hayan acabado entonces el enabled pasa a false
+				comboBox_1.setEnabled(false);
+			}
+		}
+		return comboBox_1;
+	}
+	private JLabel getLabel_55() {
+		if (label_55 == null) {
+			label_55 = new JLabel("   (*): campo no obligatorio");
+			label_55.setVerticalAlignment(SwingConstants.BOTTOM);
+		}
+		return label_55;
+	}
+	private JPanel getPanel_86() {
+		if (panel_86 == null) {
+			panel_86 = new JPanel();
+			panel_86.setLayout(new GridLayout(0, 3, 0, 0));
+			panel_86.add(getLabel_56());
+			panel_86.add(getPanel_87());
+			panel_86.add(getLabel_57());
+		}
+		return panel_86;
+	}
+	private JLabel getLabel_56() {
+		if (label_56 == null) {
+			label_56 = new JLabel("");
+		}
+		return label_56;
+	}
+	private JPanel getPanel_87() {
+		if (panel_87 == null) {
+			panel_87 = new JPanel();
+			panel_87.add(getBtnModificarDatos());
+		}
+		return panel_87;
+	}
+	private JButton getBtnModificarDatos() {
+		if (btnModificarDatos == null) {
+			btnModificarDatos = new JButton("Modificar datos");
+			btnModificarDatos.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					String password = passwordField.getText();
+					String nombre = textField_9.getText();
+					String apellidos = textField_10.getText();
+					String direccion = "";
+					String provincia = "";
+					boolean direccionEditable = false;
+					boolean capitalLetter = false;
+					boolean minimalLetter = false;
+					boolean number = false;
+					for(char ch : password.toCharArray()) {
+						if(Character.isUpperCase(ch)) {
+							capitalLetter = true;
+						}
+						if(Character.isLowerCase(ch)) {
+							minimalLetter = true;
+						}
+						if(Character.isDigit(ch)) {
+							number = true;
+						}
+					}
+					if(textField_11.isEnabled()) {
+						direccion = textField_11.getText();
+						direccionEditable = true;
+					}
+					if(comboBox_1.isEnabled()) {
+						provincia = (String) comboBox_1.getSelectedItem();
+					}
+					if(password.length()!=0) {
+						if(password.length()<5) {
+							JOptionPane.showMessageDialog(null,
+								"La contraseña debe de tener longitud 5 o más.");
+						}
+						else if(!capitalLetter && !minimalLetter && !number) {
+							JOptionPane.showMessageDialog(null,
+									"La contraseña debe poseer como mínimo una letra mayúscula, minúscula y un número.");
+						}
+					}
+					else if(direccionEditable){
+						if(direccion.length()!=0)
+							if(direccion.length()<2) {
+								JOptionPane.showMessageDialog(null,
+										"La dirección debe de ser válida.");
+							}
+					}
+					else {
+						try {
+							DatabaseManager.updateCliente(clienteActual.getDni(), nombre, apellidos, password, direccion, provincia);
+						} catch (SQLException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+					}
+				}
+			});
+		}
+		return btnModificarDatos;
+	}
+	private JLabel getLabel_57() {
+		if (label_57 == null) {
+			label_57 = new JLabel("");
+		}
+		return label_57;
 	}
 }
