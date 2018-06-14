@@ -673,8 +673,9 @@ public class VentanaPrincipal extends JFrame {
 						}
 						else {
 							try {
-								boolean yaExiste = DatabaseManager.existeClientePorDNI(dniUsuario);
-								if(yaExiste) {
+								boolean yaExistePorCliente = DatabaseManager.existeClientePorDNI(dniUsuario);
+								boolean yaExistePorTransportista = DatabaseManager.existeTransportistaPorDNI(dniUsuario);
+								if(yaExistePorCliente || yaExistePorTransportista) {
 									JOptionPane.showMessageDialog(null,
 											"Ya existe un usuario con ese DNI.");
 								}

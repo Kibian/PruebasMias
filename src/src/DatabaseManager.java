@@ -73,6 +73,26 @@ public class DatabaseManager {
 		}
 	}
 	
+	public static boolean existeTransportistaPorDNI(String dni) throws SQLException {
+		PreparedStatement pst = null;
+		ResultSet rs = null;
+		try {
+			getConnection();
+			pst = con.prepareStatement("select * from transportistas where dni = ?");
+			pst.setString(1, dni);
+			rs = pst.executeQuery();
+			if(rs.next()) {
+				return true;
+			}
+			return false;
+		} catch(SQLException e) {
+			throw new SQLException(e);
+		}finally {
+			rs.close();
+			pst.close();
+		}
+	}
+	
 	public static Cliente checkLoginCliente(String dni, String password) throws SQLException {
 		PreparedStatement pst = null;
 		ResultSet rs = null;
