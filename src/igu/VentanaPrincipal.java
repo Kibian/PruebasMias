@@ -47,7 +47,11 @@ public class VentanaPrincipal extends JFrame {
 	 */
 	
 	private Cliente clienteActual;
-	MyTableModel modelEnviosEnviados;
+	private MyTableModel modelEnviosEnviados;
+	private MyTableModel modelEnviosARepartir;
+	private MyTableModel modelVehiculosAMostrar;
+	private MyTableModel modelFallosAMostrar;
+	private MyTableModel modelFallosACliente;
 	private Transportista transportistaActual;
 	
 	private static final long serialVersionUID = 1L;
@@ -218,9 +222,7 @@ public class VentanaPrincipal extends JFrame {
 	private JRadioButton rdbtnFallida;
 	private JRadioButton rdbtnEntregafallida;
 	private JRadioButton rdbtnEntregafallida_1;
-	private MyTableModel modelEnviosARepartir;
-	private MyTableModel modelVehiculosAMostrar;
-	private MyTableModel modelFallosAMostrar;
+
 	private JRadioButton rdbtnEntregadoedificiosalida;
 	private JPanel panelInicioAdmin;
 	private JPanel panel_59;
@@ -303,6 +305,9 @@ public class VentanaPrincipal extends JFrame {
 	private JPanel panel_92;
 	private JLabel lblFallosProducidosEn;
 	private JTable table_3;
+	private JPanel panelMuestraFallosCliente;
+	private JLabel lblPedidosConFallos;
+	private JTable table_4;
 
 	/**
 	 * Launch the application.
@@ -342,7 +347,8 @@ public class VentanaPrincipal extends JFrame {
 		contentPane.add(getPanelInicioAdmin(), "panelInicioAdmin");
 		contentPane.add(getPanelListadoVehiculos(), "panelListadoVehiculos");
 		contentPane.add(getPanelCambioDatos(), "panelCambioDatos");
-		contentPane.add(getPanelFallosEnEnvios(), "name_130801735942391");
+		contentPane.add(getPanelFallosEnEnvios(), "panelFallosEnvios");
+		contentPane.add(getPanelMuestraFallosCliente(), "panelMuestraFallosCliente");
 	}
 	private JLabel getLblAplicacinDeEntrega() {
 		if (lblAplicacinDeEntrega == null) {
@@ -1090,7 +1096,13 @@ public class VentanaPrincipal extends JFrame {
 	}
 	private JButton getBtnListaAlmacenes() {
 		if (btnListaAlmacenes == null) {
-			btnListaAlmacenes = new JButton("Lista almacenes");
+			btnListaAlmacenes = new JButton("Incidencias en envios");
+			btnListaAlmacenes.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					CardLayout card = (CardLayout) contentPane.getLayout();
+					card.show(contentPane, "panelMuestraFallosCliente");
+				}
+			});
 		}
 		return btnListaAlmacenes;
 	}
@@ -1699,7 +1711,8 @@ public class VentanaPrincipal extends JFrame {
 		removeModelContent(modelEnviosEnviados);
 		String[] x = {"Id", "Destino", "DNI Receptor", "Estado", "Precio"};
 		modelEnviosEnviados.addRow(x);
-		addToModel(modelEnviosEnviados, DatabaseManager.getEnviosEmisor(clienteActual.getDni()));
+		if(clienteActual!=null)
+			addToModel(modelEnviosEnviados, DatabaseManager.getEnviosEmisor(clienteActual.getDni()));
 	}
 	
 	private JLabel getLblListado() {
@@ -2506,7 +2519,8 @@ public class VentanaPrincipal extends JFrame {
 		removeModelContentt(modelEnviosARepartir);
 		String[] x = {"Id", "Lugar Recogida", "Destino", "Vehículo"};
 		modelEnviosARepartir.addRow(x);
-		addToModelt(modelEnviosARepartir, DatabaseManager.getEnviosTransportista(transportistaActual.getDNI()));
+		if(transportistaActual!=null)
+			addToModelt(modelEnviosARepartir, DatabaseManager.getEnviosTransportista(transportistaActual.getDNI()));
 	}
 	
 	
@@ -2858,6 +2872,12 @@ public class VentanaPrincipal extends JFrame {
 	private JButton getBtnEntregasFallidas() {
 		if (btnEntregasFallidas == null) {
 			btnEntregasFallidas = new JButton("Entregas fallidas");
+			btnEntregasFallidas.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					CardLayout card = (CardLayout) contentPane.getLayout();
+					card.show(contentPane, "panelFallosEnvios");
+				}
+			});
 		}
 		return btnEntregasFallidas;
 	}
@@ -3562,4 +3582,47 @@ public class VentanaPrincipal extends JFrame {
 		modelEnviosARepartir.addRow(x);
 		addToModelt(modelEnviosARepartir, DatabaseManager.getFallos());
 	}
+	private JPanel getPanelMuestraFallosCliente() {
+		if (panelMuestraFallosCliente == null) {
+			panelMuestraFallosCliente = new JPanel();
+			panelMuestraFallosCliente.setLayout(new BorderLayout(0, 0));
+			panelMuestraFallosCliente.add(getLblPedidosConFallos(), BorderLayout.NORTH);
+			panelMuestraFallosCliente.add(getTable_4(), BorderLayout.CENTER);
+		}
+		return panelMuestraFallosCliente;
+	}
+	private JLabel getLblPedidosConFallos() {
+		if (lblPedidosConFallos == null) {
+			lblPedidosConFallos = new JLabel("Pedidos con fallos:");
+			lblPedidosConFallos.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 16));
+		}
+		return lblPedidosConFallos;
+	}
+	private JTable getTable_4() {
+		if (table_4 == null) {
+			//podemos hacer que en el momento en el que pase de estado fallo 3 a entregado en edificio
+			//se añada un fallo 4, luego comparamos ids de pedidos fallidos con pedidos en general y si existe
+			//un cuarto fallo entonces añadimos el lugar de recogida y podemos poner 4 fallos
+			
+			//num fallos puede ser un count del numero de fallos con tal id
+			modelFallosACliente = new MyTableModel();
+			modelFallosACliente.addColumn("Id");
+			modelFallosACliente.addColumn("Emisor");
+			modelFallosACliente.addColumn("Receptor");
+			modelFallosACliente.addColumn("Numero fallos");
+			modelFallosACliente.addColumn("Estado");
+			modelFallosACliente.addColumn("Lugar recogida");
+			String[] x = {"Id", "Emisor", "Receptor", "Numero fallos", "Estado", "Lugar recogida"};
+			modelFallosACliente.addColumn(x);
+			table_4 = new JTable(modelFallosACliente);
+		}
+		return table_4;
+	}
+	
+//	private void actualizarModel() throws SQLException {
+//		removeModelContent(modelFallosACliente);
+//		String[] x = {"Id", "Emisor", "Receptor", "Numero fallos", "Estado", "Lugar recogida"};
+//		modelFallosACliente.addRow(x);
+//		addToModel(modelFallosACliente, DatabaseManager.getEnviosFallidosDeCliente(clienteActual.getDni()));
+//	}
 }
