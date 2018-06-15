@@ -630,5 +630,41 @@ public class DatabaseManager {
 		}
 		
 	}
+
+	public static void addFallo(Fallo f) throws SQLException {
+		PreparedStatement pst = null;
+		getConnection();
+		pst = con.prepareStatement("insert into fallosentregas values(?, ?, ?)");
+		pst.setInt(1, f.getId());
+		pst.setString(2, f.getReceptorDni());
+		pst.setString(3, f.getEstado());
+		pst.executeQuery();
+	}
+	
+	public static List<String[]> getVehiculos() throws SQLException{
+		PreparedStatement pst = null;
+		getConnection();
+		List<String[]> sol = new ArrayList<String[]>();
+		pst = con.prepareStatement("select matricula, marca, tipo, edificioId from vehiculos");
+		ResultSet rs = pst.executeQuery();
+		while(rs.next()) {
+			String[] s = {rs.getString(1), rs.getString(2), rs.getString(3), Integer.toString(rs.getInt(4))};
+			sol.add(s);
+		}
+		return sol;
+	}
+	
+	public static List<String[]> getFallos() throws SQLException{
+		PreparedStatement pst = null;
+		getConnection();
+		List<String[]> sol = new ArrayList<String[]>();
+		pst = con.prepareStatement("select id, receptordni, estado from vehiculos");
+		ResultSet rs = pst.executeQuery();
+		while(rs.next()) {
+			String[] s = {Integer.toString(rs.getInt(1)), rs.getString(2), rs.getString(3)};
+			sol.add(s);
+		}
+		return sol;
+	}
 }
 	

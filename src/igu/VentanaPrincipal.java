@@ -12,6 +12,7 @@ import src.Cliente;
 import src.DatabaseManager;
 import src.Edificio;
 import src.Envio;
+import src.Fallo;
 import src.MyTableModel;
 import src.Transportista;
 import src.Vehiculo;
@@ -219,6 +220,7 @@ public class VentanaPrincipal extends JFrame {
 	private JRadioButton rdbtnEntregafallida_1;
 	private MyTableModel modelEnviosARepartir;
 	private MyTableModel modelVehiculosAMostrar;
+	private MyTableModel modelFallosAMostrar;
 	private JRadioButton rdbtnEntregadoedificiosalida;
 	private JPanel panelInicioAdmin;
 	private JPanel panel_59;
@@ -293,6 +295,14 @@ public class VentanaPrincipal extends JFrame {
 	private JPanel panel_87;
 	private JButton btnModificarDatos;
 	private JLabel label_57;
+	private JPanel panelFallosEnEnvios;
+	private JPanel panel_88;
+	private JPanel panel_89;
+	private JPanel panel_90;
+	private JPanel panel_91;
+	private JPanel panel_92;
+	private JLabel lblFallosProducidosEn;
+	private JTable table_3;
 
 	/**
 	 * Launch the application.
@@ -332,6 +342,7 @@ public class VentanaPrincipal extends JFrame {
 		contentPane.add(getPanelInicioAdmin(), "panelInicioAdmin");
 		contentPane.add(getPanelListadoVehiculos(), "panelListadoVehiculos");
 		contentPane.add(getPanelCambioDatos(), "panelCambioDatos");
+		contentPane.add(getPanelFallosEnEnvios(), "name_130801735942391");
 	}
 	private JLabel getLblAplicacinDeEntrega() {
 		if (lblAplicacinDeEntrega == null) {
@@ -1502,7 +1513,7 @@ public class VentanaPrincipal extends JFrame {
 		}
 		return rdbtnEnvoADomicilio;
 	}
-	private JPanel getPanelConsultaEnvios() {
+	private JPanel getPanelConsultaEnvios() throws SQLException {
 		if (panelConsultaEnvios == null) {
 			panelConsultaEnvios = new JPanel();
 			panelConsultaEnvios.setLayout(new BorderLayout(0, 0));
@@ -1511,7 +1522,7 @@ public class VentanaPrincipal extends JFrame {
 		}
 		return panelConsultaEnvios;
 	}
-	private JPanel getPanelLista() {
+	private JPanel getPanelLista() throws SQLException {
 		if (panelLista == null) {
 			panelLista = new JPanel();
 			panelLista.setLayout(new BorderLayout(0, 0));
@@ -1656,7 +1667,7 @@ public class VentanaPrincipal extends JFrame {
 		}
 		return btnModificar;
 	}
-	private JTable getTable() {
+	private JTable getTable() throws SQLException {
 		if (table == null) {
 			modelEnviosEnviados = new MyTableModel();
 			modelEnviosEnviados.addColumn("Id");
@@ -1667,6 +1678,7 @@ public class VentanaPrincipal extends JFrame {
 			String[] x = {"Id", "Destino", "DNI Receptor", "Estado", "Precio"};
 			modelEnviosEnviados.addRow(x);
 			table = new JTable(modelEnviosEnviados);
+			actualizarModel();
 		}
 		return table;
 	}
@@ -1956,7 +1968,7 @@ public class VentanaPrincipal extends JFrame {
 		}
 		return label_34;
 	}
-	private JPanel getPanelConsultaEnviosAsignados() {
+	private JPanel getPanelConsultaEnviosAsignados() throws SQLException {
 		if (panelConsultaEnviosAsignados == null) {
 			panelConsultaEnviosAsignados = new JPanel();
 			panelConsultaEnviosAsignados.setLayout(new BorderLayout(0, 0));
@@ -1965,7 +1977,7 @@ public class VentanaPrincipal extends JFrame {
 		}
 		return panelConsultaEnviosAsignados;
 	}
-	private JPanel getPanel_44() {
+	private JPanel getPanel_44() throws SQLException {
 		if (panel_44 == null) {
 			panel_44 = new JPanel();
 			panel_44.setLayout(new BorderLayout(0, 0));
@@ -1974,7 +1986,7 @@ public class VentanaPrincipal extends JFrame {
 		}
 		return panel_44;
 	}
-	private JTable getTable_1() {
+	private JTable getTable_1() throws SQLException {
 		//LOS ENVIOS SON POR EJEMPLO DESDE MI CASA HASTA EL ALMACEN O VICEVERSA
 		if (table_1 == null) {
 			modelEnviosARepartir = new MyTableModel();
@@ -1985,9 +1997,11 @@ public class VentanaPrincipal extends JFrame {
 			String[] x = {"Id envío", "Lugar recogida", "Lugar destino", "Matricula vehículo"};
 			modelEnviosARepartir.addRow(x);
 			table_1 = new JTable(modelEnviosARepartir);
+			actualizarModelt();
 		}
 		return table_1;
 	}
+
 	private JLabel getLblListadoEnviosAsignados() {
 		if (lblListadoEnviosAsignados == null) {
 			lblListadoEnviosAsignados = new JLabel("Listado envios asignados:");
@@ -2278,7 +2292,8 @@ public class VentanaPrincipal extends JFrame {
 									Envio envio = DatabaseManager.getEnvioById(envioId);
 									envio.setEstado(rdbtnFallida.getText());
 									DatabaseManager.updateEstadoEnvio(envio);
-									
+									Fallo f = new Fallo(envio.getId(), envio.getReceptor(), envio.getEstado());
+									DatabaseManager.addFallo(f);
 								} catch (SQLException e1) {
 									// TODO Auto-generated catch block
 									e1.printStackTrace();
@@ -2290,7 +2305,8 @@ public class VentanaPrincipal extends JFrame {
 									Envio envio = DatabaseManager.getEnvioById(envioId);
 									envio.setEstado(rdbtnEntregafallida.getText());
 									DatabaseManager.updateEstadoEnvio(envio);
-									
+									Fallo f = new Fallo(envio.getId(), envio.getReceptor(), envio.getEstado());
+									DatabaseManager.addFallo(f);
 								} catch (SQLException e1) {
 									// TODO Auto-generated catch block
 									e1.printStackTrace();
@@ -2302,7 +2318,8 @@ public class VentanaPrincipal extends JFrame {
 									Envio envio = DatabaseManager.getEnvioById(envioId);
 									envio.setEstado(rdbtnEntregafallida_1.getText());
 									DatabaseManager.updateEstadoEnvio(envio);
-									
+									Fallo f = new Fallo(envio.getId(), envio.getReceptor(), envio.getEstado());
+									DatabaseManager.addFallo(f);
 								} catch (SQLException e1) {
 									// TODO Auto-generated catch block
 									e1.printStackTrace();
@@ -2399,7 +2416,8 @@ public class VentanaPrincipal extends JFrame {
 									Envio envio = DatabaseManager.getEnvioById(envioId);
 									envio.setEstado(rdbtnFallida.getText());
 									DatabaseManager.updateEstadoEnvio(envio);
-									
+									Fallo f = new Fallo(envio.getId(), envio.getReceptor(), envio.getEstado());
+									DatabaseManager.addFallo(f);
 								} catch (SQLException e1) {
 									// TODO Auto-generated catch block
 									e1.printStackTrace();
@@ -2411,7 +2429,8 @@ public class VentanaPrincipal extends JFrame {
 									Envio envio = DatabaseManager.getEnvioById(envioId);
 									envio.setEstado(rdbtnEntregafallida.getText());
 									DatabaseManager.updateEstadoEnvio(envio);
-									
+									Fallo f = new Fallo(envio.getId(), envio.getReceptor(), envio.getEstado());
+									DatabaseManager.addFallo(f);
 								} catch (SQLException e1) {
 									// TODO Auto-generated catch block
 									e1.printStackTrace();
@@ -2423,7 +2442,8 @@ public class VentanaPrincipal extends JFrame {
 									Envio envio = DatabaseManager.getEnvioById(envioId);
 									envio.setEstado(rdbtnEntregafallida_1.getText());
 									DatabaseManager.updateEstadoEnvio(envio);
-									
+									Fallo f = new Fallo(envio.getId(), envio.getReceptor(), envio.getEstado());
+									DatabaseManager.addFallo(f);
 								} catch (SQLException e1) {
 									// TODO Auto-generated catch block
 									e1.printStackTrace();
@@ -2484,7 +2504,7 @@ public class VentanaPrincipal extends JFrame {
 	
 	private void actualizarModelt() throws SQLException {
 		removeModelContentt(modelEnviosARepartir);
-		String[] x = {"Id", "Destino", "DNI Receptor", "Estado", "Precio"};
+		String[] x = {"Id", "Lugar Recogida", "Destino", "Vehículo"};
 		modelEnviosARepartir.addRow(x);
 		addToModelt(modelEnviosARepartir, DatabaseManager.getEnviosTransportista(transportistaActual.getDNI()));
 	}
@@ -2925,7 +2945,7 @@ public class VentanaPrincipal extends JFrame {
 		}
 		return lblBienvenidoAdministrador;
 	}
-	private JPanel getPanelListadoVehiculos() {
+	private JPanel getPanelListadoVehiculos() throws SQLException {
 		if (panelListadoVehiculos == null) {
 			panelListadoVehiculos = new JPanel();
 			panelListadoVehiculos.setLayout(new GridLayout(0, 2, 0, 0));
@@ -2934,7 +2954,7 @@ public class VentanaPrincipal extends JFrame {
 		}
 		return panelListadoVehiculos;
 	}
-	private JPanel getPanel_73() {
+	private JPanel getPanel_73() throws SQLException {
 		if (panel_73 == null) {
 			panel_73 = new JPanel();
 			panel_73.setLayout(new BorderLayout(0, 0));
@@ -2951,7 +2971,7 @@ public class VentanaPrincipal extends JFrame {
 		}
 		return lblListadoVehculos;
 	}
-	private JPanel getPanel_74() {
+	private JPanel getPanel_74() throws SQLException {
 		if (panel_74 == null) {
 			panel_74 = new JPanel();
 			panel_74.setLayout(new BorderLayout(0, 0));
@@ -2959,7 +2979,7 @@ public class VentanaPrincipal extends JFrame {
 		}
 		return panel_74;
 	}
-	private JTable getTable_2() {
+	private JTable getTable_2() throws SQLException {
 		if (table_2 == null) {
 			modelVehiculosAMostrar = new MyTableModel();
 			modelVehiculosAMostrar.addColumn("Matrícula");
@@ -2967,9 +2987,19 @@ public class VentanaPrincipal extends JFrame {
 			String[] x = {"Matrícula", "Marca"};
 			modelVehiculosAMostrar.addRow(x);
 			table_2 = new JTable(modelVehiculosAMostrar);
+			actualizarModelV();
+			
 		}
 		return table_2;
 	}
+	
+	private void actualizarModelV() throws SQLException {
+		removeModelContent(modelEnviosEnviados);
+		String[] x = {"Matrícula", "Marca"};
+		modelEnviosEnviados.addRow(x);
+		addToModel(modelEnviosEnviados, DatabaseManager.getVehiculos());
+	}
+
 	private JPanel getPanel_75() {
 		if (panel_75 == null) {
 			panel_75 = new JPanel();
@@ -3459,5 +3489,77 @@ public class VentanaPrincipal extends JFrame {
 			label_57 = new JLabel("");
 		}
 		return label_57;
+	}
+	private JPanel getPanelFallosEnEnvios() throws SQLException {
+		if (panelFallosEnEnvios == null) {
+			panelFallosEnEnvios = new JPanel();
+			panelFallosEnEnvios.setLayout(new BorderLayout(0, 0));
+			panelFallosEnEnvios.add(getPanel_88(), BorderLayout.CENTER);
+			panelFallosEnEnvios.add(getPanel_89(), BorderLayout.NORTH);
+			panelFallosEnEnvios.add(getPanel_90(), BorderLayout.SOUTH);
+			panelFallosEnEnvios.add(getPanel_91(), BorderLayout.WEST);
+			panelFallosEnEnvios.add(getPanel_92(), BorderLayout.EAST);
+		}
+		return panelFallosEnEnvios;
+	}
+	private JPanel getPanel_88() throws SQLException {
+		if (panel_88 == null) {
+			panel_88 = new JPanel();
+			panel_88.setLayout(new BorderLayout(0, 0));
+			panel_88.add(getLblFallosProducidosEn(), BorderLayout.NORTH);
+			panel_88.add(getTable_3(), BorderLayout.CENTER);
+		}
+		return panel_88;
+	}
+	private JPanel getPanel_89() {
+		if (panel_89 == null) {
+			panel_89 = new JPanel();
+		}
+		return panel_89;
+	}
+	private JPanel getPanel_90() {
+		if (panel_90 == null) {
+			panel_90 = new JPanel();
+		}
+		return panel_90;
+	}
+	private JPanel getPanel_91() {
+		if (panel_91 == null) {
+			panel_91 = new JPanel();
+		}
+		return panel_91;
+	}
+	private JPanel getPanel_92() {
+		if (panel_92 == null) {
+			panel_92 = new JPanel();
+		}
+		return panel_92;
+	}
+	private JLabel getLblFallosProducidosEn() {
+		if (lblFallosProducidosEn == null) {
+			lblFallosProducidosEn = new JLabel("Fallos producidos en entregas");
+			lblFallosProducidosEn.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 18));
+		}
+		return lblFallosProducidosEn;
+	}
+	private JTable getTable_3() throws SQLException {
+		if (table_3 == null) {
+			modelFallosAMostrar = new MyTableModel();
+			modelFallosAMostrar.addColumn("Id");
+			modelFallosAMostrar.addColumn("ReceptorDNI");
+			modelFallosAMostrar.addColumn("Estado");
+			String[] x = {"Id", "ReceptorDNI", "Estado"};
+			modelFallosAMostrar.addRow(x);
+			table_3 = new JTable(modelFallosAMostrar);
+			actualizarModelf();
+		}
+		return table_3;
+	}
+	
+	private void actualizarModelf() throws SQLException {
+		removeModelContentt(modelFallosAMostrar);
+		String[] x = {"Id", "ReceptorDNI", "Estado"};
+		modelEnviosARepartir.addRow(x);
+		addToModelt(modelEnviosARepartir, DatabaseManager.getFallos());
 	}
 }
