@@ -90,7 +90,6 @@ public class VentanaPrincipal extends JFrame {
 	private JLabel lblCampoNo;
 	private JPanel panel_9;
 	private JLabel label_5;
-	private JLabel label_6;
 	private JPanel panel_10;
 	private JButton btnRegistrarse_1;
 	private JPanel panelLogin;
@@ -296,7 +295,6 @@ public class VentanaPrincipal extends JFrame {
 	private JLabel label_56;
 	private JPanel panel_87;
 	private JButton btnModificarDatos;
-	private JLabel label_57;
 	private JPanel panelFallosEnEnvios;
 	private JPanel panel_88;
 	private JPanel panel_89;
@@ -308,6 +306,34 @@ public class VentanaPrincipal extends JFrame {
 	private JPanel panelMuestraFallosCliente;
 	private JLabel lblPedidosConFallos;
 	private JTable table_4;
+	private JButton btnActualizar_2;
+	private JPanel panel_93;
+	private JPanel panel_94;
+	private JButton btnActualizar_3;
+	private JButton btnVolver_1;
+	private JPanel panel_95;
+	private JLabel label_6;
+	private JButton btnVolver_2;
+	private JButton btnVolver_3;
+	private JLabel label_47;
+	private JLabel label_58;
+	private JLabel label_59;
+	private JLabel label_60;
+	private JPanel panel_96;
+	private JButton btnVolver_4;
+	private JLabel label_61;
+	private JLabel label_62;
+	private JPanel panel_97;
+	private JButton btnVolver_5;
+	private JPanel panel_98;
+	private JLabel label_57;
+	private JButton btnVolver_6;
+	private JPanel panel_99;
+	private JButton btnVolver_7;
+	private JLabel label_63;
+	private JPanel panel_100;
+	private JButton btnVolver_8;
+	private JButton btnActualizar_4;
 
 	/**
 	 * Launch the application.
@@ -675,7 +701,7 @@ public class VentanaPrincipal extends JFrame {
 			panel_9.setLayout(new GridLayout(0, 3, 0, 0));
 			panel_9.add(getLabel_5());
 			panel_9.add(getPanel_10());
-			panel_9.add(getLabel_6());
+			panel_9.add(getPanel_95());
 		}
 		return panel_9;
 	}
@@ -684,12 +710,6 @@ public class VentanaPrincipal extends JFrame {
 			label_5 = new JLabel("");
 		}
 		return label_5;
-	}
-	private JLabel getLabel_6() {
-		if (label_6 == null) {
-			label_6 = new JLabel("");
-		}
-		return label_6;
 	}
 	private JPanel getPanel_10() {
 		if (panel_10 == null) {
@@ -870,6 +890,8 @@ public class VentanaPrincipal extends JFrame {
 	private JPanel getPanel_13() {
 		if (panel_13 == null) {
 			panel_13 = new JPanel();
+			panel_13.setLayout(null);
+			panel_13.add(getBtnVolver_3());
 		}
 		return panel_13;
 	}
@@ -996,7 +1018,7 @@ public class VentanaPrincipal extends JFrame {
 			btnCrearUnEnvo.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					CardLayout card = (CardLayout) contentPane.getLayout();
-					card.show(contentPane, "panelLogin");
+					card.show(contentPane, "panelCrearEnvio");
 				}
 			});
 		}
@@ -1241,6 +1263,11 @@ public class VentanaPrincipal extends JFrame {
 			panel_29.add(getPanel_30());
 			panel_29.add(getPanel_35());
 			panel_29.add(getPanel_36());
+			panel_29.add(getLabel_47());
+			panel_29.add(getLabel_58());
+			panel_29.add(getLabel_59());
+			panel_29.add(getLabel_60());
+			panel_29.add(getPanel_96());
 		}
 		return panel_29;
 	}
@@ -1371,6 +1398,10 @@ public class VentanaPrincipal extends JFrame {
 											"ESPERA-ENVIO");
 									envio.calculaPrecio();
 									DatabaseManager.registraEnvio(envio);
+									JOptionPane.showMessageDialog(null,
+											"Se ha creado el envío correctamente.");
+									CardLayout card = (CardLayout) contentPane.getLayout();
+									card.show(contentPane, "panelInicioUser");
 									//ahora hacemos los cambios en el transportista
 									//buscamos edificio
 									int posRandomEdificio = ThreadLocalRandom.current().nextInt(0, edificiosProvinciaEmisor.size());
@@ -1392,6 +1423,7 @@ public class VentanaPrincipal extends JFrame {
 									List<Transportista> temisor = DatabaseManager.getTransportistasLibres(clienteActual.getProvincia());
 									List<Vehiculo> vemisor = DatabaseManager.getVehiculosDeProvincia(clienteActual.getProvincia());
 									List<Transportista> treceptor = DatabaseManager.getTransportistasLibres(receptor.getProvincia());
+									System.err.println(receptor.getProvincia());
 									List<Vehiculo> vreceptor = DatabaseManager.getVehiculosDeProvincia(receptor.getProvincia());
 									if(treceptor.size()==0) {
 										JOptionPane.showMessageDialog(null,
@@ -1403,8 +1435,8 @@ public class VentanaPrincipal extends JFrame {
 									}
 									else {
 										//edificio de la provincia del emisor
-										int posRandomEdificio = ThreadLocalRandom.current().nextInt(0, edificiosProvinciaEmisor.size());
-										Edificio edificioSeleccionado= edificiosProvinciaEmisor.get(posRandomEdificio);
+										int posRandomEdificio = ThreadLocalRandom.current().nextInt(0, edificiosProvinciaReceptor.size());
+										Edificio edificioSeleccionado= edificiosProvinciaReceptor.get(posRandomEdificio);
 										//el transportista se calculará cdo el paquete esté en la otra comunidad
 //										int posRandom = ThreadLocalRandom.current().nextInt(0, temisor.size());
 //										Transportista transE = temisor.get(posRandom);
@@ -1412,11 +1444,27 @@ public class VentanaPrincipal extends JFrame {
 //										Vehiculo vehE = vreceptor.get(posRandomOne);
 										envio = new Envio(rdbtnRecogidaADomicilio.isSelected(), rdbtnEnvoADomicilio.isSelected(), dniIntroducido, clienteActual.getDni(),
 												"", "", receptor.getProvincia(), clienteActual.getProvincia(), receptor.getDireccion(), edificioSeleccionado.getTipo()+
-												"-"+edificioSeleccionado.getNombre()+"-"+edificioSeleccionado.getProvinciaLocalizacion(), "ESPERA-ENVIO");
+												"-"+edificioSeleccionado.getNombre()+"-"+edificioSeleccionado.getProvinciaLocalizacion(), "Espera-Envio");
 										envio.calculaPrecio();
-										DatabaseManager.registraEnvio(envio);
-										//NO ASIGNAMOS EL TRANSPORTISTA
 										
+										JOptionPane.showMessageDialog(null,
+												"Se ha creado el envío correctamente.");
+										CardLayout card = (CardLayout) contentPane.getLayout();
+										card.show(contentPane, "panelInicioUser");
+										
+										//ASIGNAMOS EL TRANSPORTISTA YA QUE SIMULAMOS TODO LO ANTERIOR
+										
+										int posRandom = ThreadLocalRandom.current().nextInt(0, treceptor.size());
+										Transportista transR = treceptor.get(posRandom);
+										int posRandomOne = ThreadLocalRandom.current().nextInt(0, vreceptor.size());
+										Vehiculo vehR = vreceptor.get(posRandomOne);
+										
+										transR.setLugarRecogida(envio.getLugarRecogida());
+										transR.setLugarEntrega(envio.getLugarEnvio());
+										envio.setVehiculo(vehR.getMatricula());
+										envio.setTransportista(transR.getDNI());
+										DatabaseManager.updateDestinosTransportista(transR.getLugarRecogida(), transR.getLugarEntrega(), transR.getDNI());
+										DatabaseManager.registraEnvio(envio);
 									}
 								}
 							}//SI SOLO LA RECOGIDA (EMISOR) ES A DOMICILIO
@@ -1454,6 +1502,10 @@ public class VentanaPrincipal extends JFrame {
 												"-"+edificioSeleccionado.getNombre()+"-"+edificioSeleccionado.getProvinciaLocalizacion(), clienteActual.getDireccion(), "ESPERA-ENVIO");
 										envio.calculaPrecio();
 										DatabaseManager.registraEnvio(envio);
+										JOptionPane.showMessageDialog(null,
+												"Se ha creado el envío correctamente.");
+										CardLayout card = (CardLayout) contentPane.getLayout();
+										card.show(contentPane, "panelInicioUser");
 										//ASIGNAMOS LA RUTA DEL TRANSPORTISTA
 										int posRandomEdificioE = ThreadLocalRandom.current().nextInt(0, edificiosProvinciaEmisor.size());
 										Edificio edificioSeleccionadoE= edificiosProvinciaEmisor.get(posRandomEdificioE);
@@ -1486,13 +1538,13 @@ public class VentanaPrincipal extends JFrame {
 											"-"+edificioSeleccionadoE.getNombre()+"-"+edificioSeleccionadoE.getProvinciaLocalizacion(), "ESPERA-ENVIO");
 									envio.calculaPrecio();
 									DatabaseManager.registraEnvio(envio);
+									JOptionPane.showMessageDialog(null,
+											"Se ha creado el envío correctamente.");
+									CardLayout card = (CardLayout) contentPane.getLayout();
+									card.show(contentPane, "panelInicioUser");
 									//NO ASIGNAMOS LA RUTA DEL TRANSPORTISTA
 								}
 							}
-							JOptionPane.showMessageDialog(null,
-									"Se ha creado el envío correctamente.");
-							CardLayout card = (CardLayout) contentPane.getLayout();
-							card.show(contentPane, "panelInicioUser");
 						}
 					} catch (SQLException e1) {
 						// TODO Auto-generated catch block
@@ -1553,6 +1605,9 @@ public class VentanaPrincipal extends JFrame {
 			panelInfo.add(getLabel_21());
 			panelInfo.add(getPanel_31());
 			panelInfo.add(getPanel_33());
+			panelInfo.add(getLabel_61());
+			panelInfo.add(getLabel_62());
+			panelInfo.add(getPanel_97());
 		}
 		return panelInfo;
 	}
@@ -1629,7 +1684,7 @@ public class VentanaPrincipal extends JFrame {
 			btnModificar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					int x = table.getSelectedRow();
-					if(x==-1) {
+					if(x==-1 && x==0) {
 						JOptionPane.showMessageDialog(null,
 								"Ha de seleccionar uno de los envíos de la tabla.");
 					}
@@ -1637,6 +1692,10 @@ public class VentanaPrincipal extends JFrame {
 						if(!rdbtnADomicilio.isSelected() && !rdbtnEnAlmacnU.isSelected()) {
 							JOptionPane.showMessageDialog(null,
 									"Debe seleccionar el tipo de modificación de entrega (a domicilio o en almacén).");
+						}
+						else if(((String)modelEnviosEnviados.getValueAt(x,3)).contains("Entregado")) {
+							JOptionPane.showMessageDialog(null,
+									"No se puede modificar el lugar de entrega de un envio ya entregado.");
 						}
 						else {
 							try {
@@ -1661,7 +1720,7 @@ public class VentanaPrincipal extends JFrame {
 										int posRandom = ThreadLocalRandom.current().nextInt(0, lista.size());
 										Edificio edificioSeleccionado = lista.get(posRandom);
 										DatabaseManager.modifyEnvioById("No", edificioSeleccionado.getTipo()+"-"+edificioSeleccionado.getNombre()+"-"+
-										edificioSeleccionado.getProvinciaLocalizacion(), (Integer) modelEnviosEnviados.getValueAt(x, 0));
+										edificioSeleccionado.getProvinciaLocalizacion(), Integer.parseInt((String) modelEnviosEnviados.getValueAt(x, 0)));
 										//MODIFICA EL PRECIO
 										Envio en = DatabaseManager.getEnvioById((Integer) modelEnviosEnviados.getValueAt(x, 0));
 										Double precioNuevo = en.calculaPrecio();
@@ -2031,6 +2090,8 @@ public class VentanaPrincipal extends JFrame {
 			panel_45.add(getPanel_51());
 			panel_45.add(getPanel_53());
 			panel_45.add(getPanel_56());
+			panel_45.add(getLabel_63());
+			panel_45.add(getPanel_100());
 		}
 		return panel_45;
 	}
@@ -2077,7 +2138,7 @@ public class VentanaPrincipal extends JFrame {
 			btnModificarEstadoEnvo.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					int x = table_1.getSelectedRow();
-					if(x==-1) {
+					if(x==-1 || x==0) {
 						JOptionPane.showMessageDialog(null,
 								"Debe de seleccionar uno de los envíos del listado");
 					}
@@ -2113,7 +2174,7 @@ public class VentanaPrincipal extends JFrame {
 							//si es valida la opcion cogemos el envío de la base de datos, lo modificamos y actualizamos
 							else if(rdbtnEncamino.isSelected()) {
 								try {
-									int envioId = (int) table_1.getValueAt(x, 0); //el id del envío
+									int envioId = Integer.parseInt((String) table_1.getValueAt(x, 0)); //el id del envío
 									Envio envio = DatabaseManager.getEnvioById(envioId);
 									envio.setEstado(rdbtnEncamino.getText());
 									DatabaseManager.updateEstadoEnvio(envio);
@@ -2127,7 +2188,7 @@ public class VentanaPrincipal extends JFrame {
 							//SI LA ENTREGA ES A DOMICILIO
 							else if(rdbtnEntregadoedificiosalida.isSelected()) {
 								try {
-									int envioId = (int) table_1.getValueAt(x, 0); //el id del envío
+									int envioId = Integer.parseInt((String) table_1.getValueAt(x, 0)); //el id del envío
 									Envio envio = DatabaseManager.getEnvioById(envioId);
 									
 									//AHORA CALCULAMOS UN NUEVO TRANSPORTISTA Y UN NUEVO VEHICULO
@@ -2202,7 +2263,7 @@ public class VentanaPrincipal extends JFrame {
 							}
 							else if(rdbtnEsperaEnvio.isSelected()) {
 								try {
-									int envioId = (int) table_1.getValueAt(x, 0); //el id del envío
+									int envioId = Integer.parseInt((String) table_1.getValueAt(x, 0)); //el id del envío
 									Envio envio = DatabaseManager.getEnvioById(envioId);
 									envio.setEstado(rdbtnEsperaEnvio.getText());
 									DatabaseManager.updateEstadoEnvio(envio);
@@ -2234,7 +2295,7 @@ public class VentanaPrincipal extends JFrame {
 							}
 							else if(rdbtnEncamino.isSelected()) {
 								try {
-									int envioId = (int) table_1.getValueAt(x, 0); //el id del envío
+									int envioId = Integer.parseInt((String) table_1.getValueAt(x, 0)); //el id del envío
 									Envio envio = DatabaseManager.getEnvioById(envioId);
 									envio.setEstado(rdbtnEncamino.getText());
 									DatabaseManager.updateEstadoEnvio(envio);
@@ -2247,15 +2308,15 @@ public class VentanaPrincipal extends JFrame {
 							else if(rdbtnEntregadodomicilio.isSelected()) {
 								//en este caso el envio ya esta entregado, se debe desvincular el transportista y el vehiculo
 								try {
-									int envioId = (int) table_1.getValueAt(x, 0); //el id del envío
+									int envioId = Integer.parseInt((String) table_1.getValueAt(x, 0)); //el id del envío
 									Envio envio = DatabaseManager.getEnvioById(envioId);
 									envio.setEstado(rdbtnEntregadodomicilio.getText());
 									envio.setTransportista("");
 									envio.setVehiculo("");
-									transportistaActual.setLugarEntrega("");
-									transportistaActual.setLugarRecogida("");
+									transportistaActual.setLugarEntrega(null);
+									transportistaActual.setLugarRecogida(null);
 									DatabaseManager.updateEstadoYTVEnvio(envio);
-									DatabaseManager.updateDestinosTransportista("", "", transportistaActual.getDNI());
+									DatabaseManager.updateDestinosTransportista(null, null, transportistaActual.getDNI());
 								} catch (SQLException e1) {
 									// TODO Auto-generated catch block
 									e1.printStackTrace();
@@ -2265,7 +2326,7 @@ public class VentanaPrincipal extends JFrame {
 							else if(rdbtnEntregadoedificio.isSelected()) {
 								//este caso solo se dará si se producen 4 fallos y se devuelve al almacen (cambiar el lugar de recogida) o si no hay entrega a domicilio
 								try {
-									int envioId = (int) table_1.getValueAt(x, 0); //el id del envío
+									int envioId = Integer.parseInt((String) table_1.getValueAt(x, 0)); //el id del envío
 									Envio envio = DatabaseManager.getEnvioById(envioId);
 									
 									envio.setEstado(rdbtnEntregadoedificio.getText());
@@ -2289,10 +2350,10 @@ public class VentanaPrincipal extends JFrame {
 									
 									envio.setLugarEnvio(edificioElegido.getTipo()+"-"+edificioElegido.getNombre()+"-"+
 											edificioElegido.getProvinciaLocalizacion());
-									transportistaActual.setLugarEntrega("");
-									transportistaActual.setLugarRecogida("");
+									transportistaActual.setLugarEntrega(null);
+									transportistaActual.setLugarRecogida(null);
 									DatabaseManager.updateEstadoYTVEnvio(envio);
-									DatabaseManager.updateDestinosTransportista("", "", transportistaActual.getDNI());
+									DatabaseManager.updateDestinosTransportista(null, null, transportistaActual.getDNI());
 									DatabaseManager.updateLugarEntregaEnvio(envio);
 								} catch (SQLException e1) {
 									// TODO Auto-generated catch block
@@ -2301,7 +2362,7 @@ public class VentanaPrincipal extends JFrame {
 							}
 							else if(rdbtnFallida.isSelected()) { //FALLO 1
 								try {
-									int envioId = (int) table_1.getValueAt(x, 0); //el id del envío
+									int envioId = Integer.parseInt((String) table_1.getValueAt(x, 0)); //el id del envío
 									Envio envio = DatabaseManager.getEnvioById(envioId);
 									envio.setEstado(rdbtnFallida.getText());
 									DatabaseManager.updateEstadoEnvio(envio);
@@ -2314,7 +2375,7 @@ public class VentanaPrincipal extends JFrame {
 							}
 							else if(rdbtnEntregafallida.isSelected()) { //FALLO 2
 								try {
-									int envioId = (int) table_1.getValueAt(x,0); //el id del envío
+									int envioId = Integer.parseInt((String) table_1.getValueAt(x, 0)); //el id del envío
 									Envio envio = DatabaseManager.getEnvioById(envioId);
 									envio.setEstado(rdbtnEntregafallida.getText());
 									DatabaseManager.updateEstadoEnvio(envio);
@@ -2327,7 +2388,7 @@ public class VentanaPrincipal extends JFrame {
 							}
 							else if(rdbtnEntregafallida_1.isSelected()) { //FALLO 3
 								try {
-									int envioId = (int) table_1.getValueAt(x, 0); //el id del envío
+									int envioId = Integer.parseInt((String) table_1.getValueAt(x, 0)); //el id del envío
 									Envio envio = DatabaseManager.getEnvioById(envioId);
 									envio.setEstado(rdbtnEntregafallida_1.getText());
 									DatabaseManager.updateEstadoEnvio(envio);
@@ -2340,7 +2401,7 @@ public class VentanaPrincipal extends JFrame {
 							}
 							else if(rdbtnEsperaEnvio.isSelected()) {
 								try {
-									int envioId = (int) table_1.getValueAt(x, 0); //el id del envío
+									int envioId = Integer.parseInt((String) table_1.getValueAt(x, 0)); //el id del envío
 									Envio envio = DatabaseManager.getEnvioById(envioId);
 									envio.setEstado(rdbtnEsperaEnvio.getText());
 									DatabaseManager.updateEstadoEnvio(envio);
@@ -2371,7 +2432,7 @@ public class VentanaPrincipal extends JFrame {
 							}
 							else if(rdbtnEncamino.isSelected()) {
 								try {
-									int envioId = (int) table_1.getValueAt(x, 0); //el id del envío
+									int envioId = Integer.parseInt((String) table_1.getValueAt(x, 0)); //el id del envío
 									Envio envio = DatabaseManager.getEnvioById(envioId);
 									envio.setEstado(rdbtnEncamino.getText());
 									DatabaseManager.updateEstadoEnvio(envio);
@@ -2384,15 +2445,15 @@ public class VentanaPrincipal extends JFrame {
 							else if(rdbtnEntregadodomicilio.isSelected()) {
 								//en este caso el envio ya esta entregado, se debe desvincular el transportista y el vehiculo
 								try {
-									int envioId = (int) table_1.getValueAt(x, 0); //el id del envío
+									int envioId = Integer.parseInt((String) table_1.getValueAt(x, 0)); //el id del envío
 									Envio envio = DatabaseManager.getEnvioById(envioId);
 									envio.setEstado(rdbtnEntregadodomicilio.getText());
 									envio.setTransportista("");
 									envio.setVehiculo("");
-									transportistaActual.setLugarEntrega("");
-									transportistaActual.setLugarRecogida("");
+									transportistaActual.setLugarEntrega(null);
+									transportistaActual.setLugarRecogida(null);
 									DatabaseManager.updateEstadoYTVEnvio(envio);
-									DatabaseManager.updateDestinosTransportista("", "", transportistaActual.getDNI());
+									DatabaseManager.updateDestinosTransportista(null, null, transportistaActual.getDNI());
 								} catch (SQLException e1) {
 									// TODO Auto-generated catch block
 									e1.printStackTrace();
@@ -2401,22 +2462,33 @@ public class VentanaPrincipal extends JFrame {
 							else if(rdbtnEntregadoedificio.isSelected()) {
 								//este caso solo se dará si se producen 4 fallos y se devuelve al almacen (cambiar el lugar de recogida)
 								try {
-									int envioId = (int) table_1.getValueAt(x, 0); //el id del envío
+									int envioId = Integer.parseInt((String) table_1.getValueAt(x, 0)); //el id del envío
 									Envio envio = DatabaseManager.getEnvioById(envioId);
 									envio.setEstado(rdbtnEntregadoedificio.getText());
 									envio.setTransportista("");
 									envio.setVehiculo("");
+									
+									String lugarEntrega = envio.getLugarEnvio();
+									String[] partes = lugarEntrega.split("-");
+									
+//									edificioSeleccionado.getTipo()+
+//									"-"+edificioSeleccionado.getNombre()+"-"+edificioSeleccionado.getProvinciaLocalizacion()
 									//calculamos el edificio
 									List<Edificio> edificios = DatabaseManager.getEdificiosByProvincia(envio.getProvinciaDestino());
 									int posRandomE = ThreadLocalRandom.current().nextInt(0, edificios.size());
-									Edificio edificioElegido = edificios.get(posRandomE);
+									Edificio edificioElegido = edificios.get(posRandomE); //inicialmente elegimos el random si es que ha fallado
+									for(Edificio edif : edificios) {
+										if(edif.getTipo().equals(partes[0]) && edif.getNombre().equals(partes[1]) && edif.getProvinciaLocalizacion().equals(partes[2])) {
+											edificioElegido = edif; //pero en caso de que no venga de fallos y la localizacion final sea un almacen entonces se sustituye
+										}
+									}
 									
 									envio.setLugarEnvio(edificioElegido.getTipo()+"-"+edificioElegido.getNombre()+"-"+
 											edificioElegido.getProvinciaLocalizacion());
-									transportistaActual.setLugarEntrega("");
-									transportistaActual.setLugarRecogida("");
+									transportistaActual.setLugarEntrega(null);
+									transportistaActual.setLugarRecogida(null);
 									DatabaseManager.updateEstadoYTVEnvio(envio);
-									DatabaseManager.updateDestinosTransportista("", "", transportistaActual.getDNI());
+									DatabaseManager.updateDestinosTransportista(null, null, transportistaActual.getDNI());
 									DatabaseManager.updateLugarEntregaEnvio(envio);
 								} catch (SQLException e1) {
 									// TODO Auto-generated catch block
@@ -2425,7 +2497,7 @@ public class VentanaPrincipal extends JFrame {
 							}
 							else if(rdbtnFallida.isSelected()) { //FALLO 1
 								try {
-									int envioId = (int) table_1.getValueAt(x, 0); //el id del envío
+									int envioId = Integer.parseInt((String) table_1.getValueAt(x, 0)); //el id del envío
 									Envio envio = DatabaseManager.getEnvioById(envioId);
 									envio.setEstado(rdbtnFallida.getText());
 									DatabaseManager.updateEstadoEnvio(envio);
@@ -2438,7 +2510,7 @@ public class VentanaPrincipal extends JFrame {
 							}
 							else if(rdbtnEntregafallida.isSelected()) { //FALLO 2
 								try {
-									int envioId = (int) table_1.getValueAt(x,0); //el id del envío
+									int envioId = Integer.parseInt((String) table_1.getValueAt(x, 0)); //el id del envío
 									Envio envio = DatabaseManager.getEnvioById(envioId);
 									envio.setEstado(rdbtnEntregafallida.getText());
 									DatabaseManager.updateEstadoEnvio(envio);
@@ -2451,7 +2523,7 @@ public class VentanaPrincipal extends JFrame {
 							}
 							else if(rdbtnEntregafallida_1.isSelected()) { //FALLO 3
 								try {
-									int envioId = (int) table_1.getValueAt(x, 0); //el id del envío
+									int envioId = Integer.parseInt((String) table_1.getValueAt(x, 0)); //el id del envío
 									Envio envio = DatabaseManager.getEnvioById(envioId);
 									envio.setEstado(rdbtnEntregafallida_1.getText());
 									DatabaseManager.updateEstadoEnvio(envio);
@@ -2464,7 +2536,7 @@ public class VentanaPrincipal extends JFrame {
 							}
 							else if(rdbtnEsperaEnvio.isSelected()) {
 								try {
-									int envioId = (int) table_1.getValueAt(x, 0); //el id del envío
+									int envioId = Integer.parseInt((String) table_1.getValueAt(x, 0)); //el id del envío
 									Envio envio = DatabaseManager.getEnvioById(envioId);
 									envio.setEstado(rdbtnEsperaEnvio.getText());
 									DatabaseManager.updateEstadoEnvio(envio);
@@ -3014,10 +3086,11 @@ public class VentanaPrincipal extends JFrame {
 	}
 	
 	private void actualizarModelV() throws SQLException {
-		removeModelContent(modelEnviosEnviados);
+		removeModelContent(modelVehiculosAMostrar);
 		String[] x = {"Matrícula", "Marca"};
-		modelEnviosEnviados.addRow(x);
-		addToModel(modelEnviosEnviados, DatabaseManager.getVehiculos());
+		modelVehiculosAMostrar.addRow(x);
+		addToModel(modelVehiculosAMostrar, DatabaseManager.getVehiculos());
+//		table_2.setModel(modelVehiculosAMostrar);
 	}
 
 	private JPanel getPanel_75() {
@@ -3063,6 +3136,12 @@ public class VentanaPrincipal extends JFrame {
 	private JButton getBtnVolver() {
 		if (btnVolver == null) {
 			btnVolver = new JButton("Volver");
+			btnVolver.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					CardLayout card = (CardLayout) contentPane.getLayout();
+					card.show(contentPane, "panelInicioAdmin");
+				}
+			});
 		}
 		return btnVolver;
 	}
@@ -3071,6 +3150,7 @@ public class VentanaPrincipal extends JFrame {
 			panel_78 = new JPanel();
 			panel_78.setLayout(new BorderLayout(0, 0));
 			panel_78.add(getBtnMostrarDatosVehculo(), BorderLayout.EAST);
+			panel_78.add(getBtnActualizar_2(), BorderLayout.WEST);
 		}
 		return panel_78;
 	}
@@ -3109,8 +3189,11 @@ public class VentanaPrincipal extends JFrame {
 								}
 							}
 							else {
-								JOptionPane.showMessageDialog(null,
-										"Se ha producido un problema mostrando los datos del vehículo.");
+								textPane.setText("Datos del vehículo con matrícula " + matriculaElegida+ ":\n"
+										+ "Marca: " + v.getMarca() + "\n"
+										+ "Tipo: " +v.getTipo() + "\n" 
+										+ "Id del edificio en el que opera: " + v.getEdificioId() + "\n"
+										+ "Provincia en la que opera: " + edificio.getProvinciaLocalizacion() + "\n");
 							}
 						} catch (SQLException e) {
 							// TODO Auto-generated catch block
@@ -3329,9 +3412,10 @@ public class VentanaPrincipal extends JFrame {
 			textField_11 = new JTextField();
 			textField_11.setColumns(10);
 			textField_11.setBounds(89, 15, 220, 22);
-			if(DatabaseManager.enviosPendientes(clienteActual.getDni())) { //si tiene envios pendientes que no hayan acabado entonces el enabled pasa a false
-				textField_11.setEnabled(false);
-			}
+			if(clienteActual!=null)
+				if(DatabaseManager.enviosPendientes(clienteActual.getDni())) { //si tiene envios pendientes que no hayan acabado entonces el enabled pasa a false
+					textField_11.setEnabled(false);
+				}
 		}
 		return textField_11;
 	}
@@ -3406,9 +3490,10 @@ public class VentanaPrincipal extends JFrame {
 			comboBox_1.addItem("Vizcaya");
 			comboBox_1.addItem("Zamora");
 			comboBox_1.addItem("Zaragoza");
-			if(DatabaseManager.enviosPendientes(clienteActual.getDni())) { //si tiene envios pendientes que no hayan acabado entonces el enabled pasa a false
-				comboBox_1.setEnabled(false);
-			}
+			if(clienteActual!=null)
+				if(DatabaseManager.enviosPendientes(clienteActual.getDni())) { //si tiene envios pendientes que no hayan acabado entonces el enabled pasa a false
+					comboBox_1.setEnabled(false);
+				}
 		}
 		return comboBox_1;
 	}
@@ -3425,7 +3510,7 @@ public class VentanaPrincipal extends JFrame {
 			panel_86.setLayout(new GridLayout(0, 3, 0, 0));
 			panel_86.add(getLabel_56());
 			panel_86.add(getPanel_87());
-			panel_86.add(getLabel_57());
+			panel_86.add(getPanel_98());
 		}
 		return panel_86;
 	}
@@ -3504,12 +3589,6 @@ public class VentanaPrincipal extends JFrame {
 		}
 		return btnModificarDatos;
 	}
-	private JLabel getLabel_57() {
-		if (label_57 == null) {
-			label_57 = new JLabel("");
-		}
-		return label_57;
-	}
 	private JPanel getPanelFallosEnEnvios() throws SQLException {
 		if (panelFallosEnEnvios == null) {
 			panelFallosEnEnvios = new JPanel();
@@ -3527,7 +3606,7 @@ public class VentanaPrincipal extends JFrame {
 			panel_88 = new JPanel();
 			panel_88.setLayout(new BorderLayout(0, 0));
 			panel_88.add(getLblFallosProducidosEn(), BorderLayout.NORTH);
-			panel_88.add(getTable_3(), BorderLayout.CENTER);
+			panel_88.add(getPanel_93(), BorderLayout.CENTER);
 		}
 		return panel_88;
 	}
@@ -3579,15 +3658,16 @@ public class VentanaPrincipal extends JFrame {
 	private void actualizarModelf() throws SQLException {
 		removeModelContentt(modelFallosAMostrar);
 		String[] x = {"Id", "ReceptorDNI", "Estado"};
-		modelEnviosARepartir.addRow(x);
-		addToModelt(modelEnviosARepartir, DatabaseManager.getFallos());
+		modelFallosAMostrar.addRow(x);
+		addToModelt(modelFallosAMostrar, DatabaseManager.getFallos());
 	}
-	private JPanel getPanelMuestraFallosCliente() {
+	private JPanel getPanelMuestraFallosCliente() throws SQLException {
 		if (panelMuestraFallosCliente == null) {
 			panelMuestraFallosCliente = new JPanel();
 			panelMuestraFallosCliente.setLayout(new BorderLayout(0, 0));
 			panelMuestraFallosCliente.add(getLblPedidosConFallos(), BorderLayout.NORTH);
 			panelMuestraFallosCliente.add(getTable_4(), BorderLayout.CENTER);
+			panelMuestraFallosCliente.add(getPanel_99(), BorderLayout.SOUTH);
 		}
 		return panelMuestraFallosCliente;
 	}
@@ -3598,7 +3678,7 @@ public class VentanaPrincipal extends JFrame {
 		}
 		return lblPedidosConFallos;
 	}
-	private JTable getTable_4() {
+	private JTable getTable_4() throws SQLException {
 		if (table_4 == null) {
 			//podemos hacer que en el momento en el que pase de estado fallo 3 a entregado en edificio
 			//se añada un fallo 4, luego comparamos ids de pedidos fallidos con pedidos en general y si existe
@@ -3613,16 +3693,291 @@ public class VentanaPrincipal extends JFrame {
 			modelFallosACliente.addColumn("Estado");
 			modelFallosACliente.addColumn("Lugar recogida");
 			String[] x = {"Id", "Emisor", "Receptor", "Numero fallos", "Estado", "Lugar recogida"};
-			modelFallosACliente.addColumn(x);
+			modelFallosACliente.addRow(x);
 			table_4 = new JTable(modelFallosACliente);
+			actualizarModelFC();
 		}
 		return table_4;
 	}
 	
-//	private void actualizarModel() throws SQLException {
-//		removeModelContent(modelFallosACliente);
-//		String[] x = {"Id", "Emisor", "Receptor", "Numero fallos", "Estado", "Lugar recogida"};
-//		modelFallosACliente.addRow(x);
-//		addToModel(modelFallosACliente, DatabaseManager.getEnviosFallidosDeCliente(clienteActual.getDni()));
-//	}
+	private void actualizarModelFC() throws SQLException {
+		removeModelContent(modelFallosACliente);
+		String[] x = {"Id", "Emisor", "Receptor", "Numero fallos", "Estado", "Lugar recogida"};
+		modelFallosACliente.addRow(x);
+		if(clienteActual!=null)
+			addToModel(modelFallosACliente, DatabaseManager.getEnviosFallidosDeCliente(clienteActual.getDni()));
+	}
+	
+	private JButton getBtnActualizar_2() {
+		if (btnActualizar_2 == null) {
+			btnActualizar_2 = new JButton("Actualizar");
+			btnActualizar_2.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					try {
+						actualizarModelV();
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+			});
+		}
+		return btnActualizar_2;
+	}
+	private JPanel getPanel_93() throws SQLException {
+		if (panel_93 == null) {
+			panel_93 = new JPanel();
+			panel_93.setLayout(new BorderLayout(0, 0));
+			panel_93.add(getTable_3());
+			panel_93.add(getPanel_94(), BorderLayout.SOUTH);
+		}
+		return panel_93;
+	}
+	private JPanel getPanel_94() {
+		if (panel_94 == null) {
+			panel_94 = new JPanel();
+			panel_94.setLayout(new BorderLayout(0, 0));
+			panel_94.add(getBtnActualizar_3(), BorderLayout.WEST);
+			panel_94.add(getBtnVolver_1(), BorderLayout.EAST);
+		}
+		return panel_94;
+	}
+	private JButton getBtnActualizar_3() {
+		if (btnActualizar_3 == null) {
+			btnActualizar_3 = new JButton("Actualizar");
+			btnActualizar_3.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					try {
+						actualizarModelf();
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+			});
+		}
+		return btnActualizar_3;
+	}
+	private JButton getBtnVolver_1() {
+		if (btnVolver_1 == null) {
+			btnVolver_1 = new JButton("Volver");
+			btnVolver_1.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					CardLayout card = (CardLayout) contentPane.getLayout();
+					card.show(contentPane, "panelInicioAdmin");
+				}
+			});
+		}
+		return btnVolver_1;
+	}
+	private JPanel getPanel_95() {
+		if (panel_95 == null) {
+			panel_95 = new JPanel();
+			panel_95.setLayout(new GridLayout(2, 0, 0, 0));
+			panel_95.add(getLabel_6_1());
+			panel_95.add(getBtnVolver_2());
+		}
+		return panel_95;
+	}
+	private JLabel getLabel_6_1() {
+		if (label_6 == null) {
+			label_6 = new JLabel("");
+		}
+		return label_6;
+	}
+	private JButton getBtnVolver_2() {
+		if (btnVolver_2 == null) {
+			btnVolver_2 = new JButton("Volver");
+			btnVolver_2.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					CardLayout card = (CardLayout) contentPane.getLayout();
+					card.show(contentPane, "panelInicio");
+				}
+			});
+		}
+		return btnVolver_2;
+	}
+	private JButton getBtnVolver_3() {
+		if (btnVolver_3 == null) {
+			btnVolver_3 = new JButton("Volver");
+			btnVolver_3.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					CardLayout card = (CardLayout) contentPane.getLayout();
+					card.show(contentPane, "panelInicio");
+				}
+			});
+			btnVolver_3.setBounds(230, 422, 89, 23);
+		}
+		return btnVolver_3;
+	}
+	private JLabel getLabel_47() {
+		if (label_47 == null) {
+			label_47 = new JLabel("");
+		}
+		return label_47;
+	}
+	private JLabel getLabel_58() {
+		if (label_58 == null) {
+			label_58 = new JLabel("");
+		}
+		return label_58;
+	}
+	private JLabel getLabel_59() {
+		if (label_59 == null) {
+			label_59 = new JLabel("");
+		}
+		return label_59;
+	}
+	private JLabel getLabel_60() {
+		if (label_60 == null) {
+			label_60 = new JLabel("");
+		}
+		return label_60;
+	}
+	private JPanel getPanel_96() {
+		if (panel_96 == null) {
+			panel_96 = new JPanel();
+			panel_96.setLayout(null);
+			panel_96.add(getBtnVolver_4());
+		}
+		return panel_96;
+	}
+	private JButton getBtnVolver_4() {
+		if (btnVolver_4 == null) {
+			btnVolver_4 = new JButton("Volver");
+			btnVolver_4.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					CardLayout card = (CardLayout) contentPane.getLayout();
+					card.show(contentPane, "panelInicioUser");
+				}
+			});
+			btnVolver_4.setBounds(230, 30, 89, 23);
+		}
+		return btnVolver_4;
+	}
+	private JLabel getLabel_61() {
+		if (label_61 == null) {
+			label_61 = new JLabel("");
+		}
+		return label_61;
+	}
+	private JLabel getLabel_62() {
+		if (label_62 == null) {
+			label_62 = new JLabel("");
+		}
+		return label_62;
+	}
+	private JPanel getPanel_97() {
+		if (panel_97 == null) {
+			panel_97 = new JPanel();
+			panel_97.setLayout(null);
+			panel_97.add(getBtnVolver_5());
+		}
+		return panel_97;
+	}
+	private JButton getBtnVolver_5() {
+		if (btnVolver_5 == null) {
+			btnVolver_5 = new JButton("Volver");
+			btnVolver_5.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					CardLayout card = (CardLayout) contentPane.getLayout();
+					card.show(contentPane, "panelInicioUser");
+				}
+				
+			});
+			btnVolver_5.setBounds(233, 36, 89, 23);
+		}
+		return btnVolver_5;
+	}
+	private JPanel getPanel_98() {
+		if (panel_98 == null) {
+			panel_98 = new JPanel();
+			panel_98.setLayout(new GridLayout(2, 0, 0, 0));
+			panel_98.add(getLabel_57_1());
+			panel_98.add(getBtnVolver_6());
+		}
+		return panel_98;
+	}
+	private JLabel getLabel_57_1() {
+		if (label_57 == null) {
+			label_57 = new JLabel("");
+		}
+		return label_57;
+	}
+	private JButton getBtnVolver_6() {
+		if (btnVolver_6 == null) {
+			btnVolver_6 = new JButton("Volver");
+			btnVolver_6.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					CardLayout card = (CardLayout) contentPane.getLayout();
+					card.show(contentPane, "panelInicioUser");
+				}
+			});
+		}
+		return btnVolver_6;
+	}
+	private JPanel getPanel_99() {
+		if (panel_99 == null) {
+			panel_99 = new JPanel();
+			panel_99.setLayout(new BorderLayout(0, 0));
+			panel_99.add(getBtnVolver_7(), BorderLayout.EAST);
+			panel_99.add(getBtnActualizar_4(), BorderLayout.WEST);
+		}
+		return panel_99;
+	}
+	private JButton getBtnVolver_7() {
+		if (btnVolver_7 == null) {
+			btnVolver_7 = new JButton("Volver");
+			btnVolver_7.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					CardLayout card = (CardLayout) contentPane.getLayout();
+					card.show(contentPane, "panelInicioUser");
+				}
+			});
+		}
+		return btnVolver_7;
+	}
+	private JLabel getLabel_63() {
+		if (label_63 == null) {
+			label_63 = new JLabel("");
+		}
+		return label_63;
+	}
+	private JPanel getPanel_100() {
+		if (panel_100 == null) {
+			panel_100 = new JPanel();
+			panel_100.setLayout(null);
+			panel_100.add(getBtnVolver_8());
+		}
+		return panel_100;
+	}
+	private JButton getBtnVolver_8() {
+		if (btnVolver_8 == null) {
+			btnVolver_8 = new JButton("Volver");
+			btnVolver_8.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					CardLayout card = (CardLayout) contentPane.getLayout();
+					card.show(contentPane, "panelInicioTransportista");
+				}
+			});
+			btnVolver_8.setBounds(201, 53, 89, 23);
+		}
+		return btnVolver_8;
+	}
+	private JButton getBtnActualizar_4() {
+		if (btnActualizar_4 == null) {
+			btnActualizar_4 = new JButton("Actualizar");
+			btnActualizar_4.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					try {
+						actualizarModelFC();
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+			});
+		}
+		return btnActualizar_4;
+	}
 }
