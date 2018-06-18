@@ -5,13 +5,13 @@ public class RegistroMovimiento {
 	String dniTransportista;
 	String vehiculo;
 	int idEnvio;
-	String estadoActual;
-	public RegistroMovimiento(String dniTransportista, String vehiculo, int idEnvio, String estadoActual) {
+	String ubicacionActual;
+	public RegistroMovimiento(String dniTransportista, String vehiculo, int idEnvio, String ubicacionActual) {
 		super();
 		this.dniTransportista = dniTransportista;
 		this.vehiculo = vehiculo;
 		this.idEnvio = idEnvio;
-		this.estadoActual = estadoActual;
+		this.ubicacionActual = ubicacionActual;
 	}
 	public String getDniTransportista() {
 		return dniTransportista;
@@ -31,10 +31,10 @@ public class RegistroMovimiento {
 	public void setIdEnvio(int idEnvio) {
 		this.idEnvio = idEnvio;
 	}
-	public String getEstadoActual() {
-		return estadoActual;
+	public String getUbicacionActual() {
+		return ubicacionActual;
 	}
-	public void setEstadoActual(String estadoActual) {
-		this.estadoActual = estadoActual;
+	public void setUbicacionActual(String estadoActual) {
+		this.ubicacionActual = estadoActual;
 	}
 }

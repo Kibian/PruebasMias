@@ -822,7 +822,7 @@ public class DatabaseManager {
 			pst.setString(1, registroMovimiento.getDniTransportista());
 			pst.setString(2, registroMovimiento.getVehiculo());
 			pst.setInt(3, registroMovimiento.getIdEnvio());
-			pst.setString(4, registroMovimiento.getEstadoActual());
+			pst.setString(4, registroMovimiento.getUbicacionActual());
 			DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
 			Date date = new Date();
 			java.sql.Date sqlDate = new java.sql.Date(date.getTime());
@@ -842,15 +842,16 @@ public class DatabaseManager {
 		List<String[]> result = new ArrayList<String[]>();
 		try {
 			getConnection();
-			pst = con.prepareStatement("select id, provinciaorigen, provinciadestino from envios where provinciaorigen<>provinciadestino and estado='En Oficina' or "
-					+ "provinciaorigen!=provinciadestino and estado='En Almacen'");
+			pst = con.prepareStatement("select id, provinciaorigen, provinciadestino, localizacionactual from envios where provinciaorigen<>provinciadestino and estado='En Oficina' or "
+					+ "provinciaorigen<>provinciadestino and estado='En Almacen'");
 			rs = pst.executeQuery();
 			while (rs.next()) {
 				Integer id = rs.getInt(1);
 				String provinciaEmisor = rs.getString(2);
 				String provinciaReceptor = rs.getString(3);
 				String[] in = {String.valueOf(id), provinciaEmisor, provinciaReceptor};
-				result.add(in);
+				if(rs.getString(4).contains(provinciaEmisor))
+					result.add(in);
 			}
 			return result;
 		}catch(SQLException e) {
@@ -858,6 +859,20 @@ public class DatabaseManager {
 		}finally {
 //			pst.close();
 		}
+	}
+
+	public static List<String[]> getRegistros() throws SQLException {
+		PreparedStatement pst = null;
+		getConnection();
+		List<String[]> sol = new ArrayList<String[]>();
+		pst = con.prepareStatement("select idenvio, transportistadni, vehiculomatricula, ubicacionactual, fecha from registros");
+		ResultSet rs = pst.executeQuery();
+		DateFormat df = new SimpleDateFormat("yyyy-mm-dd");
+		while(rs.next()) {
+			String[] s = {Integer.toString(rs.getInt(1)), rs.getString(2), rs.getString(3), rs.getString(4), df.format(rs.getDate(5))};
+			sol.add(s);
+		}
+		return sol;
 	}
 }
 	

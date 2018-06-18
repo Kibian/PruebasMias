@@ -53,7 +53,7 @@ public class VentanaPrincipal extends JFrame {
 	private Cliente clienteActual;
 	private MyTableModel modelEnviosEnviados;
 	private MyTableModel modelEnviosARepartir;
-	private MyTableModel modelVehiculosAMostrar;
+	private MyTableModel modelRegistrosAMostrar;
 	private MyTableModel modelFallosAMostrar;
 	private MyTableModel modelFallosACliente;
 	private Transportista transportistaActual;
@@ -239,19 +239,12 @@ public class VentanaPrincipal extends JFrame {
 	private JButton button_4;
 	private JPanel panel_72;
 	private JLabel lblBienvenidoAdministrador;
-	private JPanel panelListadoVehiculos;
+	private JPanel panelListadoRegistros;
 	private JPanel panel_73;
-	private JLabel lblListadoVehculos;
+	private JLabel lblListadoRegistros;
 	private JPanel panel_74;
 	private JTable table_2;
-	private JPanel panel_75;
-	private JLabel lblDatosVehculoSeleccionado;
-	private JPanel panel_76;
-	private JTextPane textPane;
-	private JPanel panel_77;
-	private JButton btnVolver;
 	private JPanel panel_78;
-	private JButton btnMostrarDatosVehculo;
 	private JLabel label_36;
 	private JPanel panel_66;
 	private JPanel panel_67;
@@ -428,6 +421,15 @@ public class VentanaPrincipal extends JFrame {
 	private JButton btnVolver_10;
 	private MyTableModel modelPedidosEntreProvincias;
 	private JButton btnEnvioEntreProvincias;
+	private JButton btnVolver;
+	private JPanel panel_75;
+	private JPanel panel_76;
+	private JLabel label_82;
+	private JButton btnVolver_11;
+	private JPanel panel_77;
+	private JPanel panel_127;
+	private JLabel label_83;
+	private JButton btnVolver_12;
 
 	/**
 	 * Launch the application.
@@ -465,7 +467,7 @@ public class VentanaPrincipal extends JFrame {
 		contentPane.add(getPanelInicioTransportista(), "panelInicioTransportista");
 		contentPane.add(getPanelConsultaEnviosAsignados(), "panelConsultaEnviosAsignados");
 		contentPane.add(getPanelInicioAdmin(), "panelInicioAdmin");
-		contentPane.add(getPanelListadoVehiculos(), "panelListadoVehiculos");
+		contentPane.add(getPanelListadoRegistros(), "panelListadoRegistros");
 		contentPane.add(getPanelCambioDatos(), "panelCambioDatos");
 		contentPane.add(getPanelFallosEnEnvios(), "panelFallosEnvios");
 		contentPane.add(getPanelMuestraFallosCliente(), "panelMuestraFallosCliente");
@@ -1742,7 +1744,7 @@ public class VentanaPrincipal extends JFrame {
 			btnModificar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					int x = table.getSelectedRow();
-					if(x==-1 && x==0) {
+					if(x==-1 || x==0) {
 						JOptionPane.showMessageDialog(null,
 								"Ha de seleccionar uno de los envíos de la tabla.");
 					}
@@ -2348,11 +2350,11 @@ public class VentanaPrincipal extends JFrame {
 	}
 	private JButton getBtnListadoVehculos() {
 		if (btnListadoVehculos == null) {
-			btnListadoVehculos = new JButton("Listado veh\u00EDculos");
+			btnListadoVehculos = new JButton("Listado registros");
 			btnListadoVehculos.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					CardLayout card = (CardLayout) contentPane.getLayout();
-					card.show(contentPane, "panelListadoVehiculos");
+					card.show(contentPane, "panelListadoRegistros");
 				}
 			});
 		}
@@ -2487,31 +2489,30 @@ public class VentanaPrincipal extends JFrame {
 		}
 		return lblBienvenidoAdministrador;
 	}
-	private JPanel getPanelListadoVehiculos() throws SQLException {
-		if (panelListadoVehiculos == null) {
-			panelListadoVehiculos = new JPanel();
-			panelListadoVehiculos.setLayout(new GridLayout(0, 2, 0, 0));
-			panelListadoVehiculos.add(getPanel_73());
-			panelListadoVehiculos.add(getPanel_75());
+	private JPanel getPanelListadoRegistros() throws SQLException {
+		if (panelListadoRegistros == null) {
+			panelListadoRegistros = new JPanel();
+			panelListadoRegistros.setLayout(new BorderLayout(0, 0));
+			panelListadoRegistros.add(getPanel_73(), BorderLayout.CENTER);
 		}
-		return panelListadoVehiculos;
+		return panelListadoRegistros;
 	}
 	private JPanel getPanel_73() throws SQLException {
 		if (panel_73 == null) {
 			panel_73 = new JPanel();
 			panel_73.setLayout(new BorderLayout(0, 0));
-			panel_73.add(getLblListadoVehculos(), BorderLayout.NORTH);
+			panel_73.add(getLblListadoRegistros(), BorderLayout.NORTH);
 			panel_73.add(getPanel_74(), BorderLayout.CENTER);
 			panel_73.add(getPanel_78(), BorderLayout.SOUTH);
 		}
 		return panel_73;
 	}
-	private JLabel getLblListadoVehculos() {
-		if (lblListadoVehculos == null) {
-			lblListadoVehculos = new JLabel("Listado veh\u00EDculos");
-			lblListadoVehculos.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 18));
+	private JLabel getLblListadoRegistros() {
+		if (lblListadoRegistros == null) {
+			lblListadoRegistros = new JLabel("Listado registros");
+			lblListadoRegistros.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 18));
 		}
-		return lblListadoVehculos;
+		return lblListadoRegistros;
 	}
 	private JPanel getPanel_74() throws SQLException {
 		if (panel_74 == null) {
@@ -2523,12 +2524,16 @@ public class VentanaPrincipal extends JFrame {
 	}
 	private JTable getTable_2() throws SQLException {
 		if (table_2 == null) {
-			modelVehiculosAMostrar = new MyTableModel();
-			modelVehiculosAMostrar.addColumn("Matrícula");
-			modelVehiculosAMostrar.addColumn("Marca");
-			String[] x = {"Matrícula", "Marca"};
-			modelVehiculosAMostrar.addRow(x);
-			table_2 = new JTable(modelVehiculosAMostrar);
+			modelRegistrosAMostrar = new MyTableModel();
+			modelRegistrosAMostrar.addColumn("IdEnvio");
+			modelRegistrosAMostrar.addColumn("DNITransportista");
+			modelRegistrosAMostrar.addColumn("MatriculaVehiculo");
+			modelRegistrosAMostrar.addColumn("UbicacionActual");
+			modelRegistrosAMostrar.addColumn("FechaRegistro");
+			String[] x = {"Id envio", "DNI transportista", "Matrícula vehículo", "Ubicación actual envío"
+					, "Fecha de registro"};
+			modelRegistrosAMostrar.addRow(x);
+			table_2 = new JTable(modelRegistrosAMostrar);
 			actualizarModelV();
 			
 		}
@@ -2536,124 +2541,20 @@ public class VentanaPrincipal extends JFrame {
 	}
 	
 	private void actualizarModelV() throws SQLException {
-		removeModelContent(modelVehiculosAMostrar);
-		String[] x = {"Matrícula", "Marca"};
-		modelVehiculosAMostrar.addRow(x);
-		addToModel(modelVehiculosAMostrar, DatabaseManager.getVehiculos());
+		removeModelContent(modelRegistrosAMostrar);
+		String[] x = {"Id Envio", "DNI Transportista", "Matrícula vehículo", "Ubicación actual envío"};
+		modelRegistrosAMostrar.addRow(x);
+		addToModel(modelRegistrosAMostrar, DatabaseManager.getRegistros());
 //		table_2.setModel(modelVehiculosAMostrar);
-	}
-
-	private JPanel getPanel_75() {
-		if (panel_75 == null) {
-			panel_75 = new JPanel();
-			panel_75.setLayout(new BorderLayout(0, 0));
-			panel_75.add(getLblDatosVehculoSeleccionado(), BorderLayout.NORTH);
-			panel_75.add(getPanel_76(), BorderLayout.CENTER);
-			panel_75.add(getPanel_77(), BorderLayout.SOUTH);
-		}
-		return panel_75;
-	}
-	private JLabel getLblDatosVehculoSeleccionado() {
-		if (lblDatosVehculoSeleccionado == null) {
-			lblDatosVehculoSeleccionado = new JLabel("Datos veh\u00EDculo seleccionado");
-			lblDatosVehculoSeleccionado.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 18));
-		}
-		return lblDatosVehculoSeleccionado;
-	}
-	private JPanel getPanel_76() {
-		if (panel_76 == null) {
-			panel_76 = new JPanel();
-			panel_76.setLayout(new BorderLayout(0, 0));
-			panel_76.add(getTextPane());
-		}
-		return panel_76;
-	}
-	private JTextPane getTextPane() {
-		if (textPane == null) {
-			textPane = new JTextPane();
-			textPane.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		}
-		return textPane;
-	}
-	private JPanel getPanel_77() {
-		if (panel_77 == null) {
-			panel_77 = new JPanel();
-			panel_77.setLayout(new BorderLayout(0, 0));
-			panel_77.add(getBtnVolver(), BorderLayout.EAST);
-		}
-		return panel_77;
-	}
-	private JButton getBtnVolver() {
-		if (btnVolver == null) {
-			btnVolver = new JButton("Volver");
-			btnVolver.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-					CardLayout card = (CardLayout) contentPane.getLayout();
-					card.show(contentPane, "panelInicioAdmin");
-				}
-			});
-		}
-		return btnVolver;
 	}
 	private JPanel getPanel_78() {
 		if (panel_78 == null) {
 			panel_78 = new JPanel();
 			panel_78.setLayout(new BorderLayout(0, 0));
-			panel_78.add(getBtnMostrarDatosVehculo(), BorderLayout.EAST);
 			panel_78.add(getBtnActualizar_2(), BorderLayout.WEST);
+			panel_78.add(getBtnVolver(), BorderLayout.EAST);
 		}
 		return panel_78;
-	}
-	private JButton getBtnMostrarDatosVehculo() {
-		if (btnMostrarDatosVehculo == null) {
-			btnMostrarDatosVehculo = new JButton("Mostrar datos veh\u00EDculo");
-			btnMostrarDatosVehculo.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-					int pos = table_2.getSelectedRow();
-					if(pos==-1) {
-						JOptionPane.showMessageDialog(null,
-								"Debe seleccionar un elemento de la tabla");
-					}
-					else {
-						try {
-							String matriculaElegida = (String) table_2.getValueAt(pos, 0);
-							Vehiculo v = DatabaseManager.getVehiculoByMatricula(matriculaElegida);
-							Envio envio = DatabaseManager.getEnvioByMatricula(matriculaElegida);
-							Edificio edificio = DatabaseManager.getEdificioById(v.getEdificioId());
-							if(envio!=null) {
-								if(envio.getTransportista().equals("") || envio.getVehiculo().equals("")) {
-									textPane.setText("Datos del vehículo con matrícula " + matriculaElegida+ ":\n"
-											+ "Marca: " + v.getMarca() + "\n"
-											+ "Tipo: " +v.getTipo() + "\n" 
-											+ "Id del edificio en el que opera: " + v.getEdificioId() + "\n"
-											+ "Provincia en la que opera: " + edificio.getProvinciaLocalizacion() + "\n");
-								}
-								else {
-									textPane.setText("Datos del vehículo con matrícula " + matriculaElegida+ ":\n"
-											+ "Marca: " + v.getMarca() + "\n"
-											+ "Tipo: " +v.getTipo() + "\n" 
-											+ "Id del edificio en el que opera: " + v.getEdificioId() + "\n"
-											+ "Provincia en la que opera: " + edificio.getProvinciaLocalizacion() + "\n"
-											+ "Transportista actual: "+ envio.getTransportista() +"\n"
-											+ "Envio actual: " + envio.getId());
-								}
-							}
-							else {
-								textPane.setText("Datos del vehículo con matrícula " + matriculaElegida+ ":\n"
-										+ "Marca: " + v.getMarca() + "\n"
-										+ "Tipo: " +v.getTipo() + "\n" 
-										+ "Id del edificio en el que opera: " + v.getEdificioId() + "\n"
-										+ "Provincia en la que opera: " + edificio.getProvinciaLocalizacion() + "\n");
-							}
-						} catch (SQLException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-					}
-				}
-			});
-		}
-		return btnMostrarDatosVehculo;
 	}
 	private JLabel getLabel_36() {
 		if (label_36 == null) {
@@ -4027,6 +3928,8 @@ public class VentanaPrincipal extends JFrame {
 			panel_113.add(getPanel_124());
 			panel_113.add(getBtnMarcarComoEntregado());
 			panel_113.add(getBtnActualizar_5());
+			panel_113.add(getPanel_77());
+			panel_113.add(getPanel_127());
 		}
 		return panel_113;
 	}
@@ -4136,10 +4039,12 @@ public class VentanaPrincipal extends JFrame {
 			panel_115 = new JPanel();
 			panel_115.setLayout(new GridLayout(7, 0, 0, 0));
 			panel_115.add(getLabel_75());
-			panel_115.add(getLabel_76());
 			panel_115.add(getLabel_77());
 			panel_115.add(getBtnMarcarComoRecogido());
 			panel_115.add(getBtnActualizar_6());
+			panel_115.add(getLabel_76());
+			panel_115.add(getPanel_75());
+			panel_115.add(getPanel_76());
 		}
 		return panel_115;
 	}
@@ -4486,7 +4391,7 @@ public class VentanaPrincipal extends JFrame {
 								env.setTransportista("");
 								env.setVehiculo("");
 								DatabaseManager.updateEstadoYTVEnvio(env);
-								DatabaseManager.añadirRegistro(new RegistroMovimiento(transportistaActual.getDNI(), vehiculo, env.getId(), env.getEstado()));
+								DatabaseManager.añadirRegistro(new RegistroMovimiento(transportistaActual.getDNI(), vehiculo, env.getId(), env.getUbicacionActual()));
 							} catch (SQLException e1) {
 								// TODO Auto-generated catch block
 								e1.printStackTrace();
@@ -4520,7 +4425,7 @@ public class VentanaPrincipal extends JFrame {
 									env.setUbicacionActual(textField_15.getText());
 									env.setEstado("En " + lugarActual[0]);
 									DatabaseManager.updateEstadoYTVEnvio(env);
-									DatabaseManager.añadirRegistro(new RegistroMovimiento(transportistaActual.getDNI(), env.getVehiculo(), env.getId(), env.getEstado()));
+									DatabaseManager.añadirRegistro(new RegistroMovimiento(transportistaActual.getDNI(), env.getVehiculo(), env.getId(), env.getUbicacionActual()));
 								} catch (SQLException e1) {
 									// TODO Auto-generated catch block
 									e1.printStackTrace();
@@ -4590,7 +4495,8 @@ public class VentanaPrincipal extends JFrame {
 			btnVolver_9 = new JButton("Volver");
 			btnVolver_9.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					
+					CardLayout card = (CardLayout) contentPane.getLayout();
+					card.show(contentPane, "panelInicioTransportista");
 				}
 			});
 		}
@@ -4618,7 +4524,7 @@ public class VentanaPrincipal extends JFrame {
 								Vehiculo random = v.get((new Random()).nextInt(v.size()));
 								env.setVehiculo(random.getMatricula());
 								DatabaseManager.updateEstadoYTVEnvio(env);
-								DatabaseManager.añadirRegistro(new RegistroMovimiento(transportistaActual.getDNI(), env.getVehiculo(), env.getId(), env.getEstado()));
+								DatabaseManager.añadirRegistro(new RegistroMovimiento(transportistaActual.getDNI(), env.getVehiculo(), env.getId(), env.getUbicacionActual()));
 							} catch (SQLException e1) {
 								// TODO Auto-generated catch block
 								e1.printStackTrace();
@@ -4867,12 +4773,73 @@ public class VentanaPrincipal extends JFrame {
 	private JButton getBtnEnviarAProvincia() {
 		if (btnEnviarAProvincia == null) {
 			btnEnviarAProvincia = new JButton("Enviar a provincia destinatario");
+			btnEnviarAProvincia.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					int idPedido = Integer.parseInt((String) modelPedidosEntreProvincias.getValueAt(table_9.getSelectedRow(), 0));
+					if(table_9.getSelectedRow()==-1 || table_9.getSelectedRow()==0) {
+						JOptionPane.showMessageDialog(null,
+								"Debe de seleccionar uno de los envíos del listado");
+					}
+					else {
+						Envio envio = null;
+						try {
+							envio = DatabaseManager.getEnvioById(idPedido);
+							
+							if (envio==null) {
+								JOptionPane.showMessageDialog(null,
+										"No existe un envio con esa id");
+							}
+							else {
+								//hay que asociarle al pedido un edificio, y un transportista y vehiculo si la entrega es a domicilio
+								List<Edificio> edificiosProvinciaReceptor = DatabaseManager.getEdificiosByProvincia(envio.getProvinciaDestino());
+								Random randomGenerator = new Random();
+								int index = randomGenerator.nextInt(edificiosProvinciaReceptor.size());
+								Edificio edifElegido = edificiosProvinciaReceptor.get(index);
+								
+								String transportistaDni = "";
+								String vehiculoMatricula = "";
+								
+								if(envio.isEnvioADomicilio()) {
+									List<Transportista> transportistasProvinciaReceptor = DatabaseManager.getTransportistasProvincia(envio.getProvinciaDestino());
+									Random randomGenerator2 = new Random();
+									int index2 = randomGenerator2.nextInt(transportistasProvinciaReceptor.size());
+									Transportista transElegido = transportistasProvinciaReceptor.get(index2);
+									
+									List<Vehiculo> vehiculosProvinciaReceptor = DatabaseManager.getVehiculosDeProvincia(envio.getProvinciaDestino());
+									Random randomGenerator3 = new Random();
+									int index3 = randomGenerator3.nextInt(vehiculosProvinciaReceptor.size());
+									Vehiculo vehElegido = vehiculosProvinciaReceptor.get(index3);
+									
+									transportistaDni = transElegido.getDNI();
+									vehiculoMatricula = vehElegido.getMatricula();
+								}
+								
+								envio.setTransportista(transportistaDni);
+								envio.setVehiculo(vehiculoMatricula);
+								envio.setUbicacionActual(edifElegido.getTipo()+ "-" + edifElegido.getNombre() + "-" + edifElegido.getProvinciaLocalizacion());
+								envio.setEstado("En " + edifElegido.getTipo());
+								DatabaseManager.updateEstadoYTVEnvio(envio);
+								actualizarModelPEE();
+							}
+						} catch (SQLException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+					}
+				}
+			});
 		}
 		return btnEnviarAProvincia;
 	}
 	private JButton getBtnVolver_10() {
 		if (btnVolver_10 == null) {
 			btnVolver_10 = new JButton("Volver");
+			btnVolver_10.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					CardLayout card = (CardLayout) contentPane.getLayout();
+					card.show(contentPane, "panelInicioAdmin");
+				}
+			});
 		}
 		return btnVolver_10;
 	}
@@ -4887,5 +4854,83 @@ public class VentanaPrincipal extends JFrame {
 			});
 		}
 		return btnEnvioEntreProvincias;
+	}
+	private JButton getBtnVolver() {
+		if (btnVolver == null) {
+			btnVolver = new JButton("Volver");
+			btnVolver.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					CardLayout card = (CardLayout) contentPane.getLayout();
+					card.show(contentPane, "panelInicioAdmin");
+				}
+			});
+		}
+		return btnVolver;
+	}
+	private JPanel getPanel_75() {
+		if (panel_75 == null) {
+			panel_75 = new JPanel();
+		}
+		return panel_75;
+	}
+	private JPanel getPanel_76() {
+		if (panel_76 == null) {
+			panel_76 = new JPanel();
+			panel_76.setLayout(new GridLayout(2, 0, 0, 0));
+			panel_76.add(getLabel_82());
+			panel_76.add(getBtnVolver_11());
+		}
+		return panel_76;
+	}
+	private JLabel getLabel_82() {
+		if (label_82 == null) {
+			label_82 = new JLabel("");
+		}
+		return label_82;
+	}
+	private JButton getBtnVolver_11() {
+		if (btnVolver_11 == null) {
+			btnVolver_11 = new JButton("Volver");
+			btnVolver_11.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					CardLayout card = (CardLayout) contentPane.getLayout();
+					card.show(contentPane, "panelInicioAdmin");
+				}
+			});
+		}
+		return btnVolver_11;
+	}
+	private JPanel getPanel_77() {
+		if (panel_77 == null) {
+			panel_77 = new JPanel();
+		}
+		return panel_77;
+	}
+	private JPanel getPanel_127() {
+		if (panel_127 == null) {
+			panel_127 = new JPanel();
+			panel_127.setLayout(new GridLayout(2, 0, 0, 0));
+			panel_127.add(getLabel_83());
+			panel_127.add(getBtnVolver_12());
+		}
+		return panel_127;
+	}
+	private JLabel getLabel_83() {
+		if (label_83 == null) {
+			label_83 = new JLabel("");
+		}
+		return label_83;
+	}
+	private JButton getBtnVolver_12() {
+		if (btnVolver_12 == null) {
+			btnVolver_12 = new JButton("Volver");
+			btnVolver_12.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					CardLayout card = (CardLayout) contentPane.getLayout();
+					card.show(contentPane, "panelInicioAdmin");
+				}
+			});
+		}
+		return btnVolver_12;
 	}
 }
