@@ -6,23 +6,12 @@ public class Transportista {
 	private String nombre;
 	private Vehiculo vehiculo;
 	private String provincia;
-	private String lugarRecogida;
-	private String lugarEntrega;
 	public Transportista(String contrasenna, String DNI, String nombre, String provincia) {
 		super();
 		this.contrasenna = contrasenna;
 		this.DNI = DNI;
 		this.nombre = nombre;
 		this.provincia = provincia;
-	}
-	public Transportista(String contrasenna, String DNI, String nombre, String provincia, String lugarRecogida, String lugarEntrega) {
-		super();
-		this.contrasenna = contrasenna;
-		this.DNI = DNI;
-		this.nombre = nombre;
-		this.provincia = provincia;
-		this.lugarEntrega = lugarEntrega;
-		this.lugarRecogida = lugarRecogida;
 	}
 	public String getContrasenna() {
 		return contrasenna;
@@ -53,17 +42,5 @@ public class Transportista {
 	}
 	public void setProvincia(String provincia) {
 		this.provincia = provincia;
-	}
-	public String getLugarRecogida() {
-		return lugarRecogida;
-	}
-	public void setLugarRecogida(String lugarRecogida) {
-		this.lugarRecogida = lugarRecogida;
-	}
-	public String getLugarEntrega() {
-		return lugarEntrega;
-	}
-	public void setLugarEntrega(String lugarEntrega) {
-		this.lugarEntrega = lugarEntrega;
 	}
 }

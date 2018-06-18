@@ -7,6 +7,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
 
 import src.Cliente;
 import src.DatabaseManager;
@@ -14,6 +15,7 @@ import src.Edificio;
 import src.Envio;
 import src.Fallo;
 import src.MyTableModel;
+import src.RegistroMovimiento;
 import src.Transportista;
 import src.Vehiculo;
 
@@ -30,7 +32,9 @@ import javax.swing.JTextField;
 import javax.swing.JComboBox;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 import java.awt.event.ActionEvent;
 import java.awt.Color;
@@ -206,23 +210,9 @@ public class VentanaPrincipal extends JFrame {
 	private JPanel panel_51;
 	private JLabel lblNewLabel_1;
 	private JPanel panel_52;
-	private JButton btnModificarEstadoEnvo;
 	private JButton btnActualizar_1;
 	private JPanel panel_53;
-	private JPanel panel_54;
-	private JPanel panel_55;
-	private JRadioButton rdbtnEsperaEnvio;
-	private JRadioButton rdbtnEncamino;
-	private JRadioButton rdbtnEntregadodomicilio;
-	private JRadioButton rdbtnEntregadoedificio;
 	private JPanel panel_56;
-	private JPanel panel_57;
-	private JPanel panel_58;
-	private JRadioButton rdbtnFallida;
-	private JRadioButton rdbtnEntregafallida;
-	private JRadioButton rdbtnEntregafallida_1;
-
-	private JRadioButton rdbtnEntregadoedificiosalida;
 	private JPanel panelInicioAdmin;
 	private JPanel panel_59;
 	private JLabel lblOpcionesDeAdministrador;
@@ -315,9 +305,7 @@ public class VentanaPrincipal extends JFrame {
 	private JLabel label_6;
 	private JButton btnVolver_2;
 	private JButton btnVolver_3;
-	private JLabel label_47;
 	private JLabel label_58;
-	private JLabel label_59;
 	private JLabel label_60;
 	private JPanel panel_96;
 	private JButton btnVolver_4;
@@ -334,6 +322,112 @@ public class VentanaPrincipal extends JFrame {
 	private JPanel panel_100;
 	private JButton btnVolver_8;
 	private JButton btnActualizar_4;
+	private JLabel label_64;
+	private JButton btnCrearEnvo;
+	private JPanel panelCrearEnvioAdmin;
+	private JLabel label_65;
+	private JPanel panel_101;
+	private JLabel label_66;
+	private JPanel panel_102;
+	private JLabel label_68;
+	private JTextField textField_8;
+	private JPanel panel_103;
+	private JRadioButton radioButton;
+	private JRadioButton radioButton_1;
+	private JPanel panel_104;
+	private JLabel label_69;
+	private JPanel panel_105;
+	private JButton button;
+	private JButton button_1;
+	private JPanel panel_107;
+	private JLabel lblDni_1;
+	private JTextField textField_12;
+	private JPanel panel_108;
+	private JPanel panel_109;
+	private JPanel panel_110;
+	private JPanel panel_111;
+	private JLabel lblProvinciaDestinatario;
+	private JLabel lblProvinciaRemitente;
+	private JComboBox<String> comboBox_2;
+	private JComboBox<String> comboBox_3;
+	private JPanel panel_112;
+	private JLabel label_67;
+	private JLabel label_70;
+	private JLabel lblDireccinDestinatario;
+	private JLabel lblDireccinRemitente;
+	private JTextField textField_13;
+	private JTextField textField_14;
+	private JPanel panelEntregaPaqueteEnOficina;
+	private JPanel panelRecogidaPaqueteEnOficina;
+	private JPanel panel_106;
+	private JPanel panel_113;
+	private JLabel label_71;
+	private JTable table_5;
+	private JLabel label_72;
+	private JLabel label_73;
+	private JButton btnMarcarComoEntregado;
+	private JPanel panel_115;
+	private JLabel label_75;
+	private JLabel label_76;
+	private JLabel label_77;
+	private JButton btnMarcarComoRecogido;
+	private JPanel panel_114;
+	private JLabel lblPaquetesPendientesDe;
+	private JTable table_6;
+	private MyTableModel modelEnviosARecoger;
+	private MyTableModel modelEnviosAEntregar;
+	private JButton btnActualizar_5;
+	private JButton btnActualizar_6;
+	private JLabel label_78;
+	private JPanel panel_116;
+	private JLabel label_79;
+	private JButton btnMarcarRecogidos;
+	private JLabel label_80;
+	private JPanel panel_117;
+	private JLabel label_81;
+	private JButton btnMarcarEntregados;
+	private JPanel panelRegistroDejadaYRecogidaPaquetes;
+	private JPanel panel_54;
+	private JPanel panel_55;
+	private JPanel panel_57;
+	private JLabel lblRegistroEntregaDe;
+	private JLabel lblRegistroRecogidaPaquetes;
+	private JPanel panel_58;
+	private JPanel panel_118;
+	private JLabel lblLugarDeEntrega;
+	private JTextField textField_15;
+	private JTable table_7;
+	private JPanel panel_119;
+	private JButton btnNewButton;
+	private JTable table_8;
+	private JPanel panel_120;
+	private JPanel panel_121;
+	private JButton btnVolver_9;
+	private JButton btnRegistrarComoRecogidos;
+	private MyTableModel modelRegistrarEntregados;
+	private MyTableModel modelRegistrarRecogidos;
+	private JPanel panel_122;
+	private JLabel lblProvinciaDestinatario_1;
+	private JComboBox<String> comboBox_4;
+	private JPanel panel_123;
+	private JLabel label_47;
+	private JTextField textField_16;
+	private JButton btnRegistrarCambiosEnvios;
+	private JButton btnActualizar_7;
+	private JButton btnActualizar_8;
+	private JPanel panelEnvioProvinciaReceptor;
+	private JPanel panel_124;
+	private JLabel label_59;
+	private JPanel panel_125;
+	private JLabel label_74;
+	private JTextField textField_17;
+	private JLabel lblPedidosPendientesDe;
+	private JTable table_9;
+	private JPanel panel_126;
+	private JButton btnEnviarAProvincia;
+	private JButton btnVolver_10;
+	private MyTableModel modelPedidosEntreProvincias;
+	private JButton btnEnvioEntreProvincias;
 
 	/**
 	 * Launch the application.
@@ -375,6 +469,11 @@ public class VentanaPrincipal extends JFrame {
 		contentPane.add(getPanelCambioDatos(), "panelCambioDatos");
 		contentPane.add(getPanelFallosEnEnvios(), "panelFallosEnvios");
 		contentPane.add(getPanelMuestraFallosCliente(), "panelMuestraFallosCliente");
+		contentPane.add(getPanelCrearEnvioAdmin(), "panelCrearEnvioAdmin");
+		contentPane.add(getPanelEntregaPaqueteEnOficina(), "panelEntregaPaqueteEnOficina");
+		contentPane.add(getPanelRecogidaPaqueteEnOficina(), "panelRecogidaPaqueteEnOficina");
+		contentPane.add(getPanelRegistroDejadaYRecogidaPaquetes(), "panelRegistroDejadaYRecogidaPaquetes");
+		contentPane.add(getPanelEnvioProvinciaReceptor(), "panelEnvioProvinciaReceptor");
 	}
 	private JLabel getLblAplicacinDeEntrega() {
 		if (lblAplicacinDeEntrega == null) {
@@ -1261,11 +1360,11 @@ public class VentanaPrincipal extends JFrame {
 			panel_29.add(getLblCrearEnvo());
 			panel_29.add(getLabel_18());
 			panel_29.add(getPanel_30());
+			panel_29.add(getPanel_122());
 			panel_29.add(getPanel_35());
+			panel_29.add(getPanel_123());
 			panel_29.add(getPanel_36());
-			panel_29.add(getLabel_47());
 			panel_29.add(getLabel_58());
-			panel_29.add(getLabel_59());
 			panel_29.add(getLabel_60());
 			panel_29.add(getPanel_96());
 		}
@@ -1347,208 +1446,155 @@ public class VentanaPrincipal extends JFrame {
 			btnConfirmar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					String dniIntroducido = textField_7.getText();
-					try {
-						boolean existe = DatabaseManager.existeClientePorDNI(dniIntroducido);
-						if(!existe) {
-							JOptionPane.showMessageDialog(null,
-									"El destinatario no existe o es incorrecto.");
-						}
-						else {
-							Cliente receptor = DatabaseManager.getCliente(dniIntroducido);
-							
-							Envio envio = null;
+					try {						
+						Envio envio = null;
 
+						//SI EL ENVIO Y LA RECOGIDA ES A DOMICILIO NO HACE FALTA ASIGNAR UN EDIFICIO
+						if(rdbtnEnvoADomicilio.isSelected() && rdbtnRecogidaADomicilio.isSelected()) {
 							
-							List<Edificio> edificiosProvinciaReceptor = DatabaseManager.getEdificiosByProvincia(receptor.getProvincia());
-							List<Edificio> edificiosProvinciaEmisor = DatabaseManager.getEdificiosByProvincia(clienteActual.getProvincia());
-							//SI EL ENVIO Y LA RECOGIDA ES A DOMICILIO NO HACE FALTA ASIGNAR UN EDIFICIO
-							if(rdbtnEnvoADomicilio.isSelected() && rdbtnRecogidaADomicilio.isSelected()) {
+							List<Transportista> temisor = DatabaseManager.getTransportistasProvincia(clienteActual.getProvincia());
+							List<Vehiculo> vemisor = DatabaseManager.getVehiculosDeProvincia(clienteActual.getProvincia());
+							List<Transportista> treceptor = DatabaseManager.getTransportistasProvincia((String)comboBox_4.getSelectedItem());
+							DatabaseManager.getVehiculosDeProvincia((String)comboBox_4.getSelectedItem());
+							if(temisor.size()==0) {
+								JOptionPane.showMessageDialog(null,
+										"No hay transportistas para la provincia del emisor disponibles.");
+							}
+							else if(vemisor.size()==0) {
+								JOptionPane.showMessageDialog(null,
+										"No hay vehiculos de transporte para la provincia del emisor.");
+							}
+							else if(treceptor.size()==0) {
+								JOptionPane.showMessageDialog(null,
+										"No hay transportistas para la provincia del receptor disponibles.");
+							}
+							else if(vemisor.size()==0) {
+								JOptionPane.showMessageDialog(null,
+										"No hay vehiculos de transporte para la provincia del receptor.");
+							}
+							else {
 								
-								List<Transportista> temisor = DatabaseManager.getTransportistasLibres(clienteActual.getProvincia());
-								List<Vehiculo> vemisor = DatabaseManager.getVehiculosDeProvincia(clienteActual.getProvincia());
-								List<Transportista> treceptor = DatabaseManager.getTransportistasLibres(receptor.getProvincia());
-								List<Vehiculo> vreceptor = DatabaseManager.getVehiculosDeProvincia(receptor.getProvincia());
-								if(temisor.size()==0) {
-									JOptionPane.showMessageDialog(null,
-											"No hay transportistas para la provincia del emisor disponibles.");
-								}
-								else if(vemisor.size()==0) {
-									JOptionPane.showMessageDialog(null,
-											"No hay vehiculos de transporte para la provincia del emisor.");
-								}
-								else if(treceptor.size()==0) {
-									JOptionPane.showMessageDialog(null,
-											"No hay transportistas para la provincia del receptor disponibles.");
-								}
-								else if(vemisor.size()==0) {
-									JOptionPane.showMessageDialog(null,
-											"No hay vehiculos de transporte para la provincia del receptor.");
-								}
-								else {
-									int posRandom = ThreadLocalRandom.current().nextInt(0, temisor.size());
-									Transportista transE = temisor.get(posRandom);
-									int posRandomOne = ThreadLocalRandom.current().nextInt(0, vreceptor.size());
-									Vehiculo vehE = vreceptor.get(posRandomOne);
+								int posRandom = ThreadLocalRandom.current().nextInt(0, temisor.size());
+								Transportista transE = temisor.get(posRandom);
+								int posRandomOne = ThreadLocalRandom.current().nextInt(0, vemisor.size());
+								Vehiculo vehE = vemisor.get(posRandomOne);
 //									int posRandomDos = ThreadLocalRandom.current().nextInt(0, treceptor.size());		SOLO CALCULAMOS EL EMISOR, EL V Y T DEL RECEPTOR SE CALCULA CDO LLEGUE AL ALMACÉN
 //									Transportista transR = treceptor.get(posRandomDos);
 //									int posRandomTres = ThreadLocalRandom.current().nextInt(0, vreceptor.size());
 //									Vehiculo vehR = vreceptor.get(posRandomTres);
-									envio = new Envio(rdbtnRecogidaADomicilio.isSelected(), rdbtnEnvoADomicilio.isSelected(), dniIntroducido, clienteActual.getDni(),
-											transE.getDNI(), vehE.getMatricula(), receptor.getProvincia(), clienteActual.getProvincia(), receptor.getDireccion(), clienteActual.getDireccion(),
-											"ESPERA-ENVIO");
-									envio.calculaPrecio();
-									DatabaseManager.registraEnvio(envio);
-									JOptionPane.showMessageDialog(null,
-											"Se ha creado el envío correctamente.");
-									CardLayout card = (CardLayout) contentPane.getLayout();
-									card.show(contentPane, "panelInicioUser");
-									//ahora hacemos los cambios en el transportista
-									//buscamos edificio
-									int posRandomEdificio = ThreadLocalRandom.current().nextInt(0, edificiosProvinciaEmisor.size());
-									Edificio edificioSeleccionado= edificiosProvinciaEmisor.get(posRandomEdificio);
-									//le asignamos la ruta inicial
-									transE.setLugarRecogida(clienteActual.getDireccion());
-									transE.setLugarEntrega(edificioSeleccionado.getTipo()+
-											"-"+edificioSeleccionado.getNombre()+"-"+edificioSeleccionado.getProvinciaLocalizacion());
-									//y actualizamos en la bbdd
-									DatabaseManager.updateDestinosTransportista(transE.getLugarRecogida(), transE.getLugarEntrega(), transE.getDNI());
-								}
-							}
-							//si solo EL ENVIO (RECEPTOR) es a domicilio
-							else if(rdbtnEnvoADomicilio.isSelected() && !rdbtnRecogidaADomicilio.isSelected()) {
-								if(edificiosProvinciaEmisor.size()==0) {
-									JOptionPane.showMessageDialog(null,
-											"No existen edificios de recogida en la provincia del emisor.");
-								}else {
-									List<Transportista> temisor = DatabaseManager.getTransportistasLibres(clienteActual.getProvincia());
-									List<Vehiculo> vemisor = DatabaseManager.getVehiculosDeProvincia(clienteActual.getProvincia());
-									List<Transportista> treceptor = DatabaseManager.getTransportistasLibres(receptor.getProvincia());
-									System.err.println(receptor.getProvincia());
-									List<Vehiculo> vreceptor = DatabaseManager.getVehiculosDeProvincia(receptor.getProvincia());
-									if(treceptor.size()==0) {
-										JOptionPane.showMessageDialog(null,
-												"No hay transportistas para la provincia del receptor.");
-									}
-									else if(vreceptor.size()==0) {
-										JOptionPane.showMessageDialog(null,
-												"No hay vehiculos de transporte para la provincia del receptor.");
-									}
-									else {
-										//edificio de la provincia del emisor
-										int posRandomEdificio = ThreadLocalRandom.current().nextInt(0, edificiosProvinciaReceptor.size());
-										Edificio edificioSeleccionado= edificiosProvinciaReceptor.get(posRandomEdificio);
-										//el transportista se calculará cdo el paquete esté en la otra comunidad
-//										int posRandom = ThreadLocalRandom.current().nextInt(0, temisor.size());
-//										Transportista transE = temisor.get(posRandom);
-//										int posRandomOne = ThreadLocalRandom.current().nextInt(0, vemisor.size());
-//										Vehiculo vehE = vreceptor.get(posRandomOne);
-										envio = new Envio(rdbtnRecogidaADomicilio.isSelected(), rdbtnEnvoADomicilio.isSelected(), dniIntroducido, clienteActual.getDni(),
-												"", "", receptor.getProvincia(), clienteActual.getProvincia(), receptor.getDireccion(), edificioSeleccionado.getTipo()+
-												"-"+edificioSeleccionado.getNombre()+"-"+edificioSeleccionado.getProvinciaLocalizacion(), "Espera-Envio");
-										envio.calculaPrecio();
-										
-										JOptionPane.showMessageDialog(null,
-												"Se ha creado el envío correctamente.");
-										CardLayout card = (CardLayout) contentPane.getLayout();
-										card.show(contentPane, "panelInicioUser");
-										
-										//ASIGNAMOS EL TRANSPORTISTA YA QUE SIMULAMOS TODO LO ANTERIOR
-										
-										int posRandom = ThreadLocalRandom.current().nextInt(0, treceptor.size());
-										Transportista transR = treceptor.get(posRandom);
-										int posRandomOne = ThreadLocalRandom.current().nextInt(0, vreceptor.size());
-										Vehiculo vehR = vreceptor.get(posRandomOne);
-										
-										transR.setLugarRecogida(envio.getLugarRecogida());
-										transR.setLugarEntrega(envio.getLugarEnvio());
-										envio.setVehiculo(vehR.getMatricula());
-										envio.setTransportista(transR.getDNI());
-										DatabaseManager.updateDestinosTransportista(transR.getLugarRecogida(), transR.getLugarEntrega(), transR.getDNI());
-										DatabaseManager.registraEnvio(envio);
-									}
-								}
-							}//SI SOLO LA RECOGIDA (EMISOR) ES A DOMICILIO
-							else if(!rdbtnEnvoADomicilio.isSelected() && rdbtnRecogidaADomicilio.isSelected()) {
-								if(edificiosProvinciaReceptor.size()==0) {
-									JOptionPane.showMessageDialog(null,
-											"No existen edificios de recogida en la provincia del receptor.");
-								}
-								else {
-									List<Transportista> temisor = DatabaseManager.getTransportistasLibres(clienteActual.getProvincia());
-									List<Vehiculo> vemisor = DatabaseManager.getVehiculosDeProvincia(clienteActual.getProvincia());
-									List<Transportista> treceptor = DatabaseManager.getTransportistasLibres(receptor.getProvincia());
-									List<Vehiculo> vreceptor = DatabaseManager.getVehiculosDeProvincia(receptor.getProvincia());
-									if(temisor.size()==0) {
-										JOptionPane.showMessageDialog(null,
-												"No hay transportistas para la provincia del emisor.");
-									}
-									else if(vemisor.size()==0) {
-										JOptionPane.showMessageDialog(null,
-												"No hay vehiculos de transporte para la provincia del emisor.");
-									}
-									
-									else {
-										//la entrega será en un edificio de la provincia del receptor
-										int posRandomEdificio = ThreadLocalRandom.current().nextInt(0, edificiosProvinciaReceptor.size());
-										Edificio edificioSeleccionado= edificiosProvinciaReceptor.get(posRandomEdificio);
-										//cogemos transportistas y vehiculos de la provincia del emisor para la primera entrega
-										int posRandom = ThreadLocalRandom.current().nextInt(0, temisor.size());
-										Transportista transE = temisor.get(posRandom);
-										int posRandomOne = ThreadLocalRandom.current().nextInt(0, vemisor.size());
-										Vehiculo vehE = vemisor.get(posRandomOne);
-										//EL ENVIO TIENE LAS UBICACIONES INICIAL Y FINAL, EL TRANSPORTISTA SOLO LAS QUE EL HACE
-										envio = new Envio(rdbtnRecogidaADomicilio.isSelected(), rdbtnEnvoADomicilio.isSelected(), dniIntroducido, clienteActual.getDni(),
-												transE.getDNI(), vehE.getMatricula(), receptor.getProvincia(), clienteActual.getProvincia(), edificioSeleccionado.getTipo()+
-												"-"+edificioSeleccionado.getNombre()+"-"+edificioSeleccionado.getProvinciaLocalizacion(), clienteActual.getDireccion(), "ESPERA-ENVIO");
-										envio.calculaPrecio();
-										DatabaseManager.registraEnvio(envio);
-										JOptionPane.showMessageDialog(null,
-												"Se ha creado el envío correctamente.");
-										CardLayout card = (CardLayout) contentPane.getLayout();
-										card.show(contentPane, "panelInicioUser");
-										//ASIGNAMOS LA RUTA DEL TRANSPORTISTA
-										int posRandomEdificioE = ThreadLocalRandom.current().nextInt(0, edificiosProvinciaEmisor.size());
-										Edificio edificioSeleccionadoE= edificiosProvinciaEmisor.get(posRandomEdificioE);
-										transE.setLugarRecogida(clienteActual.getDireccion());
-										transE.setLugarEntrega(edificioSeleccionadoE.getTipo()+
-												"-"+edificioSeleccionadoE.getNombre()+"-"+edificioSeleccionadoE.getProvinciaLocalizacion());
-										DatabaseManager.updateDestinosTransportista(transE.getLugarRecogida(), transE.getLugarEntrega(), transE.getDNI());
-									}
-								}
-							}
-								
-							else {			//SI NO HAY A DOMICILIOS ENTONCES SI CALCULAMOS LOS EDIFICIOS
-								
-								if(edificiosProvinciaReceptor.size()==0) {
-									JOptionPane.showMessageDialog(null,
-											"No existen edificios de recogida en la provincia del receptor.");
-								}
-								else if(edificiosProvinciaEmisor.size()==0) {
-									JOptionPane.showMessageDialog(null,
-											"No existen edificios de recogida en la provincia del emisor.");
-								}else {
-									int posRandomEdificioR = ThreadLocalRandom.current().nextInt(0, edificiosProvinciaReceptor.size());
-									Edificio edificioSeleccionadoR= edificiosProvinciaReceptor.get(posRandomEdificioR);
-									int posRandomEdificioE = ThreadLocalRandom.current().nextInt(0, edificiosProvinciaEmisor.size());
-									Edificio edificioSeleccionadoE= edificiosProvinciaEmisor.get(posRandomEdificioE);
-									//NO CALCULAMOS LOS TRANSPORTISTAS YA QUE NO RECOGEN A DOMICILIO
-									envio = new Envio(rdbtnRecogidaADomicilio.isSelected(), rdbtnEnvoADomicilio.isSelected(), dniIntroducido, clienteActual.getDni(),
-											"", "", receptor.getProvincia(), clienteActual.getProvincia(), edificioSeleccionadoR.getTipo()+
-											"-"+edificioSeleccionadoR.getNombre()+"-"+edificioSeleccionadoR.getProvinciaLocalizacion(), edificioSeleccionadoE.getTipo()+
-											"-"+edificioSeleccionadoE.getNombre()+"-"+edificioSeleccionadoE.getProvinciaLocalizacion(), "ESPERA-ENVIO");
-									envio.calculaPrecio();
-									DatabaseManager.registraEnvio(envio);
-									JOptionPane.showMessageDialog(null,
-											"Se ha creado el envío correctamente.");
-									CardLayout card = (CardLayout) contentPane.getLayout();
-									card.show(contentPane, "panelInicioUser");
-									//NO ASIGNAMOS LA RUTA DEL TRANSPORTISTA
-								}
+								envio = new Envio(rdbtnRecogidaADomicilio.isSelected(), rdbtnEnvoADomicilio.isSelected(), dniIntroducido, clienteActual.getDni(),
+										transE.getDNI(), vehE.getMatricula(), (String)comboBox_4.getSelectedItem(), clienteActual.getProvincia(), textField_16.getText(), clienteActual.getDireccion(),
+										"Recogida a domicilio", clienteActual.getDireccion());
+								envio.calculaPrecio();
+								DatabaseManager.registraEnvio(envio);
+								JOptionPane.showMessageDialog(null,
+										"Se ha creado el envío correctamente, el precio del envío es de: " + envio.getPrecio() + "€.");
+								CardLayout card = (CardLayout) contentPane.getLayout();
+								card.show(contentPane, "panelInicioUser");
+								//ahora hacemos los cambios en el transportista
+								//buscamos edificio
+								//le asignamos la ruta inicial
 							}
 						}
-					} catch (SQLException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
+						//si solo EL ENVIO (RECEPTOR) es a domicilio
+						else if(rdbtnEnvoADomicilio.isSelected() && !rdbtnRecogidaADomicilio.isSelected()) {
+							DatabaseManager.getTransportistasProvincia(clienteActual.getProvincia());
+							DatabaseManager.getVehiculosDeProvincia(clienteActual.getProvincia());
+							List<Transportista> treceptor = DatabaseManager.getTransportistasProvincia((String)comboBox_4.getSelectedItem());
+							List<Vehiculo> vreceptor = DatabaseManager.getVehiculosDeProvincia((String)comboBox_4.getSelectedItem());
+							if(treceptor.size()==0) {
+								JOptionPane.showMessageDialog(null,
+										"No hay transportistas para la provincia del receptor.");
+							}
+							else if(vreceptor.size()==0) {
+								JOptionPane.showMessageDialog(null,
+										"No hay vehiculos de transporte para la provincia del receptor.");
+							}
+							else {
+								//edificio de la provincia del emisor
+
+								//el transportista se calculará cdo el paquete esté en la otra comunidad
+//								int posRandom = ThreadLocalRandom.current().nextInt(0, temisor.size());
+//								Transportista transE = temisor.get(posRandom);
+//								int posRandomOne = ThreadLocalRandom.current().nextInt(0, vemisor.size());
+//								Vehiculo vehE = vreceptor.get(posRandomOne);
+								envio = new Envio(rdbtnRecogidaADomicilio.isSelected(), rdbtnEnvoADomicilio.isSelected(), dniIntroducido, clienteActual.getDni(),
+										"", "", (String)comboBox_4.getSelectedItem(), clienteActual.getProvincia(),textField_16.getText(), "", "", "");
+								envio.calculaPrecio();
+								
+								JOptionPane.showMessageDialog(null,
+										"Se ha creado el envío correctamente, el precio del envío es de: " + envio.getPrecio() + "€.");
+								CardLayout card = (CardLayout) contentPane.getLayout();
+								card.show(contentPane, "panelInicioUser");
+								
+								//ASIGNAMOS EL TRANSPORTISTA YA QUE SIMULAMOS TODO LO ANTERIOR
+								
+								int posRandom = ThreadLocalRandom.current().nextInt(0, treceptor.size());
+								Transportista transR = treceptor.get(posRandom);
+								int posRandomOne = ThreadLocalRandom.current().nextInt(0, vreceptor.size());
+								Vehiculo vehR = vreceptor.get(posRandomOne);
+								
+								//LO HAREMOS CDO EL ENVIO ESTÉ EN EL ALMACEN U OFICINA RECEPTORA
+//								envio.setVehiculo(vehR.getMatricula());
+//								envio.setTransportista(transR.getDNI());
+								DatabaseManager.registraEnvio(envio);
+							}
+						}//SI SOLO LA RECOGIDA (EMISOR) ES A DOMICILIO
+						else if(!rdbtnEnvoADomicilio.isSelected() && rdbtnRecogidaADomicilio.isSelected()) {
+							List<Transportista> temisor = DatabaseManager.getTransportistasProvincia(clienteActual.getProvincia());
+							List<Vehiculo> vemisor = DatabaseManager.getVehiculosDeProvincia(clienteActual.getProvincia());
+							DatabaseManager.getTransportistasProvincia((String)comboBox_4.getSelectedItem());
+							DatabaseManager.getVehiculosDeProvincia((String)comboBox_4.getSelectedItem());
+							if(temisor.size()==0) {
+								JOptionPane.showMessageDialog(null,
+										"No hay transportistas para la provincia del emisor.");
+							}
+							else if(vemisor.size()==0) {
+								JOptionPane.showMessageDialog(null,
+										"No hay vehiculos de transporte para la provincia del emisor.");
+							}
+							
+							else {
+								//la entrega será en un edificio de la provincia del receptor
+								//cogemos transportistas y vehiculos de la provincia del emisor para la primera entrega
+								int posRandom = ThreadLocalRandom.current().nextInt(0, temisor.size());
+								Transportista transE = temisor.get(posRandom);
+								int posRandomOne = ThreadLocalRandom.current().nextInt(0, vemisor.size());
+								Vehiculo vehE = vemisor.get(posRandomOne);
+								//EL ENVIO TIENE LAS UBICACIONES INICIAL Y FINAL, EL TRANSPORTISTA SOLO LAS QUE EL HACE
+								envio = new Envio(rdbtnRecogidaADomicilio.isSelected(), rdbtnEnvoADomicilio.isSelected(), dniIntroducido, clienteActual.getDni(),
+										transE.getDNI(), vehE.getMatricula(), (String)comboBox_4.getSelectedItem(), clienteActual.getProvincia(), "", 
+										clienteActual.getDireccion(), "Recogida a domicilio", clienteActual.getDireccion());
+								envio.calculaPrecio();
+								DatabaseManager.registraEnvio(envio);
+								JOptionPane.showMessageDialog(null,
+										"Se ha creado el envío correctamente, el precio del envío es de: " + envio.getPrecio() + "€.");
+								CardLayout card = (CardLayout) contentPane.getLayout();
+								card.show(contentPane, "panelInicioUser");
+								//ASIGNAMOS LA RUTA DEL TRANSPORTISTA
+							}
+						}
+							
+						else {			//SI NO HAY A DOMICILIOS ENTONCES SI CALCULAMOS LOS EDIFICIOS
+							//NO CALCULAMOS LOS TRANSPORTISTAS YA QUE NO RECOGEN A DOMICILIO
+							envio = new Envio(rdbtnRecogidaADomicilio.isSelected(), rdbtnEnvoADomicilio.isSelected(), dniIntroducido, clienteActual.getDni(),
+									"", "", (String)comboBox_4.getSelectedItem(), clienteActual.getProvincia(), "", "", "", "");
+							envio.calculaPrecio();
+							DatabaseManager.registraEnvio(envio);
+							JOptionPane.showMessageDialog(null,
+									"Se ha creado el envío correctamente, el precio del envío es de: " + envio.getPrecio() + "€.");
+							CardLayout card = (CardLayout) contentPane.getLayout();
+							card.show(contentPane, "panelInicioUser");
+							//NO ASIGNAMOS LA RUTA DEL TRANSPORTISTA
+							
+						}
+					}catch(SQLException x) {
+						try {
+							throw new SQLException(x);
+						} catch (SQLException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
 					}
 				}
 			});
@@ -1572,6 +1618,18 @@ public class VentanaPrincipal extends JFrame {
 	private JRadioButton getRdbtnEnvoADomicilio() {
 		if (rdbtnEnvoADomicilio == null) {
 			rdbtnEnvoADomicilio = new JRadioButton("Env\u00EDo a domicilio");
+			rdbtnEnvoADomicilio.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent arg0) {
+					if(rdbtnEnvoADomicilio.isSelected()) {
+						textField_16.setEnabled(true);
+					}
+					else {
+						textField_16.setEnabled(false);
+					}
+				}
+			});
+			
 			rdbtnEnvoADomicilio.setFont(new Font("Tahoma", Font.BOLD, 11));
 			rdbtnEnvoADomicilio.setBounds(6, 29, 148, 17);
 		}
@@ -1917,6 +1975,7 @@ public class VentanaPrincipal extends JFrame {
 			panel_41.setBackground(Color.WHITE);
 			panel_41.setLayout(new GridLayout(0, 3, 0, 0));
 			panel_41.add(getLabel_28());
+			panel_41.add(getBtnRegistrarCambiosEnvios());
 		}
 		return panel_41;
 	}
@@ -2087,8 +2146,8 @@ public class VentanaPrincipal extends JFrame {
 			panel_45.setLayout(new GridLayout(7, 0, 0, 0));
 			panel_45.add(getLabel_22());
 			panel_45.add(getLabel_35());
-			panel_45.add(getPanel_51());
 			panel_45.add(getPanel_53());
+			panel_45.add(getPanel_51());
 			panel_45.add(getPanel_56());
 			panel_45.add(getLabel_63());
 			panel_45.add(getPanel_100());
@@ -2126,436 +2185,10 @@ public class VentanaPrincipal extends JFrame {
 	private JPanel getPanel_52() {
 		if (panel_52 == null) {
 			panel_52 = new JPanel();
-			panel_52.setLayout(new GridLayout(0, 2, 0, 0));
-			panel_52.add(getBtnModificarEstadoEnvo());
+			panel_52.setLayout(new GridLayout(0, 1, 0, 0));
 			panel_52.add(getBtnActualizar_1());
 		}
 		return panel_52;
-	}
-	private JButton getBtnModificarEstadoEnvo() {
-		if (btnModificarEstadoEnvo == null) {
-			btnModificarEstadoEnvo = new JButton("Modificar estado env\u00EDo");
-			btnModificarEstadoEnvo.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					int x = table_1.getSelectedRow();
-					if(x==-1 || x==0) {
-						JOptionPane.showMessageDialog(null,
-								"Debe de seleccionar uno de los envíos del listado");
-					}
-					else {
-						//modificar el estado del envio según el radiobutton, 
-						//si enviamos un paquete desde emisor-almacen solo podemos seleccionar espera-envio, en-camino y entregado-edificio-salida
-						//si enviamos un paquete desde emisor-receptor (misma provincia) solo podemos seleccionar espera-envio, en-camino, entregado-domicilio, entregas fallidas y entregado-edificio
-						//si enviamos un paquete desde almacen-receptor solo podemos seleccionar en-camino, entregado-domicilio, entregas fallidas y entregado-edificio
-						//PRIMERO: tenemos que saber que tipo de ruta está haciendo el transportista
-						//SEGUNDO: según el tipo de ruta cada vez que haga click se le permitirá la accion o se le denegara
-						
-						//NUNCA SE VA A DAR EL CASO DE QUE EL LUGAR DE RECOGIDA Y ENTREGA SEAN ALMACENES
-						
-						//CASO EN EL QUE EL LUGAR DE ENTREGA FUERA UN ALMACEN
-						if(transportistaActual.getLugarEntrega().contains("Oficina") || transportistaActual.getLugarEntrega().contains("Almacen")) {
-							//sabemos que el lugar de entrega es un almacen u oficina
-							//ahora hay que hacer los casos de cada botón
-	//						rdbtnEncamino.setSelected(false);
-	//						rdbtnEntregadodomicilio.setSelected(false);-
-	//						rdbtnEntregadoedificio.setSelected(false);-
-	//						rdbtnFallida.setSelected(false);-
-	//						rdbtnEntregadoedificiosalida.setSelected(false);
-	//						rdbtnEntregafallida_1.setSelected(false);-
-	//						rdbtnEntregafallida.setSelected(false);-
-	//						rdbtnEsperaEnvio.setSelected(false);
-							
-							//opciones invalidas
-							if(rdbtnEntregadodomicilio.isSelected() || rdbtnEntregadoedificio.isSelected() || rdbtnFallida.isSelected() || rdbtnEntregafallida.isSelected() 
-									|| rdbtnEntregafallida_1.isSelected()) {
-								JOptionPane.showMessageDialog(null,
-										"En el envío actual es imposible seleccionar éste estado");
-							}
-							//si es valida la opcion cogemos el envío de la base de datos, lo modificamos y actualizamos
-							else if(rdbtnEncamino.isSelected()) {
-								try {
-									int envioId = Integer.parseInt((String) table_1.getValueAt(x, 0)); //el id del envío
-									Envio envio = DatabaseManager.getEnvioById(envioId);
-									envio.setEstado(rdbtnEncamino.getText());
-									DatabaseManager.updateEstadoEnvio(envio);
-									actualizarModelt();
-								} catch (SQLException e1) {
-									// TODO Auto-generated catch block
-									e1.printStackTrace();
-								}
-							}
-							//EN CASO DE QUE SEA ENTREGADO EN EL EDIFICIO DE SALIDA OMITIREMOS EL VIAJE Y CREAREMOS UN NUEVO ENVIO EN LA PROVINCIA DESTINO
-							//SI LA ENTREGA ES A DOMICILIO
-							else if(rdbtnEntregadoedificiosalida.isSelected()) {
-								try {
-									int envioId = Integer.parseInt((String) table_1.getValueAt(x, 0)); //el id del envío
-									Envio envio = DatabaseManager.getEnvioById(envioId);
-									
-									//AHORA CALCULAMOS UN NUEVO TRANSPORTISTA Y UN NUEVO VEHICULO
-									List<Transportista> t = DatabaseManager.getTransportistasLibres(envio.getProvinciaDestino());
-									List<Vehiculo> v = DatabaseManager.getVehiculosDeProvincia(envio.getProvinciaDestino());
-									if(t.size()==0) {
-										JOptionPane.showMessageDialog(null,
-												"No hay transportistas para la provincia del receptor.");
-									}
-									else if(v.size()==0) {
-										JOptionPane.showMessageDialog(null,
-												"No hay vehiculos de transporte para la provincia del receptor.");
-									}
-									
-									else {
-										//ASIGNAMOS EL VEHICULO Y EL TRANSPORTISTA ADEMAS DEL ESTADO, ASÍ COMO EL LUGAR DE RECOGIDA Y DE DESTINO TANTO DEL TRANSPORITSTA
-										//COMO DEL ENVIO
-										int posRandom = ThreadLocalRandom.current().nextInt(0, t.size());
-										Transportista trans = t.get(posRandom);
-										int posRandomOne = ThreadLocalRandom.current().nextInt(0, v.size());
-										Vehiculo veh = v.get(posRandomOne);
-										
-										//modificamos los datos del envio
-										envio.setVehiculo(veh.getMatricula());
-										envio.setTransportista(trans.getDNI());
-										
-										//vamos a calcular un almacen de la provincia del receptor
-										Cliente clienteReceptor = DatabaseManager.getCliente(envio.getReceptor());
-										String provinciaReceptor = clienteReceptor.getProvincia();
-										
-										List<Edificio> edificios = DatabaseManager.getEdificiosByProvincia(provinciaReceptor);
-										if(edificios.size()==0) {
-											JOptionPane.showMessageDialog(null,
-													"No hay edificios de almacenamiento en la provincia del receptor.");
-										}
-										else {
-											//obtenemos el edificio
-											int posRandomE = ThreadLocalRandom.current().nextInt(0, edificios.size());
-											Edificio edificioElegido = edificios.get(posRandomE);
-											
-											String lugarRecogida = edificioElegido.getTipo()+
-													"-"+edificioElegido.getNombre()+"-"+edificioElegido.getProvinciaLocalizacion();
-											
-											envio.setLugarRecogida(lugarRecogida); //el lugar de recogida es un edificio
-											
-											//el lugar de entrega puede ser el edificio o la direccion del receptor
-											if(!envio.isEnvioADomicilio()) {
-												envio.setLugarEnvio(lugarRecogida);
-											}
-											else {
-												envio.setLugarEnvio(DatabaseManager.getCliente(envio.getReceptor()).getDireccion());
-											}
-											
-											//SI EL LUGAR DE ENTREGA Y RECOGIDA ES EL MISMO NO ASIGNAMOS A UN TRANSPORTISTA
-											if(envio.getLugarEnvio().equals(envio.getLugarRecogida())) {
-												envio.setEstado(rdbtnEntregadoedificiosalida.getText());
-												DatabaseManager.updateEstadoEnvio(envio);
-											}
-											else {
-												envio.setEstado(rdbtnEntregadoedificiosalida.getText());
-												DatabaseManager.updateEstadoYTVEnvio(envio);
-											}
-											actualizarModelt();
-										}
-										
-									}
-									
-								} catch (SQLException e1) {
-									// TODO Auto-generated catch block
-									e1.printStackTrace();
-								}
-							}
-							else if(rdbtnEsperaEnvio.isSelected()) {
-								try {
-									int envioId = Integer.parseInt((String) table_1.getValueAt(x, 0)); //el id del envío
-									Envio envio = DatabaseManager.getEnvioById(envioId);
-									envio.setEstado(rdbtnEsperaEnvio.getText());
-									DatabaseManager.updateEstadoEnvio(envio);
-									
-								} catch (SQLException e1) {
-									// TODO Auto-generated catch block
-									e1.printStackTrace();
-								}
-							}
-							else { //ninguno seleccionado
-								JOptionPane.showMessageDialog(null,
-										"Debe de seleccionar una de las opciones inferiores de modificación de estado.");
-							}
-							
-						}
-						else if(transportistaActual.getLugarRecogida().contains("Oficina") || transportistaActual.getLugarRecogida().contains("Almacen")) {
-							//sabemos que el lugar de recogida es un almacen u oficina
-//							rdbtnEncamino.setSelected(false);
-//							rdbtnEntregadodomicilio.setSelected(false);
-//							rdbtnEntregadoedificio.setSelected(false);
-//							rdbtnFallida.setSelected(false);
-//							rdbtnEntregadoedificiosalida.setSelected(false);-
-//							rdbtnEntregafallida_1.setSelected(false);
-//							rdbtnEntregafallida.setSelected(false);
-//							rdbtnEsperaEnvio.setSelected(false);
-							if(rdbtnEntregadoedificiosalida.isSelected()) {
-								JOptionPane.showMessageDialog(null,
-										"En el envío actual es imposible seleccionar éste estado");
-							}
-							else if(rdbtnEncamino.isSelected()) {
-								try {
-									int envioId = Integer.parseInt((String) table_1.getValueAt(x, 0)); //el id del envío
-									Envio envio = DatabaseManager.getEnvioById(envioId);
-									envio.setEstado(rdbtnEncamino.getText());
-									DatabaseManager.updateEstadoEnvio(envio);
-									
-								} catch (SQLException e1) {
-									// TODO Auto-generated catch block
-									e1.printStackTrace();
-								}
-							}
-							else if(rdbtnEntregadodomicilio.isSelected()) {
-								//en este caso el envio ya esta entregado, se debe desvincular el transportista y el vehiculo
-								try {
-									int envioId = Integer.parseInt((String) table_1.getValueAt(x, 0)); //el id del envío
-									Envio envio = DatabaseManager.getEnvioById(envioId);
-									envio.setEstado(rdbtnEntregadodomicilio.getText());
-									envio.setTransportista("");
-									envio.setVehiculo("");
-									transportistaActual.setLugarEntrega(null);
-									transportistaActual.setLugarRecogida(null);
-									DatabaseManager.updateEstadoYTVEnvio(envio);
-									DatabaseManager.updateDestinosTransportista(null, null, transportistaActual.getDNI());
-								} catch (SQLException e1) {
-									// TODO Auto-generated catch block
-									e1.printStackTrace();
-								}
-								
-							}
-							else if(rdbtnEntregadoedificio.isSelected()) {
-								//este caso solo se dará si se producen 4 fallos y se devuelve al almacen (cambiar el lugar de recogida) o si no hay entrega a domicilio
-								try {
-									int envioId = Integer.parseInt((String) table_1.getValueAt(x, 0)); //el id del envío
-									Envio envio = DatabaseManager.getEnvioById(envioId);
-									
-									envio.setEstado(rdbtnEntregadoedificio.getText());
-									envio.setTransportista("");
-									envio.setVehiculo("");
-									String lugarEntrega = envio.getLugarEnvio();
-									String[] partes = lugarEntrega.split("-");
-									
-//									edificioSeleccionado.getTipo()+
-//									"-"+edificioSeleccionado.getNombre()+"-"+edificioSeleccionado.getProvinciaLocalizacion()
-									//calculamos el edificio
-									List<Edificio> edificios = DatabaseManager.getEdificiosByProvincia(envio.getProvinciaDestino());
-									int posRandomE = ThreadLocalRandom.current().nextInt(0, edificios.size());
-									Edificio edificioElegido = edificios.get(posRandomE); //inicialmente elegimos el random si es que ha fallado
-									for(Edificio edif : edificios) {
-										if(edif.getTipo().equals(partes[0]) && edif.getNombre().equals(partes[1]) && edif.getProvinciaLocalizacion().equals(partes[2])) {
-											edificioElegido = edif; //pero en caso de que no venga de fallos y la localizacion final sea un almacen entonces se sustituye
-										}
-									}
-									
-									
-									envio.setLugarEnvio(edificioElegido.getTipo()+"-"+edificioElegido.getNombre()+"-"+
-											edificioElegido.getProvinciaLocalizacion());
-									transportistaActual.setLugarEntrega(null);
-									transportistaActual.setLugarRecogida(null);
-									DatabaseManager.updateEstadoYTVEnvio(envio);
-									DatabaseManager.updateDestinosTransportista(null, null, transportistaActual.getDNI());
-									DatabaseManager.updateLugarEntregaEnvio(envio);
-								} catch (SQLException e1) {
-									// TODO Auto-generated catch block
-									e1.printStackTrace();
-								}
-							}
-							else if(rdbtnFallida.isSelected()) { //FALLO 1
-								try {
-									int envioId = Integer.parseInt((String) table_1.getValueAt(x, 0)); //el id del envío
-									Envio envio = DatabaseManager.getEnvioById(envioId);
-									envio.setEstado(rdbtnFallida.getText());
-									DatabaseManager.updateEstadoEnvio(envio);
-									Fallo f = new Fallo(envio.getId(), envio.getReceptor(), envio.getEstado());
-									DatabaseManager.addFallo(f);
-								} catch (SQLException e1) {
-									// TODO Auto-generated catch block
-									e1.printStackTrace();
-								}
-							}
-							else if(rdbtnEntregafallida.isSelected()) { //FALLO 2
-								try {
-									int envioId = Integer.parseInt((String) table_1.getValueAt(x, 0)); //el id del envío
-									Envio envio = DatabaseManager.getEnvioById(envioId);
-									envio.setEstado(rdbtnEntregafallida.getText());
-									DatabaseManager.updateEstadoEnvio(envio);
-									Fallo f = new Fallo(envio.getId(), envio.getReceptor(), envio.getEstado());
-									DatabaseManager.addFallo(f);
-								} catch (SQLException e1) {
-									// TODO Auto-generated catch block
-									e1.printStackTrace();
-								}
-							}
-							else if(rdbtnEntregafallida_1.isSelected()) { //FALLO 3
-								try {
-									int envioId = Integer.parseInt((String) table_1.getValueAt(x, 0)); //el id del envío
-									Envio envio = DatabaseManager.getEnvioById(envioId);
-									envio.setEstado(rdbtnEntregafallida_1.getText());
-									DatabaseManager.updateEstadoEnvio(envio);
-									Fallo f = new Fallo(envio.getId(), envio.getReceptor(), envio.getEstado());
-									DatabaseManager.addFallo(f);
-								} catch (SQLException e1) {
-									// TODO Auto-generated catch block
-									e1.printStackTrace();
-								}
-							}
-							else if(rdbtnEsperaEnvio.isSelected()) {
-								try {
-									int envioId = Integer.parseInt((String) table_1.getValueAt(x, 0)); //el id del envío
-									Envio envio = DatabaseManager.getEnvioById(envioId);
-									envio.setEstado(rdbtnEsperaEnvio.getText());
-									DatabaseManager.updateEstadoEnvio(envio);
-									
-								} catch (SQLException e1) {
-									// TODO Auto-generated catch block
-									e1.printStackTrace();
-								}
-							}
-							else { //ninguno seleccionado
-								JOptionPane.showMessageDialog(null,
-										"Debe de seleccionar una de las opciones inferiores de modificación de estado.");
-							}
-						}
-						else {
-							//si las 2 anteriores no ocurren significa que entrega de un domicilio a otro
-//							rdbtnEncamino.setSelected(false);
-//							rdbtnEntregadodomicilio.setSelected(false);
-//							rdbtnEntregadoedificio.setSelected(false);
-//							rdbtnFallida.setSelected(false);
-//							rdbtnEntregadoedificiosalida.setSelected(false);-
-//							rdbtnEntregafallida_1.setSelected(false);
-//							rdbtnEntregafallida.setSelected(false);
-//							rdbtnEsperaEnvio.setSelected(false);
-							if(rdbtnEntregadoedificiosalida.isSelected()) {
-								JOptionPane.showMessageDialog(null,
-										"En el envío actual es imposible seleccionar éste estado");
-							}
-							else if(rdbtnEncamino.isSelected()) {
-								try {
-									int envioId = Integer.parseInt((String) table_1.getValueAt(x, 0)); //el id del envío
-									Envio envio = DatabaseManager.getEnvioById(envioId);
-									envio.setEstado(rdbtnEncamino.getText());
-									DatabaseManager.updateEstadoEnvio(envio);
-									
-								} catch (SQLException e1) {
-									// TODO Auto-generated catch block
-									e1.printStackTrace();
-								}
-							}
-							else if(rdbtnEntregadodomicilio.isSelected()) {
-								//en este caso el envio ya esta entregado, se debe desvincular el transportista y el vehiculo
-								try {
-									int envioId = Integer.parseInt((String) table_1.getValueAt(x, 0)); //el id del envío
-									Envio envio = DatabaseManager.getEnvioById(envioId);
-									envio.setEstado(rdbtnEntregadodomicilio.getText());
-									envio.setTransportista("");
-									envio.setVehiculo("");
-									transportistaActual.setLugarEntrega(null);
-									transportistaActual.setLugarRecogida(null);
-									DatabaseManager.updateEstadoYTVEnvio(envio);
-									DatabaseManager.updateDestinosTransportista(null, null, transportistaActual.getDNI());
-								} catch (SQLException e1) {
-									// TODO Auto-generated catch block
-									e1.printStackTrace();
-								}
-							}
-							else if(rdbtnEntregadoedificio.isSelected()) {
-								//este caso solo se dará si se producen 4 fallos y se devuelve al almacen (cambiar el lugar de recogida)
-								try {
-									int envioId = Integer.parseInt((String) table_1.getValueAt(x, 0)); //el id del envío
-									Envio envio = DatabaseManager.getEnvioById(envioId);
-									envio.setEstado(rdbtnEntregadoedificio.getText());
-									envio.setTransportista("");
-									envio.setVehiculo("");
-									
-									String lugarEntrega = envio.getLugarEnvio();
-									String[] partes = lugarEntrega.split("-");
-									
-//									edificioSeleccionado.getTipo()+
-//									"-"+edificioSeleccionado.getNombre()+"-"+edificioSeleccionado.getProvinciaLocalizacion()
-									//calculamos el edificio
-									List<Edificio> edificios = DatabaseManager.getEdificiosByProvincia(envio.getProvinciaDestino());
-									int posRandomE = ThreadLocalRandom.current().nextInt(0, edificios.size());
-									Edificio edificioElegido = edificios.get(posRandomE); //inicialmente elegimos el random si es que ha fallado
-									for(Edificio edif : edificios) {
-										if(edif.getTipo().equals(partes[0]) && edif.getNombre().equals(partes[1]) && edif.getProvinciaLocalizacion().equals(partes[2])) {
-											edificioElegido = edif; //pero en caso de que no venga de fallos y la localizacion final sea un almacen entonces se sustituye
-										}
-									}
-									
-									envio.setLugarEnvio(edificioElegido.getTipo()+"-"+edificioElegido.getNombre()+"-"+
-											edificioElegido.getProvinciaLocalizacion());
-									transportistaActual.setLugarEntrega(null);
-									transportistaActual.setLugarRecogida(null);
-									DatabaseManager.updateEstadoYTVEnvio(envio);
-									DatabaseManager.updateDestinosTransportista(null, null, transportistaActual.getDNI());
-									DatabaseManager.updateLugarEntregaEnvio(envio);
-								} catch (SQLException e1) {
-									// TODO Auto-generated catch block
-									e1.printStackTrace();
-								}
-							}
-							else if(rdbtnFallida.isSelected()) { //FALLO 1
-								try {
-									int envioId = Integer.parseInt((String) table_1.getValueAt(x, 0)); //el id del envío
-									Envio envio = DatabaseManager.getEnvioById(envioId);
-									envio.setEstado(rdbtnFallida.getText());
-									DatabaseManager.updateEstadoEnvio(envio);
-									Fallo f = new Fallo(envio.getId(), envio.getReceptor(), envio.getEstado());
-									DatabaseManager.addFallo(f);
-								} catch (SQLException e1) {
-									// TODO Auto-generated catch block
-									e1.printStackTrace();
-								}
-							}
-							else if(rdbtnEntregafallida.isSelected()) { //FALLO 2
-								try {
-									int envioId = Integer.parseInt((String) table_1.getValueAt(x, 0)); //el id del envío
-									Envio envio = DatabaseManager.getEnvioById(envioId);
-									envio.setEstado(rdbtnEntregafallida.getText());
-									DatabaseManager.updateEstadoEnvio(envio);
-									Fallo f = new Fallo(envio.getId(), envio.getReceptor(), envio.getEstado());
-									DatabaseManager.addFallo(f);
-								} catch (SQLException e1) {
-									// TODO Auto-generated catch block
-									e1.printStackTrace();
-								}
-							}
-							else if(rdbtnEntregafallida_1.isSelected()) { //FALLO 3
-								try {
-									int envioId = Integer.parseInt((String) table_1.getValueAt(x, 0)); //el id del envío
-									Envio envio = DatabaseManager.getEnvioById(envioId);
-									envio.setEstado(rdbtnEntregafallida_1.getText());
-									DatabaseManager.updateEstadoEnvio(envio);
-									Fallo f = new Fallo(envio.getId(), envio.getReceptor(), envio.getEstado());
-									DatabaseManager.addFallo(f);
-								} catch (SQLException e1) {
-									// TODO Auto-generated catch block
-									e1.printStackTrace();
-								}
-							}
-							else if(rdbtnEsperaEnvio.isSelected()) {
-								try {
-									int envioId = Integer.parseInt((String) table_1.getValueAt(x, 0)); //el id del envío
-									Envio envio = DatabaseManager.getEnvioById(envioId);
-									envio.setEstado(rdbtnEsperaEnvio.getText());
-									DatabaseManager.updateEstadoEnvio(envio);
-									
-								} catch (SQLException e1) {
-									// TODO Auto-generated catch block
-									e1.printStackTrace();
-								}
-							}
-							else { //ninguno seleccionado
-								JOptionPane.showMessageDialog(null,
-										"Debe de seleccionar una de las opciones inferiores de modificación de estado.");
-							}
-						}
-					}
-				}
-			});
-		}
-		return btnModificarEstadoEnvo;
 	}
 	private JButton getBtnActualizar_1() {
 		if (btnActualizar_1 == null) {
@@ -2591,8 +2224,10 @@ public class VentanaPrincipal extends JFrame {
 		removeModelContentt(modelEnviosARepartir);
 		String[] x = {"Id", "Lugar Recogida", "Destino", "Vehículo"};
 		modelEnviosARepartir.addRow(x);
-		if(transportistaActual!=null)
+		if(transportistaActual!=null) {
 			addToModelt(modelEnviosARepartir, DatabaseManager.getEnviosTransportista(transportistaActual.getDNI()));
+		}
+		
 	}
 	
 	
@@ -2601,208 +2236,15 @@ public class VentanaPrincipal extends JFrame {
 		if (panel_53 == null) {
 			panel_53 = new JPanel();
 			panel_53.setLayout(new GridLayout(0, 2, 0, 0));
-			panel_53.add(getPanel_54());
-			panel_53.add(getPanel_55());
 		}
 		return panel_53;
-	}
-	private JPanel getPanel_54() {
-		if (panel_54 == null) {
-			panel_54 = new JPanel();
-			panel_54.setLayout(new GridLayout(2, 0, 0, 0));
-			panel_54.add(getRdbtnEsperaEnvio());
-			panel_54.add(getRdbtnEncamino());
-		}
-		return panel_54;
-	}
-	private JPanel getPanel_55() {
-		if (panel_55 == null) {
-			panel_55 = new JPanel();
-			panel_55.setLayout(new GridLayout(2, 0, 0, 0));
-			panel_55.add(getRdbtnEntregadodomicilio());
-			panel_55.add(getRdbtnEntregadoedificio());
-		}
-		return panel_55;
-	}
-	private JRadioButton getRdbtnEsperaEnvio() {
-		if (rdbtnEsperaEnvio == null) {
-			rdbtnEsperaEnvio = new JRadioButton("Espera-Envio");
-			rdbtnEsperaEnvio.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseClicked(MouseEvent e) {
-					rdbtnEncamino.setSelected(false);
-					rdbtnEntregadodomicilio.setSelected(false);
-					rdbtnEntregadoedificio.setSelected(false);
-					rdbtnFallida.setSelected(false);
-					rdbtnEntregadoedificiosalida.setSelected(false);
-					rdbtnEntregafallida_1.setSelected(false);
-					rdbtnEntregafallida.setSelected(false);
-					rdbtnEsperaEnvio.setSelected(true);
-				}
-			});
-			
-		}
-		return rdbtnEsperaEnvio;
-	}
-	private JRadioButton getRdbtnEncamino() {
-		if (rdbtnEncamino == null) {
-			rdbtnEncamino = new JRadioButton("En-Camino");
-			rdbtnEncamino.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseClicked(MouseEvent e) {
-					rdbtnEncamino.setSelected(true);
-					rdbtnEntregadodomicilio.setSelected(false);
-					rdbtnEntregadoedificio.setSelected(false);
-					rdbtnFallida.setSelected(false);
-					rdbtnEntregadoedificiosalida.setSelected(false);
-					rdbtnEntregafallida_1.setSelected(false);
-					rdbtnEntregafallida.setSelected(false);
-					rdbtnEsperaEnvio.setSelected(false);
-				}
-			});
-		}
-		return rdbtnEncamino;
-	}
-	private JRadioButton getRdbtnEntregadodomicilio() {
-		if (rdbtnEntregadodomicilio == null) {
-			rdbtnEntregadodomicilio = new JRadioButton("Entregado-Domicilio");
-			rdbtnEntregadodomicilio.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseClicked(MouseEvent e) {
-					rdbtnEncamino.setSelected(false);
-					rdbtnEntregadodomicilio.setSelected(true);
-					rdbtnEntregadoedificio.setSelected(false);
-					rdbtnFallida.setSelected(false);
-					rdbtnEntregadoedificiosalida.setSelected(false);
-					rdbtnEntregafallida_1.setSelected(false);
-					rdbtnEntregafallida.setSelected(false);
-					rdbtnEsperaEnvio.setSelected(false);
-				}
-			});
-		}
-		return rdbtnEntregadodomicilio;
-	}
-	private JRadioButton getRdbtnEntregadoedificio() {
-		if (rdbtnEntregadoedificio == null) {
-			rdbtnEntregadoedificio = new JRadioButton("Entregado-Edificio");
-			rdbtnEntregadoedificio.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseClicked(MouseEvent e) {
-					rdbtnEncamino.setSelected(false);
-					rdbtnEntregadodomicilio.setSelected(false);
-					rdbtnEntregadoedificio.setSelected(true);
-					rdbtnFallida.setSelected(false);
-					rdbtnEntregadoedificiosalida.setSelected(false);
-					rdbtnEntregafallida_1.setSelected(false);
-					rdbtnEntregafallida.setSelected(false);
-					rdbtnEsperaEnvio.setSelected(false);
-				}
-			});
-		}
-		return rdbtnEntregadoedificio;
 	}
 	private JPanel getPanel_56() {
 		if (panel_56 == null) {
 			panel_56 = new JPanel();
 			panel_56.setLayout(new GridLayout(0, 2, 0, 0));
-			panel_56.add(getPanel_57());
-			panel_56.add(getPanel_58());
 		}
 		return panel_56;
-	}
-	private JPanel getPanel_57() {
-		if (panel_57 == null) {
-			panel_57 = new JPanel();
-			panel_57.setLayout(new GridLayout(2, 0, 0, 0));
-			panel_57.add(getRdbtnEntregadoedificiosalida());
-			panel_57.add(getRdbtnFallida());
-		}
-		return panel_57;
-	}
-	private JPanel getPanel_58() {
-		if (panel_58 == null) {
-			panel_58 = new JPanel();
-			panel_58.setLayout(new GridLayout(2, 0, 0, 0));
-			panel_58.add(getRdbtnEntregafallida());
-			panel_58.add(getRdbtnEntregafallida_1());
-		}
-		return panel_58;
-	}
-	private JRadioButton getRdbtnFallida() {
-		if (rdbtnFallida == null) {
-			rdbtnFallida = new JRadioButton("Entrega-Fallida-1");
-			rdbtnFallida.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseClicked(MouseEvent e) {
-					rdbtnEncamino.setSelected(false);
-					rdbtnEntregadodomicilio.setSelected(false);
-					rdbtnEntregadoedificio.setSelected(false);
-					rdbtnFallida.setSelected(true);
-					rdbtnEntregadoedificiosalida.setSelected(false);
-					rdbtnEntregafallida_1.setSelected(false);
-					rdbtnEntregafallida.setSelected(false);
-					rdbtnEsperaEnvio.setSelected(false);
-				}
-			});
-		}
-		return rdbtnFallida;
-	}
-	private JRadioButton getRdbtnEntregafallida() {
-		if (rdbtnEntregafallida == null) {
-			rdbtnEntregafallida = new JRadioButton("Entrega-Fallida-2");
-			rdbtnEntregafallida.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseClicked(MouseEvent e) {
-					rdbtnEncamino.setSelected(false);
-					rdbtnEntregadodomicilio.setSelected(false);
-					rdbtnEntregadoedificio.setSelected(false);
-					rdbtnFallida.setSelected(false);
-					rdbtnEntregadoedificiosalida.setSelected(false);
-					rdbtnEntregafallida_1.setSelected(false);
-					rdbtnEntregafallida.setSelected(true);
-					rdbtnEsperaEnvio.setSelected(false);
-				}
-			});
-		}
-		return rdbtnEntregafallida;
-	}
-	private JRadioButton getRdbtnEntregafallida_1() {
-		if (rdbtnEntregafallida_1 == null) {
-			rdbtnEntregafallida_1 = new JRadioButton("Entrega-Fallida-3");
-			rdbtnEntregafallida_1.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseClicked(MouseEvent e) {
-					rdbtnEncamino.setSelected(false);
-					rdbtnEntregadodomicilio.setSelected(false);
-					rdbtnEntregadoedificio.setSelected(false);
-					rdbtnFallida.setSelected(false);
-					rdbtnEntregadoedificiosalida.setSelected(false);
-					rdbtnEntregafallida_1.setSelected(true);
-					rdbtnEntregafallida.setSelected(false);
-					rdbtnEsperaEnvio.setSelected(false);
-				}
-			});
-		}
-		return rdbtnEntregafallida_1;
-	}
-	private JRadioButton getRdbtnEntregadoedificiosalida() {
-		if (rdbtnEntregadoedificiosalida == null) {
-			rdbtnEntregadoedificiosalida = new JRadioButton("Entregado-Edificio-Salida");
-			rdbtnEntregadoedificiosalida.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseClicked(MouseEvent e) {
-					rdbtnEncamino.setSelected(false);
-					rdbtnEntregadodomicilio.setSelected(false);
-					rdbtnEntregadoedificio.setSelected(false);
-					rdbtnFallida.setSelected(false);
-					rdbtnEntregadoedificiosalida.setSelected(true);
-					rdbtnEntregafallida_1.setSelected(false);
-					rdbtnEntregafallida.setSelected(false);
-					rdbtnEsperaEnvio.setSelected(false);
-				}
-			});
-		}
-		return rdbtnEntregadoedificiosalida;
 	}
 	private JPanel getPanelInicioAdmin() {
 		if (panelInicioAdmin == null) {
@@ -2938,6 +2380,8 @@ public class VentanaPrincipal extends JFrame {
 			panel_65 = new JPanel();
 			panel_65.setBackground(Color.WHITE);
 			panel_65.setLayout(new GridLayout(0, 3, 0, 0));
+			panel_65.add(getLabel_64());
+			panel_65.add(getBtnCrearEnvo());
 		}
 		return panel_65;
 	}
@@ -2957,6 +2401,9 @@ public class VentanaPrincipal extends JFrame {
 		if (panel_68 == null) {
 			panel_68 = new JPanel();
 			panel_68.setBackground(Color.WHITE);
+			panel_68.setLayout(new GridLayout(3, 0, 0, 0));
+			panel_68.add(getLabel_78());
+			panel_68.add(getPanel_116());
 		}
 		return panel_68;
 	}
@@ -2964,6 +2411,9 @@ public class VentanaPrincipal extends JFrame {
 		if (panel_69 == null) {
 			panel_69 = new JPanel();
 			panel_69.setBackground(Color.WHITE);
+			panel_69.setLayout(new GridLayout(3, 0, 0, 0));
+			panel_69.add(getLabel_80());
+			panel_69.add(getPanel_117());
 		}
 		return panel_69;
 	}
@@ -3810,23 +3260,11 @@ public class VentanaPrincipal extends JFrame {
 		}
 		return btnVolver_3;
 	}
-	private JLabel getLabel_47() {
-		if (label_47 == null) {
-			label_47 = new JLabel("");
-		}
-		return label_47;
-	}
 	private JLabel getLabel_58() {
 		if (label_58 == null) {
 			label_58 = new JLabel("");
 		}
 		return label_58;
-	}
-	private JLabel getLabel_59() {
-		if (label_59 == null) {
-			label_59 = new JLabel("");
-		}
-		return label_59;
 	}
 	private JLabel getLabel_60() {
 		if (label_60 == null) {
@@ -3960,7 +3398,7 @@ public class VentanaPrincipal extends JFrame {
 					card.show(contentPane, "panelInicioTransportista");
 				}
 			});
-			btnVolver_8.setBounds(201, 53, 89, 23);
+			btnVolver_8.setBounds(137, 53, 89, 23);
 		}
 		return btnVolver_8;
 	}
@@ -3979,5 +3417,1475 @@ public class VentanaPrincipal extends JFrame {
 			});
 		}
 		return btnActualizar_4;
+	}
+	private JLabel getLabel_64() {
+		if (label_64 == null) {
+			label_64 = new JLabel("");
+		}
+		return label_64;
+	}
+	private JButton getBtnCrearEnvo() {
+		if (btnCrearEnvo == null) {
+			btnCrearEnvo = new JButton("Crear env\u00EDo");
+			btnCrearEnvo.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					CardLayout card = (CardLayout) contentPane.getLayout();
+					card.show(contentPane, "panelCrearEnvioAdmin");
+				}
+			});
+		}
+		return btnCrearEnvo;
+	}
+	private JPanel getPanelCrearEnvioAdmin() {
+		if (panelCrearEnvioAdmin == null) {
+			panelCrearEnvioAdmin = new JPanel();
+			panelCrearEnvioAdmin.setLayout(new GridLayout(0, 3, 0, 0));
+			panelCrearEnvioAdmin.add(getLabel_65());
+			panelCrearEnvioAdmin.add(getPanel_101());
+		}
+		return panelCrearEnvioAdmin;
+	}
+	private JLabel getLabel_65() {
+		if (label_65 == null) {
+			label_65 = new JLabel("");
+		}
+		return label_65;
+	}
+	private JPanel getPanel_101() {
+		if (panel_101 == null) {
+			panel_101 = new JPanel();
+			panel_101.setLayout(new GridLayout(10, 0, 0, 0));
+			panel_101.add(getLabel_66());
+			panel_101.add(getPanel_102());
+			panel_101.add(getPanel_107());
+			panel_101.add(getPanel_110());
+			panel_101.add(getPanel_111());
+			panel_101.add(getPanel_103());
+			panel_101.add(getPanel_108());
+			panel_101.add(getPanel_109());
+			panel_101.add(getLabel_70_1());
+			panel_101.add(getPanel_104());
+		}
+		return panel_101;
+	}
+	private JLabel getLabel_66() {
+		if (label_66 == null) {
+			label_66 = new JLabel("Crear env\u00EDo");
+			label_66.setHorizontalAlignment(SwingConstants.CENTER);
+			label_66.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 20));
+		}
+		return label_66;
+	}
+	private JPanel getPanel_102() {
+		if (panel_102 == null) {
+			panel_102 = new JPanel();
+			panel_102.setLayout(null);
+			panel_102.add(getLabel_68());
+			panel_102.add(getTextField_8());
+		}
+		return panel_102;
+	}
+	private JLabel getLabel_68() {
+		if (label_68 == null) {
+			label_68 = new JLabel("DNI destinatario: ");
+			label_68.setBounds(10, 15, 159, 22);
+		}
+		return label_68;
+	}
+	private JTextField getTextField_8() {
+		if (textField_8 == null) {
+			textField_8 = new JTextField();
+			textField_8.setColumns(10);
+			textField_8.setBounds(105, 15, 204, 22);
+		}
+		return textField_8;
+	}
+	private JPanel getPanel_103() {
+		if (panel_103 == null) {
+			panel_103 = new JPanel();
+			panel_103.setLayout(null);
+			panel_103.add(getRadioButton());
+			panel_103.add(getRadioButton_1());
+		}
+		return panel_103;
+	}
+	private JRadioButton getRadioButton() {
+		if (radioButton == null) {
+			radioButton = new JRadioButton("Recogida a domicilio");
+			radioButton.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent arg0) {
+					if(radioButton.isSelected()) {
+						textField_14.setEnabled(true);
+					}
+					else {
+						textField_14.setEnabled(false);
+					}
+				}
+			});
+			radioButton.setFont(new Font("Tahoma", Font.BOLD, 11));
+			radioButton.setBounds(6, 29, 148, 17);
+		}
+		return radioButton;
+	}
+	private JRadioButton getRadioButton_1() {
+		if (radioButton_1 == null) {
+			radioButton_1 = new JRadioButton("Env\u00EDo a domicilio");
+			radioButton_1.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					if(radioButton_1.isSelected()) {
+						textField_13.setEnabled(true);
+					}
+					else {
+						textField_13.setEnabled(false);
+					}
+				}
+			});
+			radioButton_1.setFont(new Font("Tahoma", Font.BOLD, 11));
+			radioButton_1.setBounds(6, 7, 148, 17);
+		}
+		return radioButton_1;
+	}
+	private JPanel getPanel_104() {
+		if (panel_104 == null) {
+			panel_104 = new JPanel();
+			panel_104.setLayout(new GridLayout(0, 3, 0, 0));
+			panel_104.add(getLabel_69());
+			panel_104.add(getPanel_105());
+			panel_104.add(getPanel_112());
+		}
+		return panel_104;
+	}
+	private JLabel getLabel_69() {
+		if (label_69 == null) {
+			label_69 = new JLabel("");
+		}
+		return label_69;
+	}
+	private JPanel getPanel_105() {
+		if (panel_105 == null) {
+			panel_105 = new JPanel();
+			panel_105.add(getButton());
+		}
+		return panel_105;
+	}
+	private JButton getButton() {
+		if (button == null) {
+			button = new JButton("Confirmar");
+			button.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					String dniReceptor = textField_8.getText();
+					String dniEmisor = textField_12.getText();
+					String direccionReceptor = textField_13.getText();
+					String direccionEmisor = textField_14.getText();
+					String provinciaReceptor = comboBox_2.getSelectedItem().toString();
+					String provinciaEmisor = comboBox_3.getSelectedItem().toString();
+					if(radioButton.isSelected()) {
+						if(textField_14.getText().length()<3) {
+							JOptionPane.showMessageDialog(null,
+									"Debe introducir una dirección valida del remitente para recoger el envío.");
+						}
+					}
+					else if(radioButton_1.isSelected()) {
+						if(textField_13.getText().length()<3) {
+							JOptionPane.showMessageDialog(null,
+									"Debe introducir una dirección valida del destinatario para entregar el envío.");
+						}
+					}
+					if(textField_8.getText().length()!=9)  {
+						JOptionPane.showMessageDialog(null,
+								"La longitud del DNI del destinatario debe ser de 9 caracteres.");
+					}
+					else if(Character.isLetter(textField_8.getText().charAt(8))==false) {
+						JOptionPane.showMessageDialog(null,
+								"El DNI del destinatario debe contener una letra al final.");
+					}
+					else if(textField_12.getText().length()!=9) {
+						JOptionPane.showMessageDialog(null,
+								"La longitud del DNI del remitente debe ser de 9 caracteres.");
+					}
+					else if(Character.isLetter(textField_12.getText().charAt(8))==false) {
+						JOptionPane.showMessageDialog(null,
+								"El DNI del remitente debe contener una letra al final.");
+					}
+					else {
+						
+						Envio envio = null;
+						try {
+							DatabaseManager.getEdificiosByProvincia(provinciaReceptor);
+						} catch (SQLException e3) {
+							// TODO Auto-generated catch block
+							e3.printStackTrace();
+						}
+						List<Edificio> edificiosProvinciaEmisor = null;
+						try {
+							edificiosProvinciaEmisor = DatabaseManager.getEdificiosByProvincia(provinciaEmisor);
+						} catch (SQLException e2) {
+							// TODO Auto-generated catch block
+							e2.printStackTrace();
+						}
+						List<Transportista> temisor = new ArrayList<Transportista>();
+						try {
+							temisor = DatabaseManager.getTransportistasProvincia(provinciaEmisor);
+						} catch (SQLException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+						List<Vehiculo> vemisor = new ArrayList<Vehiculo>();;
+						try {
+							vemisor = DatabaseManager.getVehiculosDeProvincia(provinciaEmisor);
+						} catch (SQLException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+						
+						
+						//si entrega y recogida es a domicilio
+						if(radioButton.isSelected() && radioButton_1.isSelected()) {
+							//si provincias son diferentes
+							if(temisor.size()==0) {
+								JOptionPane.showMessageDialog(null,
+										"No hay transportistas en la provincia del emisor");
+							}
+							else if(vemisor.size()==0) {
+								JOptionPane.showMessageDialog(null,
+										"No hay vehiculos en la provincia del emisor");
+							}
+							else {
+								if(!provinciaEmisor.equals(provinciaReceptor)) {
+									int posRandom = ThreadLocalRandom.current().nextInt(0, temisor.size());
+									Transportista transE = temisor.get(posRandom);
+									int posRandomOne = ThreadLocalRandom.current().nextInt(0, vemisor.size());
+									Vehiculo vehE = vemisor.get(posRandomOne);
+									
+									
+									
+									envio = new Envio(radioButton.isSelected(), radioButton_1.isSelected(), dniReceptor, dniEmisor,
+											transE.getDNI(), vehE.getMatricula(), provinciaReceptor, provinciaEmisor, direccionReceptor, direccionEmisor,
+											"Recogida a domicilio", direccionEmisor);
+								}
+								//si provincia es la misma
+								else {
+									int posRandom = ThreadLocalRandom.current().nextInt(0, temisor.size());
+									Transportista transE = temisor.get(posRandom);
+									int posRandomOne = ThreadLocalRandom.current().nextInt(0, vemisor.size());
+									Vehiculo vehE = vemisor.get(posRandomOne);
+									
+									envio = new Envio(radioButton.isSelected(), radioButton_1.isSelected(), dniReceptor, dniEmisor,
+											transE.getDNI(), vehE.getMatricula(), provinciaReceptor, provinciaEmisor, direccionReceptor, direccionEmisor,
+											"Recogida a domicilio", direccionEmisor);
+								}
+							}
+						}
+						else if(radioButton.isSelected() && !radioButton_1.isSelected()) {
+							if(temisor.size()==0) {
+								JOptionPane.showMessageDialog(null,
+										"No hay transportistas en la provincia del emisor");
+							}
+							else if(vemisor.size()==0) {
+								JOptionPane.showMessageDialog(null,
+										"No hay vehiculos en la provincia del emisor");
+							}
+							else {
+								if(!provinciaEmisor.equals(provinciaReceptor)) {
+									int posRandom = ThreadLocalRandom.current().nextInt(0, temisor.size());
+									Transportista transE = temisor.get(posRandom);
+									int posRandomOne = ThreadLocalRandom.current().nextInt(0, vemisor.size());
+									Vehiculo vehE = vemisor.get(posRandomOne);
+									
+									
+									envio = new Envio(radioButton.isSelected(), radioButton_1.isSelected(), dniReceptor, dniEmisor,
+											transE.getDNI(), vehE.getMatricula(), provinciaReceptor, provinciaEmisor, direccionReceptor, direccionEmisor,
+											"Recogida a domicilio", direccionEmisor);
+								}
+								else {
+									int posRandom = ThreadLocalRandom.current().nextInt(0, temisor.size());
+									Transportista transE = temisor.get(posRandom);
+									int posRandomOne = ThreadLocalRandom.current().nextInt(0, vemisor.size());
+									Vehiculo vehE = vemisor.get(posRandomOne);
+									
+									int posRandomEdifE = ThreadLocalRandom.current().nextInt(0, edificiosProvinciaEmisor.size());
+									edificiosProvinciaEmisor.get(posRandomEdifE);
+									
+									
+									envio = new Envio(radioButton.isSelected(), radioButton_1.isSelected(), dniReceptor, dniEmisor,
+											transE.getDNI(), vehE.getMatricula(), provinciaReceptor, provinciaEmisor, direccionReceptor, direccionEmisor,
+									"Recogida a domicilio", direccionEmisor);
+								}
+							}
+						}
+						//EN ESTOS CASOS HAY QUE ESPERAR A QUE EL EMISOR LO ENTREGUE EN LA OFICINA (NO TIENE ESTADO)
+						else if(!radioButton.isSelected() && radioButton_1.isSelected()) {
+							
+							envio = new Envio(radioButton.isSelected(), radioButton_1.isSelected(), dniReceptor, dniEmisor,
+									"", "", provinciaReceptor, provinciaEmisor, direccionReceptor, "",
+									"", "");
+						}
+						else {
+							envio = new Envio(radioButton.isSelected(), radioButton_1.isSelected(), dniReceptor, dniEmisor,
+									"", "", provinciaReceptor, provinciaEmisor, "", "",
+									"", "");
+						}
+						if(envio!=null) {
+							envio.calculaPrecio();
+							JOptionPane.showMessageDialog(null,
+									"Precio del envío: " + envio.getPrecio() + "€.");
+							try {
+								DatabaseManager.registraEnvio(envio);
+							} catch (SQLException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
+						}
+					}
+				}
+			});
+		}
+		return button;
+	}
+	private JButton getButton_1() {
+		if (button_1 == null) {
+			button_1 = new JButton("Volver");
+		}
+		return button_1;
+	}
+	private JPanel getPanel_107() {
+		if (panel_107 == null) {
+			panel_107 = new JPanel();
+			panel_107.setLayout(null);
+			panel_107.add(getLblDni_1());
+			panel_107.add(getTextField_12());
+		}
+		return panel_107;
+	}
+	private JLabel getLblDni_1() {
+		if (lblDni_1 == null) {
+			lblDni_1 = new JLabel("DNI remitente:");
+			lblDni_1.setBounds(10, 11, 85, 31);
+		}
+		return lblDni_1;
+	}
+	private JTextField getTextField_12() {
+		if (textField_12 == null) {
+			textField_12 = new JTextField();
+			textField_12.setBounds(105, 16, 204, 20);
+			textField_12.setColumns(10);
+		}
+		return textField_12;
+	}
+	private JPanel getPanel_108() {
+		if (panel_108 == null) {
+			panel_108 = new JPanel();
+			panel_108.setLayout(null);
+			panel_108.add(getLblDireccinDestinatario());
+			panel_108.add(getTextField_13());
+		}
+		return panel_108;
+	}
+	private JPanel getPanel_109() {
+		if (panel_109 == null) {
+			panel_109 = new JPanel();
+			panel_109.setLayout(null);
+			panel_109.add(getLblDireccinRemitente());
+			panel_109.add(getTextField_14());
+		}
+		return panel_109;
+	}
+	private JPanel getPanel_110() {
+		if (panel_110 == null) {
+			panel_110 = new JPanel();
+			panel_110.setLayout(null);
+			panel_110.add(getLabel_67_1());
+			panel_110.add(getComboBox_2());
+		}
+		return panel_110;
+	}
+	private JPanel getPanel_111() {
+		if (panel_111 == null) {
+			panel_111 = new JPanel();
+			panel_111.setLayout(null);
+			panel_111.add(getLabel_67_2());
+			panel_111.add(getComboBox_3());
+		}
+		return panel_111;
+	}
+	private JLabel getLabel_67_1() {
+		if (lblProvinciaDestinatario == null) {
+			lblProvinciaDestinatario = new JLabel("Provincia destinatario: ");
+			lblProvinciaDestinatario.setBounds(10, 11, 110, 31);
+		}
+		return lblProvinciaDestinatario;
+	}
+	private JLabel getLabel_67_2() {
+		if (lblProvinciaRemitente == null) {
+			lblProvinciaRemitente = new JLabel("Provincia remitente:");
+			lblProvinciaRemitente.setBounds(10, 11, 107, 31);
+		}
+		return lblProvinciaRemitente;
+	}
+	private JComboBox<String> getComboBox_2() {
+		if (comboBox_2 == null) {
+			comboBox_2 = new JComboBox<String>();
+			comboBox_2.setBounds(130, 16, 179, 20);
+			comboBox_2.addItem("Álava");
+			comboBox_2.addItem("Albacete");
+			comboBox_2.addItem("Alicante");
+			comboBox_2.addItem("Almería");
+			comboBox_2.addItem("Asturias");
+			comboBox_2.addItem("Avila");
+			comboBox_2.addItem("Badajoz");
+			comboBox_2.addItem("Barcelona");
+			comboBox_2.addItem("Burgos");
+			comboBox_2.addItem("Cáceres");
+			comboBox_2.addItem("Cádiz");
+			comboBox_2.addItem("Cantabria");
+			comboBox_2.addItem("Castellón");
+			comboBox_2.addItem("Ciudad Real");
+			comboBox_2.addItem("Córdoba");
+			comboBox_2.addItem("Cuenca");
+			comboBox_2.addItem("Girona");
+			comboBox_2.addItem("Granada");
+			comboBox_2.addItem("Guadalajara");
+			comboBox_2.addItem("Guipúzcoa");
+			comboBox_2.addItem("Huelva");
+			comboBox_2.addItem("Huesca");
+			comboBox_2.addItem("Islas Baleares");
+			comboBox_2.addItem("Jaén");
+			comboBox_2.addItem("La Coruña");
+			comboBox_2.addItem("La Rioja");
+			comboBox_2.addItem("Las Palmas");
+			comboBox_2.addItem("León");
+			comboBox_2.addItem("Lérida");
+			comboBox_2.addItem("Lugo");
+			comboBox_2.addItem("Madrid");
+			comboBox_2.addItem("Málaga");
+			comboBox_2.addItem("Murcia");
+			comboBox_2.addItem("Navarra");
+			comboBox_2.addItem("Orense");
+			comboBox_2.addItem("Palencia");
+			comboBox_2.addItem("Pontevedra");
+			comboBox_2.addItem("Salamanca");
+			comboBox_2.addItem("Segovia");
+			comboBox_2.addItem("Sevilla");
+			comboBox_2.addItem("Soria");
+			comboBox_2.addItem("Tarragona");
+			comboBox_2.addItem("Tenerife");
+			comboBox_2.addItem("Teruel");
+			comboBox_2.addItem("Toledo");
+			comboBox_2.addItem("Valencia");
+			comboBox_2.addItem("Valladolid");
+			comboBox_2.addItem("Vizcaya");
+			comboBox_2.addItem("Zamora");
+			comboBox_2.addItem("Zaragoza");
+		}
+		return comboBox_2;
+	}
+	private JComboBox<String> getComboBox_3() {
+		if (comboBox_3 == null) {
+			comboBox_3 = new JComboBox<String>();
+			comboBox_3.setBounds(130, 16, 179, 20);
+			comboBox_3.addItem("Álava");
+			comboBox_3.addItem("Albacete");
+			comboBox_3.addItem("Alicante");
+			comboBox_3.addItem("Almería");
+			comboBox_3.addItem("Asturias");
+			comboBox_3.addItem("Avila");
+			comboBox_3.addItem("Badajoz");
+			comboBox_3.addItem("Barcelona");
+			comboBox_3.addItem("Burgos");
+			comboBox_3.addItem("Cáceres");
+			comboBox_3.addItem("Cádiz");
+			comboBox_3.addItem("Cantabria");
+			comboBox_3.addItem("Castellón");
+			comboBox_3.addItem("Ciudad Real");
+			comboBox_3.addItem("Córdoba");
+			comboBox_3.addItem("Cuenca");
+			comboBox_3.addItem("Girona");
+			comboBox_3.addItem("Granada");
+			comboBox_3.addItem("Guadalajara");
+			comboBox_3.addItem("Guipúzcoa");
+			comboBox_3.addItem("Huelva");
+			comboBox_3.addItem("Huesca");
+			comboBox_3.addItem("Islas Baleares");
+			comboBox_3.addItem("Jaén");
+			comboBox_3.addItem("La Coruña");
+			comboBox_3.addItem("La Rioja");
+			comboBox_3.addItem("Las Palmas");
+			comboBox_3.addItem("León");
+			comboBox_3.addItem("Lérida");
+			comboBox_3.addItem("Lugo");
+			comboBox_3.addItem("Madrid");
+			comboBox_3.addItem("Málaga");
+			comboBox_3.addItem("Murcia");
+			comboBox_3.addItem("Navarra");
+			comboBox_3.addItem("Orense");
+			comboBox_3.addItem("Palencia");
+			comboBox_3.addItem("Pontevedra");
+			comboBox_3.addItem("Salamanca");
+			comboBox_3.addItem("Segovia");
+			comboBox_3.addItem("Sevilla");
+			comboBox_3.addItem("Soria");
+			comboBox_3.addItem("Tarragona");
+			comboBox_3.addItem("Tenerife");
+			comboBox_3.addItem("Teruel");
+			comboBox_3.addItem("Toledo");
+			comboBox_3.addItem("Valencia");
+			comboBox_3.addItem("Valladolid");
+			comboBox_3.addItem("Vizcaya");
+			comboBox_3.addItem("Zamora");
+			comboBox_3.addItem("Zaragoza");
+		}
+		return comboBox_3;
+	}
+	private JPanel getPanel_112() {
+		if (panel_112 == null) {
+			panel_112 = new JPanel();
+			panel_112.setLayout(new GridLayout(2, 0, 0, 0));
+			panel_112.add(getLabel_67_3());
+			panel_112.add(getButton_1());
+		}
+		return panel_112;
+	}
+	private JLabel getLabel_67_3() {
+		if (label_67 == null) {
+			label_67 = new JLabel("");
+		}
+		return label_67;
+	}
+	private JLabel getLabel_70_1() {
+		if (label_70 == null) {
+			label_70 = new JLabel("");
+		}
+		return label_70;
+	}
+	private JLabel getLblDireccinDestinatario() {
+		if (lblDireccinDestinatario == null) {
+			lblDireccinDestinatario = new JLabel("Direcci\u00F3n destinatario:");
+			lblDireccinDestinatario.setBounds(10, 11, 111, 31);
+		}
+		return lblDireccinDestinatario;
+	}
+	private JLabel getLblDireccinRemitente() {
+		if (lblDireccinRemitente == null) {
+			lblDireccinRemitente = new JLabel("Direcci\u00F3n remitente:");
+			lblDireccinRemitente.setBounds(10, 11, 111, 31);
+		}
+		return lblDireccinRemitente;
+	}
+	private JTextField getTextField_13() {
+		if (textField_13 == null) {
+			textField_13 = new JTextField();
+			textField_13.setBounds(130, 16, 179, 20);
+			textField_13.setColumns(10);
+			textField_13.setEnabled(false);
+		}
+		return textField_13;
+	}
+	private JTextField getTextField_14() {
+		if (textField_14 == null) {
+			textField_14 = new JTextField();
+			textField_14.setBounds(130, 16, 179, 20);
+			textField_14.setColumns(10);
+			textField_14.setEnabled(false);
+		}
+		return textField_14;
+	}
+	private JPanel getPanelEntregaPaqueteEnOficina() throws SQLException {
+		if (panelEntregaPaqueteEnOficina == null) {
+			panelEntregaPaqueteEnOficina = new JPanel();
+			panelEntregaPaqueteEnOficina.setLayout(new BorderLayout(0, 0));
+			panelEntregaPaqueteEnOficina.add(getPanel_106(), BorderLayout.CENTER);
+			panelEntregaPaqueteEnOficina.add(getPanel_113(), BorderLayout.EAST);
+		}
+		return panelEntregaPaqueteEnOficina;
+	}
+	private JPanel getPanelRecogidaPaqueteEnOficina() throws SQLException {
+		if (panelRecogidaPaqueteEnOficina == null) {
+			panelRecogidaPaqueteEnOficina = new JPanel();
+			panelRecogidaPaqueteEnOficina.setLayout(new BorderLayout(0, 0));
+			panelRecogidaPaqueteEnOficina.add(getPanel_114(), BorderLayout.CENTER);
+			panelRecogidaPaqueteEnOficina.add(getPanel_115(), BorderLayout.EAST);
+		}
+		return panelRecogidaPaqueteEnOficina;
+	}
+	private JPanel getPanel_106() throws SQLException {
+		if (panel_106 == null) {
+			panel_106 = new JPanel();
+			panel_106.setLayout(new BorderLayout(0, 0));
+			panel_106.add(getLabel_71(), BorderLayout.NORTH);
+			panel_106.add(getTable_5(), BorderLayout.CENTER);
+		}
+		return panel_106;
+	}
+	private JPanel getPanel_113() {
+		if (panel_113 == null) {
+			panel_113 = new JPanel();
+			panel_113.setLayout(new GridLayout(7, 0, 0, 0));
+			panel_113.add(getLabel_72());
+			panel_113.add(getLabel_73());
+			panel_113.add(getPanel_124());
+			panel_113.add(getBtnMarcarComoEntregado());
+			panel_113.add(getBtnActualizar_5());
+		}
+		return panel_113;
+	}
+	private JLabel getLabel_71() {
+		if (label_71 == null) {
+			label_71 = new JLabel("Paquetes pendientes de entregar:");
+			label_71.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 16));
+		}
+		return label_71;
+	}
+	private JTable getTable_5() throws SQLException {
+		if (table_5 == null) {
+			modelEnviosAEntregar = new MyTableModel();
+			modelEnviosAEntregar.addColumn("Id");
+			modelEnviosAEntregar.addColumn("Emisor");
+			String[] x = {"Id", "Emisor"};
+			modelEnviosAEntregar.addRow(x);
+			table_5 = new JTable(modelEnviosAEntregar);
+			actualizarModelEE();
+		}
+		return table_5;
+	}
+	private void actualizarModelEE() throws SQLException {
+		removeModelContent(modelEnviosAEntregar);
+		String[] x = {"Id", "Emisor"};
+		modelEnviosAEntregar.addRow(x);
+		addToModel(modelEnviosAEntregar, DatabaseManager.getEnviosAEntregar());
+		table_5.setModel(modelEnviosAEntregar);
+	}
+	private JLabel getLabel_72() {
+		if (label_72 == null) {
+			label_72 = new JLabel("");
+		}
+		return label_72;
+	}
+	private JLabel getLabel_73() {
+		if (label_73 == null) {
+			label_73 = new JLabel("");
+		}
+		return label_73;
+	}
+	private JButton getBtnMarcarComoEntregado() {
+		if (btnMarcarComoEntregado == null) {
+			btnMarcarComoEntregado = new JButton("Marcar como entregado");
+			btnMarcarComoEntregado.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					int x = table_5.getSelectedRow();
+					if(x==-1 || x==0) {
+						JOptionPane.showMessageDialog(null,
+								"Debe de seleccionar uno de los envíos del listado");
+					}
+					else {
+						int envioId = Integer.parseInt((String) table_5.getValueAt(x, 0)); //el id del envío
+						Envio envio = null;
+						try {
+							envio = DatabaseManager.getEnvioById(envioId);
+						} catch (SQLException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+						
+						if(textField_17.getText().length()==0) {
+							JOptionPane.showMessageDialog(null,
+								"Debe incluir un lugar de entrega.");
+						}
+						else if((textField_17.getText().contains("Oficina") || textField_17.getText().contains("Almacen")) && textField_17.getText().contains("-")){
+							String[] lugarActual = textField_17.getText().split("-");
+							System.out.println(lugarActual.length);
+							if(lugarActual.length!=3) {
+								JOptionPane.showMessageDialog(null,
+										"El lugar de entrega debe de seguir el formato: Tipo-Nombre-Provincia.");
+							}else if(!lugarActual[2].equals(envio.getProvinciaOrigen())) {
+								JOptionPane.showMessageDialog(null,
+										"La provincia del edificio debe de ser la misma que la del emisor.");
+							}
+							else {
+								envio.setEstado("En " + lugarActual[0]);
+								envio.setUbicacionActual(textField_17.getText());
+								try {
+									DatabaseManager.updateEstadoYTVEnvio(envio);
+									actualizarModelEE();
+								} catch (SQLException e1) {
+									// TODO Auto-generated catch block
+									e1.printStackTrace();
+								}
+							}
+						}
+						else {
+							JOptionPane.showMessageDialog(null,
+									"El lugar de entrega debe de seguir el formato: Tipo-Nombre-Provincia.");
+						}
+						try {
+							actualizarModelER();
+						} catch (SQLException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+					}
+				}
+				
+			});
+		}
+		return btnMarcarComoEntregado;
+	}
+	private JPanel getPanel_115() {
+		if (panel_115 == null) {
+			panel_115 = new JPanel();
+			panel_115.setLayout(new GridLayout(7, 0, 0, 0));
+			panel_115.add(getLabel_75());
+			panel_115.add(getLabel_76());
+			panel_115.add(getLabel_77());
+			panel_115.add(getBtnMarcarComoRecogido());
+			panel_115.add(getBtnActualizar_6());
+		}
+		return panel_115;
+	}
+	private JLabel getLabel_75() {
+		if (label_75 == null) {
+			label_75 = new JLabel("");
+		}
+		return label_75;
+	}
+	private JLabel getLabel_76() {
+		if (label_76 == null) {
+			label_76 = new JLabel("");
+		}
+		return label_76;
+	}
+	private JLabel getLabel_77() {
+		if (label_77 == null) {
+			label_77 = new JLabel("");
+		}
+		return label_77;
+	}
+	private JButton getBtnMarcarComoRecogido() {
+		if (btnMarcarComoRecogido == null) {
+			btnMarcarComoRecogido = new JButton("Marcar como recogido");
+			btnMarcarComoRecogido.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					int x = table_6.getSelectedRow();
+					if(x==-1 || x==0) {
+						JOptionPane.showMessageDialog(null,
+								"Debe de seleccionar uno de los envíos del listado");
+					}
+					else {
+						int envioId = Integer.parseInt((String) table_6.getValueAt(x, 0)); //el id del envío
+						Envio envio = null;
+						try {
+							envio = DatabaseManager.getEnvioById(envioId);
+						} catch (SQLException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+						envio.setEstado("Recogido-Cliente");
+						envio.setTransportista("");
+						envio.setVehiculo("");
+						try {
+							envio.setUbicacionActual("");
+							DatabaseManager.updateEstadoYTVEnvio(envio);
+						} catch (SQLException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+					}
+				}
+			});
+		}
+		return btnMarcarComoRecogido;
+	}
+	private JPanel getPanel_114() throws SQLException {
+		if (panel_114 == null) {
+			panel_114 = new JPanel();
+			panel_114.setLayout(new BorderLayout(0, 0));
+			panel_114.add(getLblPaquetesPendientesDe(), BorderLayout.NORTH);
+			panel_114.add(getTable_6(), BorderLayout.CENTER);
+		}
+		return panel_114;
+	}
+	private JLabel getLblPaquetesPendientesDe() {
+		if (lblPaquetesPendientesDe == null) {
+			lblPaquetesPendientesDe = new JLabel("Paquetes pendientes de recoger:");
+			lblPaquetesPendientesDe.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 16));
+		}	
+		return lblPaquetesPendientesDe;
+	}
+	private JTable getTable_6() throws SQLException {
+		if (table_6 == null) {
+			modelEnviosARecoger = new MyTableModel();
+			modelEnviosARecoger.addColumn("Id");
+			modelEnviosARecoger.addColumn("Receptor");
+			String[] x = {"Id", "Receptor"};
+			modelEnviosARecoger.addRow(x);
+			table_6 = new JTable(modelEnviosARecoger);
+			actualizarModelER();
+		}
+		return table_6;
+	}
+	
+	private void actualizarModelER() throws SQLException {
+		removeModelContent(modelEnviosARecoger);
+		String[] x = {"Id", "Receptor"};
+		modelEnviosARecoger.addRow(x);
+		List<String[]> enviosARecoger = DatabaseManager.getEnviosARecoger();
+		List<String[]> enviosQueDebenSerRecogidosPorCliente = new ArrayList<String[]>();
+		for(String[] s : enviosARecoger) {
+			Envio e = DatabaseManager.getEnvioById(Integer.parseInt(s[0]));
+			String provincia = e.getProvinciaDestino();
+			if(e.getUbicacionActual()!=null)
+				if (e.getUbicacionActual().contains(provincia)) {
+					enviosQueDebenSerRecogidosPorCliente.add(s);
+				}
+		}
+		addToModel(modelEnviosARecoger, enviosQueDebenSerRecogidosPorCliente);
+		table_6.setModel(modelEnviosARecoger);
+	}
+	private JButton getBtnActualizar_5() {
+		if (btnActualizar_5 == null) {
+			btnActualizar_5 = new JButton("Actualizar");
+			btnActualizar_5.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					try {
+						actualizarModelEE();
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+			});
+		}
+		return btnActualizar_5;
+	}
+	private JButton getBtnActualizar_6() {
+		if (btnActualizar_6 == null) {
+			btnActualizar_6 = new JButton("Actualizar");
+			btnActualizar_6.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					try {
+						actualizarModelER();
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+			});
+		}
+		return btnActualizar_6;
+	}
+	private JLabel getLabel_78() {
+		if (label_78 == null) {
+			label_78 = new JLabel("");
+		}
+		return label_78;
+	}
+	private JPanel getPanel_116() {
+		if (panel_116 == null) {
+			panel_116 = new JPanel();
+			panel_116.setBackground(Color.WHITE);
+			panel_116.setLayout(new GridLayout(0, 3, 0, 0));
+			panel_116.add(getBtnMarcarRecogidos());
+			panel_116.add(getLabel_79());
+			panel_116.add(getBtnMarcarEntregados());
+		}
+		return panel_116;
+	}
+	private JLabel getLabel_79() {
+		if (label_79 == null) {
+			label_79 = new JLabel("");
+		}
+		return label_79;
+	}
+	private JButton getBtnMarcarRecogidos() {
+		if (btnMarcarRecogidos == null) {
+			btnMarcarRecogidos = new JButton("Marcar recogidos en oficina");
+			btnMarcarRecogidos.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					CardLayout card = (CardLayout) contentPane.getLayout();
+					card.show(contentPane, "panelRecogidaPaqueteEnOficina");
+				}
+			});
+		}
+		return btnMarcarRecogidos;
+	}
+	private JLabel getLabel_80() {
+		if (label_80 == null) {
+			label_80 = new JLabel("");
+		}
+		return label_80;
+	}
+	private JPanel getPanel_117() {
+		if (panel_117 == null) {
+			panel_117 = new JPanel();
+			panel_117.setBackground(Color.WHITE);
+			panel_117.setLayout(new GridLayout(0, 3, 0, 0));
+			panel_117.add(getLabel_81());
+			panel_117.add(getBtnEnvioEntreProvincias());
+		}
+		return panel_117;
+	}
+	private JLabel getLabel_81() {
+		if (label_81 == null) {
+			label_81 = new JLabel("");
+		}
+		return label_81;
+	}
+	private JButton getBtnMarcarEntregados() {
+		if (btnMarcarEntregados == null) {
+			btnMarcarEntregados = new JButton("Marcar entregados en oficina");
+			btnMarcarEntregados.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					CardLayout card = (CardLayout) contentPane.getLayout();
+					card.show(contentPane, "panelEntregaPaqueteEnOficina");
+				}
+			});
+		}
+		return btnMarcarEntregados;
+	}
+	private JPanel getPanelRegistroDejadaYRecogidaPaquetes() throws SQLException {
+		if (panelRegistroDejadaYRecogidaPaquetes == null) {
+			panelRegistroDejadaYRecogidaPaquetes = new JPanel();
+			panelRegistroDejadaYRecogidaPaquetes.setLayout(new BorderLayout(0, 0));
+			panelRegistroDejadaYRecogidaPaquetes.add(getPanel_54());
+			panelRegistroDejadaYRecogidaPaquetes.add(getPanel_121(), BorderLayout.SOUTH);
+		}
+		return panelRegistroDejadaYRecogidaPaquetes;
+	}
+	private JPanel getPanel_54() throws SQLException {
+		if (panel_54 == null) {
+			panel_54 = new JPanel();
+			panel_54.setLayout(new GridLayout(0, 2, 0, 0));
+			panel_54.add(getPanel_55_1());
+			panel_54.add(getPanel_57_1());
+		}
+		return panel_54;
+	}
+	private JPanel getPanel_55_1() throws SQLException {
+		if (panel_55 == null) {
+			panel_55 = new JPanel();
+			panel_55.setLayout(new BorderLayout(0, 0));
+			panel_55.add(getLblRegistroEntregaDe(), BorderLayout.NORTH);
+			panel_55.add(getPanel_58_1(), BorderLayout.CENTER);
+		}
+		return panel_55;
+	}
+	private JPanel getPanel_57_1() throws SQLException {
+		if (panel_57 == null) {
+			panel_57 = new JPanel();
+			panel_57.setLayout(new BorderLayout(0, 0));
+			panel_57.add(getLblRegistroRecogidaPaquetes(), BorderLayout.NORTH);
+			panel_57.add(getTable_8(), BorderLayout.CENTER);
+			panel_57.add(getPanel_120(), BorderLayout.SOUTH);
+		}
+		return panel_57;
+	}
+	private JLabel getLblRegistroEntregaDe() {
+		if (lblRegistroEntregaDe == null) {
+			lblRegistroEntregaDe = new JLabel("Registro entrega de paquetes");
+			lblRegistroEntregaDe.setFont(new Font("Tahoma", Font.ITALIC, 18));
+		}
+		return lblRegistroEntregaDe;
+	}
+	private JLabel getLblRegistroRecogidaPaquetes() {
+		if (lblRegistroRecogidaPaquetes == null) {
+			lblRegistroRecogidaPaquetes = new JLabel("Registro recogida de paquetes");
+			lblRegistroRecogidaPaquetes.setFont(new Font("Tahoma", Font.ITALIC, 18));
+		}
+		return lblRegistroRecogidaPaquetes;
+	}
+	private JPanel getPanel_58_1() throws SQLException {
+		if (panel_58 == null) {
+			panel_58 = new JPanel();
+			panel_58.setLayout(new BorderLayout(0, 0));
+			panel_58.add(getPanel_118(), BorderLayout.NORTH);
+			panel_58.add(getTable_7(), BorderLayout.CENTER);
+			panel_58.add(getPanel_119(), BorderLayout.SOUTH);
+		}
+		return panel_58;
+	}
+	private JPanel getPanel_118() {
+		if (panel_118 == null) {
+			panel_118 = new JPanel();
+			panel_118.setLayout(new BorderLayout(0, 0));
+			panel_118.add(getLblLugarDeEntrega(), BorderLayout.WEST);
+			panel_118.add(getTextField_15(), BorderLayout.CENTER);
+		}
+		return panel_118;
+	}
+	private JLabel getLblLugarDeEntrega() {
+		if (lblLugarDeEntrega == null) {
+			lblLugarDeEntrega = new JLabel("Lugar de entrega: ");
+		}
+		return lblLugarDeEntrega;
+	}
+	private JTextField getTextField_15() {
+		if (textField_15 == null) {
+			textField_15 = new JTextField();
+			textField_15.setColumns(10);
+		}
+		return textField_15;
+	}
+	private JTable getTable_7() throws SQLException {
+		if (table_7 == null) {
+			modelRegistrarEntregados = new MyTableModel();
+			modelRegistrarEntregados.addColumn("id");
+			modelRegistrarEntregados.addColumn("receptor");
+			modelRegistrarEntregados.addColumn("lugarEntrega");
+			String[] x = {"id", "Receptor", "Lugar de entrega"};
+			modelRegistrarEntregados.addRow(x);
+			table_7 = new JTable(modelRegistrarEntregados);
+			actualizarModelRE();
+		}
+		return table_7;
+	}
+	
+	private void actualizarModelRE() throws SQLException {
+		removeModelContent(modelRegistrarEntregados);
+		String[] x = {"Id", "Receptor"};
+		modelRegistrarEntregados.addRow(x);
+		if(transportistaActual!=null)
+			addToModel(modelRegistrarEntregados, DatabaseManager.getEnviosPorEntregarDeTransportista(transportistaActual.getDNI()));
+		table_7.setModel(modelRegistrarEntregados);
+	}
+	
+	private JPanel getPanel_119() {
+		if (panel_119 == null) {
+			panel_119 = new JPanel();
+			panel_119.setLayout(new BorderLayout(0, 0));
+			panel_119.add(getBtnNewButton(), BorderLayout.EAST);
+			panel_119.add(getBtnActualizar_8(), BorderLayout.WEST);
+		}
+		return panel_119;
+	}
+	private JButton getBtnNewButton() {
+		if (btnNewButton == null) {
+			btnNewButton = new JButton("Registrar como entregados");
+			btnNewButton.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					int[] elegidos = table_7.getSelectedRows();
+					if(elegidos.length==0) {
+						JOptionPane.showMessageDialog(null,
+								"Debe elegir al menos un envio.");
+					}
+					else if(textField_15.getText().length()==0) {
+						JOptionPane.showMessageDialog(null,
+								"Debe incluir un lugar de entrega.");
+					}
+					else if(textField_15.getText().equalsIgnoreCase("Domicilio cliente")) {
+						for(int i : elegidos) {
+							Envio env = null;
+							String vehiculo = "";
+							int id = Integer.parseInt((String) modelRegistrarEntregados.getValueAt(i, 0));
+							try {
+								env = DatabaseManager.getEnvioById(id);
+								vehiculo = env.getVehiculo();
+								String lugarEntrega = env.getLugarEnvio();
+								env.setUbicacionActual(lugarEntrega);
+								env.setEstado("Entregado al Cliente");
+								env.setTransportista("");
+								env.setVehiculo("");
+								DatabaseManager.updateEstadoYTVEnvio(env);
+								DatabaseManager.añadirRegistro(new RegistroMovimiento(transportistaActual.getDNI(), vehiculo, env.getId(), env.getEstado()));
+							} catch (SQLException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
+							try {
+								actualizarModelRE();
+								
+							} catch (SQLException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
+						}
+					}
+					else if((textField_15.getText().contains("Oficina") || textField_15.getText().contains("Almacen")) && textField_15.getText().contains("-"))
+					{
+						String[] lugarActual = textField_15.getText().split("-");
+						System.out.println(lugarActual.length);
+						if(lugarActual.length!=3) {
+							JOptionPane.showMessageDialog(null,
+									"El lugar de entrega debe de seguir el formato: Tipo-Nombre-Provincia.");
+						}else if(!lugarActual[2].equals(transportistaActual.getProvincia())) {
+							JOptionPane.showMessageDialog(null,
+									"La provincia del edificio debe de ser la misma que la del transportista.");
+						}
+						else {
+							Envio env = null;
+							for(int i : elegidos) {
+								int id = Integer.parseInt((String) modelRegistrarEntregados.getValueAt(i, 0));
+								try {
+									env = DatabaseManager.getEnvioById(id);
+									env.setUbicacionActual(textField_15.getText());
+									env.setEstado("En " + lugarActual[0]);
+									DatabaseManager.updateEstadoYTVEnvio(env);
+									DatabaseManager.añadirRegistro(new RegistroMovimiento(transportistaActual.getDNI(), env.getVehiculo(), env.getId(), env.getEstado()));
+								} catch (SQLException e1) {
+									// TODO Auto-generated catch block
+									e1.printStackTrace();
+								}
+								
+							}
+							try {
+								actualizarModelRE();
+								
+							} catch (SQLException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
+						}
+					}
+					else {
+						JOptionPane.showMessageDialog(null,
+								"El lugar de entrega debe de seguir el formato: Tipo-Nombre-Provincia.");
+					}
+				}
+			});
+		}
+		return btnNewButton;
+	}
+	private JTable getTable_8() throws SQLException {
+		if (table_8 == null) {
+			modelRegistrarRecogidos = new MyTableModel();
+			modelRegistrarRecogidos.addColumn("id");
+			modelRegistrarRecogidos.addColumn("receptor");
+			modelRegistrarRecogidos.addColumn("lugarEntrega");
+			String[] x = {"id", "Receptor", "Lugar de entrega"};
+			modelRegistrarRecogidos.addRow(x);
+			table_8 = new JTable(modelRegistrarEntregados);
+			actualizarModelRR();
+		}
+		return table_8;
+	}
+	
+	private void actualizarModelRR() throws SQLException {
+		removeModelContent(modelRegistrarRecogidos);
+		String[] x = {"Id", "Receptor"};
+		modelRegistrarRecogidos.addRow(x);
+		if(transportistaActual!=null)
+			addToModel(modelRegistrarRecogidos, DatabaseManager.getEnviosPorRecogerDeTransportista(transportistaActual.getDNI()));
+		table_8.setModel(modelRegistrarRecogidos);
+	}
+	
+	private JPanel getPanel_120() {
+		if (panel_120 == null) {
+			panel_120 = new JPanel();
+			panel_120.setLayout(new BorderLayout(0, 0));
+			panel_120.add(getBtnRegistrarComoRecogidos(), BorderLayout.EAST);
+			panel_120.add(getBtnActualizar_7(), BorderLayout.WEST);
+		}
+		return panel_120;
+	}
+	private JPanel getPanel_121() {
+		if (panel_121 == null) {
+			panel_121 = new JPanel();
+			panel_121.setLayout(new BorderLayout(0, 0));
+			panel_121.add(getBtnVolver_9(), BorderLayout.EAST);
+		}
+		return panel_121;
+	}
+	private JButton getBtnVolver_9() {
+		if (btnVolver_9 == null) {
+			btnVolver_9 = new JButton("Volver");
+			btnVolver_9.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					
+				}
+			});
+		}
+		return btnVolver_9;
+	}
+	private JButton getBtnRegistrarComoRecogidos() {
+		if (btnRegistrarComoRecogidos == null) {
+			btnRegistrarComoRecogidos = new JButton("Registrar como recogidos");
+			btnRegistrarComoRecogidos.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					int[] elegidos = table_8.getSelectedRows();
+					if(elegidos.length==0) {
+						JOptionPane.showMessageDialog(null,
+								"Debe elegir al menos un envio.");
+					}
+					else {
+						for(int i : elegidos) {
+							int id = Integer.parseInt((String) modelRegistrarRecogidos.getValueAt(i, 0));
+							try {
+								Envio env = DatabaseManager.getEnvioById(id);
+								env.setUbicacionActual("");
+								env.setEstado("En Transporte");
+								env.setTransportista(transportistaActual.getDNI());
+								List<Vehiculo> v = DatabaseManager.getVehiculosDeProvincia(transportistaActual.getProvincia());
+								Vehiculo random = v.get((new Random()).nextInt(v.size()));
+								env.setVehiculo(random.getMatricula());
+								DatabaseManager.updateEstadoYTVEnvio(env);
+								DatabaseManager.añadirRegistro(new RegistroMovimiento(transportistaActual.getDNI(), env.getVehiculo(), env.getId(), env.getEstado()));
+							} catch (SQLException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
+							
+						}
+						try {
+							actualizarModelRR();
+							
+						} catch (SQLException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+					}
+				}
+			});
+		}
+		return btnRegistrarComoRecogidos;
+	}
+	private JPanel getPanel_122() {
+		if (panel_122 == null) {
+			panel_122 = new JPanel();
+			panel_122.setLayout(null);
+			panel_122.add(getLabel_47_1());
+			panel_122.add(getComboBox_4());
+		}
+		return panel_122;
+	}
+	private JLabel getLabel_47_1() {
+		if (lblProvinciaDestinatario_1 == null) {
+			lblProvinciaDestinatario_1 = new JLabel("Provincia destinatario:");
+			lblProvinciaDestinatario_1.setBounds(10, 11, 122, 31);
+		}
+		return lblProvinciaDestinatario_1;
+	}
+	private JComboBox<String> getComboBox_4() {
+		if (comboBox_4 == null) {
+			comboBox_4 = new JComboBox<String>();
+			comboBox_4.setBounds(142, 16, 167, 20);
+			comboBox_4.addItem("Álava");
+			comboBox_4.addItem("Albacete");
+			comboBox_4.addItem("Alicante");
+			comboBox_4.addItem("Almería");
+			comboBox_4.addItem("Asturias");
+			comboBox_4.addItem("Avila");
+			comboBox_4.addItem("Badajoz");
+			comboBox_4.addItem("Barcelona");
+			comboBox_4.addItem("Burgos");
+			comboBox_4.addItem("Cáceres");
+			comboBox_4.addItem("Cádiz");
+			comboBox_4.addItem("Cantabria");
+			comboBox_4.addItem("Castellón");
+			comboBox_4.addItem("Ciudad Real");
+			comboBox_4.addItem("Córdoba");
+			comboBox_4.addItem("Cuenca");
+			comboBox_4.addItem("Girona");
+			comboBox_4.addItem("Granada");
+			comboBox_4.addItem("Guadalajara");
+			comboBox_4.addItem("Guipúzcoa");
+			comboBox_4.addItem("Huelva");
+			comboBox_4.addItem("Huesca");
+			comboBox_4.addItem("Islas Baleares");
+			comboBox_4.addItem("Jaén");
+			comboBox_4.addItem("La Coruña");
+			comboBox_4.addItem("La Rioja");
+			comboBox_4.addItem("Las Palmas");
+			comboBox_4.addItem("León");
+			comboBox_4.addItem("Lérida");
+			comboBox_4.addItem("Lugo");
+			comboBox_4.addItem("Madrid");
+			comboBox_4.addItem("Málaga");
+			comboBox_4.addItem("Murcia");
+			comboBox_4.addItem("Navarra");
+			comboBox_4.addItem("Orense");
+			comboBox_4.addItem("Palencia");
+			comboBox_4.addItem("Pontevedra");
+			comboBox_4.addItem("Salamanca");
+			comboBox_4.addItem("Segovia");
+			comboBox_4.addItem("Sevilla");
+			comboBox_4.addItem("Soria");
+			comboBox_4.addItem("Tarragona");
+			comboBox_4.addItem("Tenerife");
+			comboBox_4.addItem("Teruel");
+			comboBox_4.addItem("Toledo");
+			comboBox_4.addItem("Valencia");
+			comboBox_4.addItem("Valladolid");
+			comboBox_4.addItem("Vizcaya");
+			comboBox_4.addItem("Zamora");
+			comboBox_4.addItem("Zaragoza");
+		}
+		return comboBox_4;
+	}
+	private JPanel getPanel_123() {
+		if (panel_123 == null) {
+			panel_123 = new JPanel();
+			panel_123.setLayout(null);
+			panel_123.add(getLabel_47());
+			panel_123.add(getTextField_16());
+		}
+		return panel_123;
+	}
+	private JLabel getLabel_47() {
+		if (label_47 == null) {
+			label_47 = new JLabel("Direcci\u00F3n destinatario:");
+			label_47.setBounds(10, 11, 111, 31);
+		}
+		return label_47;
+	}
+	private JTextField getTextField_16() {
+		if (textField_16 == null) {
+			textField_16 = new JTextField();
+			textField_16.setEnabled(false);
+			textField_16.setColumns(10);
+			textField_16.setBounds(130, 16, 179, 20);
+		}
+		return textField_16;
+	}
+	private JButton getBtnRegistrarCambiosEnvios() {
+		if (btnRegistrarCambiosEnvios == null) {
+			btnRegistrarCambiosEnvios = new JButton("Registrar cambios envios");
+			btnRegistrarCambiosEnvios.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					CardLayout card = (CardLayout) contentPane.getLayout();
+					card.show(contentPane, "panelRegistroDejadaYRecogidaPaquetes");
+				}
+			});
+		}
+		return btnRegistrarCambiosEnvios;
+	}
+	private JButton getBtnActualizar_7() {
+		if (btnActualizar_7 == null) {
+			btnActualizar_7 = new JButton("Actualizar");
+			btnActualizar_7.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					try {
+						actualizarModelRR();
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+			});
+		}
+		return btnActualizar_7;
+	}
+	private JButton getBtnActualizar_8() {
+		if (btnActualizar_8 == null) {
+			btnActualizar_8 = new JButton("Actualizar");
+			btnActualizar_8.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					try {
+						actualizarModelRE();
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+			});
+		}
+		return btnActualizar_8;
+	}
+	private JPanel getPanelEnvioProvinciaReceptor() throws SQLException {
+		if (panelEnvioProvinciaReceptor == null) {
+			panelEnvioProvinciaReceptor = new JPanel();
+			panelEnvioProvinciaReceptor.setLayout(new BorderLayout(0, 0));
+			panelEnvioProvinciaReceptor.add(getLblPedidosPendientesDe(), BorderLayout.NORTH);
+			panelEnvioProvinciaReceptor.add(getTable_9(), BorderLayout.CENTER);
+			panelEnvioProvinciaReceptor.add(getPanel_126(), BorderLayout.SOUTH);
+		}
+		return panelEnvioProvinciaReceptor;
+	}
+	private JPanel getPanel_124() {
+		if (panel_124 == null) {
+			panel_124 = new JPanel();
+			panel_124.setLayout(new GridLayout(3, 1, 0, 0));
+			panel_124.add(getLabel_59());
+			panel_124.add(getPanel_125());
+		}
+		return panel_124;
+	}
+	private JLabel getLabel_59() {
+		if (label_59 == null) {
+			label_59 = new JLabel("");
+		}
+		return label_59;
+	}
+	private JPanel getPanel_125() {
+		if (panel_125 == null) {
+			panel_125 = new JPanel();
+			panel_125.setLayout(new GridLayout(0, 2, 0, 0));
+			panel_125.add(getLabel_74());
+			panel_125.add(getTextField_17());
+		}
+		return panel_125;
+	}
+	private JLabel getLabel_74() {
+		if (label_74 == null) {
+			label_74 = new JLabel("Lugar entrega:");
+		}
+		return label_74;
+	}
+	private JTextField getTextField_17() {
+		if (textField_17 == null) {
+			textField_17 = new JTextField();
+			textField_17.setColumns(10);
+		}
+		return textField_17;
+	}
+	private JLabel getLblPedidosPendientesDe() {
+		if (lblPedidosPendientesDe == null) {
+			lblPedidosPendientesDe = new JLabel("Pedidos pendientes de env\u00EDo:");
+			lblPedidosPendientesDe.setFont(new Font("Tahoma", Font.ITALIC, 18));
+		}
+		return lblPedidosPendientesDe;
+	}
+	private JTable getTable_9() throws SQLException {
+		if (table_9 == null) {
+			modelPedidosEntreProvincias = new MyTableModel();
+			modelPedidosEntreProvincias.addColumn("id");
+			modelPedidosEntreProvincias.addColumn("provinciaRecogida");
+			modelPedidosEntreProvincias.addColumn("provinciaEntrega");
+			String[] x = {"Id", "Provincia Recogida", "Provincia entrega"};
+			modelPedidosEntreProvincias.addRow(x);
+			table_9 = new JTable(modelPedidosEntreProvincias);
+			actualizarModelPEE();
+		}
+		return table_9;
+	}
+	private void actualizarModelPEE() throws SQLException {
+		removeModelContent(modelPedidosEntreProvincias);
+		String[] x = {"Id", "Provincia Recogida", "Provincia entrega"};
+		modelPedidosEntreProvincias.addRow(x);
+		addToModel(modelPedidosEntreProvincias, DatabaseManager.getEnviosEntreProvincias());
+		table_8.setModel(modelPedidosEntreProvincias);
+	}
+	
+	private JPanel getPanel_126() {
+		if (panel_126 == null) {
+			panel_126 = new JPanel();
+			panel_126.setLayout(new BorderLayout(0, 0));
+			panel_126.add(getBtnEnviarAProvincia(), BorderLayout.WEST);
+			panel_126.add(getBtnVolver_10(), BorderLayout.EAST);
+		}
+		return panel_126;
+	}
+	private JButton getBtnEnviarAProvincia() {
+		if (btnEnviarAProvincia == null) {
+			btnEnviarAProvincia = new JButton("Enviar a provincia destinatario");
+		}
+		return btnEnviarAProvincia;
+	}
+	private JButton getBtnVolver_10() {
+		if (btnVolver_10 == null) {
+			btnVolver_10 = new JButton("Volver");
+		}
+		return btnVolver_10;
+	}
+	private JButton getBtnEnvioEntreProvincias() {
+		if (btnEnvioEntreProvincias == null) {
+			btnEnvioEntreProvincias = new JButton("Envio entre provincias");
+			btnEnvioEntreProvincias.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					CardLayout card = (CardLayout) contentPane.getLayout();
+					card.show(contentPane, "panelEnvioProvinciaReceptor");
+				}
+			});
+		}
+		return btnEnvioEntreProvincias;
 	}
 }

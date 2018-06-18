@@ -13,10 +13,11 @@ public class Envio {
 	private String lugarRecogida;
 	private double precio;
 	private Integer id;
-	private String estado;	//CREADO-ESPERA-VYT, ESPERA-ENVIO, EN-CAMINO, FALLO-UNO, FALLO-DOS, FALLO-TRES, ENTREGADO-DOMICILIO, ENTREGADO-OFICINA
+	private String estado;	//RECOGIDA A DOMICILIO, EN OFICINA, EN ALMACEN, EN TRANSPORTE, ENTREGADO AL CLIENTE
+	private String ubicacionActual;
 	
 	public Envio(boolean busquedaADomicilio, boolean envioADomicilio, String receptor, String emisor, String transportista, String vehiculo,
-			String provinciaDestino, String provinciaOrigen, String lugarEnvio, String lugarRecogida, String estado) {
+			String provinciaDestino, String provinciaOrigen, String lugarEnvio, String lugarRecogida, String estado, String ubicacionActual) {
 		super();
 		this.busquedaADomicilio = busquedaADomicilio;
 		this.envioADomicilio = envioADomicilio;
@@ -27,12 +28,13 @@ public class Envio {
 		this.provinciaEnvio = provinciaDestino;
 		this.provinciaRecogida = provinciaOrigen;
 		this.lugarRecogida = lugarRecogida;
-		this.setLugarEnvio(lugarEnvio);
+		this.lugarEnvio = lugarEnvio;
 		this.setEstado(estado);
+		this.setUbicacionActual(ubicacionActual);
 	}
 	public Envio(boolean bad, boolean ead, String receptordni, String emisordni, String transportistadni,
 			String vehiculomatricula, String provinciaenvio, String provinciarecogida, String lugarenvio,
-			String lugarRecogida, String estado, Double precio) {
+			String lugarRecogida, String estado, Double precio, String ubicacionActual) {
 		this.busquedaADomicilio = bad;
 		this.envioADomicilio = ead;
 		this.receptor = receptordni;
@@ -45,9 +47,10 @@ public class Envio {
 		this.estado = estado;
 		this.precio = precio;
 		this.lugarRecogida = lugarRecogida;
+		this.setUbicacionActual(ubicacionActual);
 	}
 	public Envio(Integer id, boolean busquedaADomicilio, boolean envioADomicilio, String receptor, String emisor, String transportista, String vehiculo,
-			String provinciaDestino, String provinciaOrigen, String lugarEnvio, String lugarRecogida, String estado, Double precio) {
+			String provinciaDestino, String provinciaOrigen, String lugarEnvio, String lugarRecogida, String estado, Double precio, String ubicacionActual) {
 		super();
 		this.id = id;
 		this.busquedaADomicilio = busquedaADomicilio;
@@ -58,10 +61,11 @@ public class Envio {
 		this.vehiculo = vehiculo;
 		this.provinciaEnvio = provinciaDestino;
 		this.provinciaRecogida = provinciaOrigen;
-		this.setLugarEnvio(lugarEnvio);
+		this.lugarEnvio = lugarEnvio;
 		this.setEstado(estado);
 		this.precio = precio;
 		this.lugarRecogida = lugarRecogida;
+		this.setUbicacionActual(ubicacionActual);
 	}
 	public String getReceptor() {
 		return receptor;
@@ -135,9 +139,6 @@ public class Envio {
 	public String getLugarEnvio() {
 		return lugarEnvio;
 	}
-	public void setLugarEnvio(String lugarEnvio) {
-		this.lugarEnvio = lugarEnvio;
-	}
 	public String getEstado() {
 		return estado;
 	}
@@ -153,7 +154,10 @@ public class Envio {
 	public String getLugarRecogida() {
 		return lugarRecogida;
 	}
-	public void setLugarRecogida(String lugarRecogida) {
-		this.lugarRecogida = lugarRecogida;
+	public String getUbicacionActual() {
+		return ubicacionActual;
+	}
+	public void setUbicacionActual(String ubicacionActual) {
+		this.ubicacionActual = ubicacionActual;
 	}
 }

@@ -1,10 +1,13 @@
 package src;
 
 import java.sql.Connection;
+import java.util.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,7 +52,7 @@ public class DatabaseManager {
 		} catch(SQLException e) {
 			throw new SQLException(e);
 		}finally {
-//			pst.close();
+			pst.close();
 		}
 	}
 	
@@ -126,22 +129,20 @@ public class DatabaseManager {
 		ResultSet rs = null;
 		try {
 			getConnection();
-			pst = con.prepareStatement("select dni, nombre, contrasenna, provincia, lugarrecogida, lugarentrega "
+			pst = con.prepareStatement("select dni, nombre, contrasenna, provincia "
 					+ "from transportistas where dni = ? and contrasenna = ?");
 			pst.setString(1, dni);
 			pst.setString(2, password);
 			rs = pst.executeQuery();
 			String nombre, contrasenna, dniObtenido,
-			provincia, lugarrecogida, lugarentrega;
+			provincia;
 			Transportista t = null;
 			if(rs.next()) {
 				nombre = rs.getString(2);
 				dniObtenido = rs.getString(1);
 				contrasenna = rs.getString(3);
 				provincia = rs.getString(4);
-				lugarrecogida = rs.getString(5);
-				lugarentrega = rs.getString(6);
-				t = new Transportista(contrasenna, dniObtenido, nombre, provincia, lugarrecogida, lugarentrega);
+				t = new Transportista(contrasenna, dniObtenido, nombre, provincia);
 			}
 			return t;
 		} catch(SQLException e) {
@@ -187,11 +188,11 @@ public class DatabaseManager {
 			getConnection();
 			pst = con.prepareStatement("select busquedaadomicilio, envioadomicilio, receptordni, "
 					+ "emisordni, transportistadni, vehiculomatricula, provinciadestino, provinciaorigen, "
-					+ "lugarenvio, estado, precio, lugarrecogida from envios where id = ?");
+					+ "lugarenvio, estado, precio, lugarrecogida, localizacionactual from envios where id = ?");
 			pst.setInt(1, id);
 			rs = pst.executeQuery();
 			String busquedaadomicilio, envioadomicilio, receptordni, emisordni, transportistadni,
-			vehiculomatricula, provinciaenvio, provinciarecogida, lugarenvio, lugarrecogida, estado;
+			vehiculomatricula, provinciaenvio, provinciarecogida, lugarenvio, lugarrecogida, estado, localizacionactual;
 			Double precio;
 			Envio e = null;
 			if(rs.next()) {
@@ -207,6 +208,7 @@ public class DatabaseManager {
 				estado = rs.getString(10);
 				precio = rs.getDouble(11);
 				lugarrecogida = rs.getString(12);
+				localizacionactual = rs.getString(13);
 				boolean bad = false;
 				boolean ead = false;
 				if(busquedaadomicilio.equals("Si")) {
@@ -217,7 +219,7 @@ public class DatabaseManager {
 				}
 				e = new Envio(id, bad, ead, receptordni, emisordni, 
 						transportistadni, vehiculomatricula, provinciaenvio, provinciarecogida,
-						lugarenvio, lugarrecogida, estado, precio);
+						lugarenvio, lugarrecogida, estado, precio, localizacionactual);
 			}
 			return e;
 		} catch(SQLException e) {
@@ -239,6 +241,7 @@ public class DatabaseManager {
 		String transportistaDNI = envio.getTransportista();
 		String vehiculoMatricula = envio.getVehiculo();
 		String lugarRecogida = envio.getLugarRecogida();
+		String localizacionactual = envio.getUbicacionActual();
 		boolean bad = envio.isBusquedaADomicilio();
 		boolean ead = envio.isEnvioADomicilio();
 		String badS = "No";
@@ -252,7 +255,7 @@ public class DatabaseManager {
 		PreparedStatement pst = null;
 		try {
 			getConnection();
-			pst = con.prepareStatement("insert into envios values (?,?,?,?,?,?,?,?,?,?,?,?,?)");
+			pst = con.prepareStatement("insert into envios values (?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
 			pst.setInt(1, maxId()+1);
 			pst.setString(2, badS);
 			pst.setString(3, eadS);
@@ -266,6 +269,7 @@ public class DatabaseManager {
 			pst.setString(11, estado);
 			pst.setDouble(12, precio);
 			pst.setString(13, lugarRecogida);
+			pst.setString(14, localizacionactual);
 			pst.execute();
 		} catch(SQLException e) {
 			throw new SQLException(e);
@@ -350,35 +354,21 @@ public class DatabaseManager {
 		return result;
 	}
 
-	public static List<Transportista> getTransportistasLibres(String provincia) throws SQLException {
+	public static List<Transportista> getTransportistasProvincia(String provincia) throws SQLException {
 		PreparedStatement pst = null;
 		ResultSet rs = null;
 		List<Transportista> result = new ArrayList<Transportista>();
 		getConnection();
-		pst = con.prepareStatement("select dni, nombre, contrasenna, provincia, lugarrecogida, lugarentrega "
+		pst = con.prepareStatement("select dni, nombre, contrasenna, provincia "
 				+ "from transportistas where provincia = ?");
 		pst.setString(1, provincia);
 		rs=pst.executeQuery();
 		while(rs.next()) {
-			System.err.println("paso " + rs.getString(5) + " " + rs.getString(6));
 			Transportista t = new Transportista(rs.getString(3), rs.getString(1),
 					rs.getString(2), rs.getString(4));
-			if(rs.getString(5) == null && rs.getString(6) == null) {
-				result.add(t);
-			}
-			
+			result.add(t);
 		}
 		return result;
-	}
-	
-	public static void updateDestinosTransportista(String lugarRecogida, String lugarEnvio, String dni) throws SQLException {
-		PreparedStatement pst = null;
-		getConnection();
-		pst = con.prepareStatement("update transportistas set lugarrecogida = ?, lugarentrega = ? where dni = ?");
-		pst.setString(1, lugarRecogida);
-		pst.setString(2, lugarEnvio);
-		pst.setString(3, dni);
-		pst.execute();
 	}
 
 	public static List<Vehiculo> getVehiculosDeProvincia(String provincia) throws SQLException {
@@ -406,11 +396,11 @@ public class DatabaseManager {
 			getConnection();
 			pst = con.prepareStatement("select id, busquedaadomicilio, envioadomicilio, receptordni, "
 					+ "emisordni, transportistadni, vehiculomatricula, provinciadestino, provinciaorigen, "
-					+ "lugarenvio, estado, precio, lugarrecogida from envios where transportistadni = ?");
+					+ "lugarenvio, estado, precio, lugarrecogida, localizacionactual from envios where transportistadni = ?");
 			pst.setString(1, dniTransportista);
 			rs = pst.executeQuery();
 			String busquedaadomicilio, envioadomicilio, receptordni, emisordni, transportistadni,
-			vehiculomatricula, provinciadestino, provinciaorigen, lugarenvio, lugarrecogida, estado;
+			vehiculomatricula, provinciadestino, provinciaorigen, lugarenvio, lugarrecogida, localizacionactual, estado;
 			Double precio;
 			Integer id;
 			Envio e = null;
@@ -428,6 +418,7 @@ public class DatabaseManager {
 				estado = rs.getString(11);
 				precio = rs.getDouble(12);
 				lugarrecogida = rs.getString(13);
+				localizacionactual = rs.getString(14);
 				boolean bad = false;
 				boolean ead = false;
 				if(busquedaadomicilio.equals("Si")) {
@@ -438,7 +429,7 @@ public class DatabaseManager {
 				}
 				e = new Envio(id, bad, ead, receptordni, emisordni, 
 						transportistadni, vehiculomatricula, provinciadestino, provinciaorigen,
-						lugarenvio, lugarrecogida, estado, precio);
+						lugarenvio, lugarrecogida, estado, precio, localizacionactual);
 				envios.add(e);
 			}
 			return envios;
@@ -483,11 +474,12 @@ public class DatabaseManager {
 		String transportista = envio.getTransportista();
 		String vehiculo = envio.getVehiculo();
 		getConnection();
-		pst = con.prepareStatement("update envios set estado = ?, transportistadni = ?, vehiculomatricula = ? where id = ?");
+		pst = con.prepareStatement("update envios set estado = ?, transportistadni = ?, vehiculomatricula = ?, localizacionactual = ? where id = ?");
 		pst.setString(1, estado);
 		pst.setString(2, transportista);
 		pst.setString(3, vehiculo);
-		pst.setInt(4, id);
+		pst.setString(4, envio.getUbicacionActual());
+		pst.setInt(5, id);
 		pst.execute();
 		
 	}
@@ -524,7 +516,7 @@ public class DatabaseManager {
 		getConnection();
 		pst = con.prepareStatement("select id, busquedaadomicilio, envioadomicilio, receptordni,"
 				+ " emisordni, transportistadni, provinciadestino, provinciaorigen, lugarenvio, "
-				+ "estado, precio, lugarrecogida from envios "
+				+ "estado, precio, lugarrecogida, localizacionactual from envios "
 				+ "where vehiculomatricula = ?");
 		pst.setString(1, matriculaElegida);
 		rs = pst.executeQuery();
@@ -541,7 +533,7 @@ public class DatabaseManager {
 //			Integer id, boolean busquedaADomicilio, boolean envioADomicilio, String receptor, String emisor, String transportista, String vehiculo,
 //			String provinciaDestino, String provinciaOrigen, String lugarEnvio, String lugarRecogida, String estado, Double precio
 			e = new Envio(rs.getInt(1), bad, ead, rs.getString(4), rs.getString(5), rs.getString(6), matriculaElegida, rs.getString(7), rs.getString(8),
-					rs.getString(9), rs.getString(12), rs.getString(10), rs.getDouble(11));
+					rs.getString(9), rs.getString(12), rs.getString(10), rs.getDouble(11), rs.getString(13));
 			
 		}
 		return e;
@@ -695,7 +687,7 @@ public class DatabaseManager {
 				numfallos = rst.getInt(1);
 			}
 			if(numfallos>0) {
-				if(estado.equals("Entregado-Edificio")) {
+				if(estado.equals("En Oficina") || estado.equals("En Almacen")) {
 					numfallos++;
 				}
 				String[] x = {String.valueOf(idEnvio), rs.getString(2), rs.getString(3), String.valueOf(numfallos), estado, rs.getString(5)};
@@ -703,6 +695,169 @@ public class DatabaseManager {
 			}
 		}
 		return sol;
+	}
+	
+	public static List<String[]> getEnviosARecoger() throws SQLException {
+		PreparedStatement pst = null;
+		ResultSet rs = null;
+		List<String[]> result = new ArrayList<String[]>();
+		try {
+			getConnection();
+			pst = con.prepareStatement("select id, receptordni from envios where estado = 'En Oficina' and transportistadni = '' and envioadomicilio='No' "
+					+ "or estado = 'En Almacen' and transportistadni = '' and envioadomicilio='No'");
+			rs = pst.executeQuery();
+			while (rs.next()) {
+				Integer id = rs.getInt(1);
+				String dniR = rs.getString(2);
+				String[] in = {String.valueOf(id), dniR};
+				result.add(in);
+			}
+			return result;
+		}catch(SQLException e) {
+			throw new SQLException(e);
+		}finally {
+			pst.close();
+		}
+	}
+	
+	public static List<String[]> getEnviosAEntregar() throws SQLException {
+		PreparedStatement pst = null;
+		ResultSet rs = null;
+		List<String[]> result = new ArrayList<String[]>();
+		try {
+			getConnection();
+			pst = con.prepareStatement("select id, emisordni from envios where estado = '' and busquedaadomicilio='No'");
+			rs = pst.executeQuery();
+			while (rs.next()) {
+				Integer id = rs.getInt(1);
+				String dniE = rs.getString(2);
+				String[] in = {String.valueOf(id), dniE};
+				result.add(in);
+			}
+			return result;
+		}catch(SQLException e) {
+			throw new SQLException(e);
+		}finally {
+			pst.close();
+		}
+	}
+	
+	public static boolean isEntregaADomicilio(int id) throws SQLException {
+		PreparedStatement pst = null;
+		ResultSet rs = null;
+		boolean sol = false;
+		try {
+			getConnection();
+			pst = con.prepareStatement("select envioadomicilio from envios where id=?");
+			pst.setInt(1, id);
+			rs = pst.executeQuery();
+			while (rs.next()) {
+				String envioADomicilio = rs.getString(1);
+				if(envioADomicilio.equals("Si")) {
+					sol = true;
+				}
+			}
+			return sol;
+		}catch(SQLException e) {
+			throw new SQLException(e);
+		}finally {
+			pst.close();
+		}
+	}
+
+	public static List<String[]> getEnviosPorRecogerDeTransportista(String dni) throws SQLException {
+		PreparedStatement pst = null;
+		ResultSet rs = null;
+		List<String[]> result = new ArrayList<String[]>();
+		try {
+			getConnection();
+			pst = con.prepareStatement("select id, receptordni, lugarenvio from envios where estado='Recogida a domicilio' and TRANSPORTISTADNI = ? or estado = 'En Oficina' and TRANSPORTISTADNI = ?"
+					+ " or estado = 'En Almacen' and TRANSPORTISTADNI = ?");
+			pst.setString(1, dni);
+			rs = pst.executeQuery();
+			while (rs.next()) {
+				Integer id = rs.getInt(1);
+				String dniE = rs.getString(2);
+				String lugarEnvio = rs.getString(3);
+				String[] in = {String.valueOf(id), dniE, lugarEnvio};
+				result.add(in);
+			}
+			return result;
+		}catch(SQLException e) {
+			throw new SQLException(e);
+		}finally {
+			pst.close();
+		}
+	}
+
+	public static List<String[]> getEnviosPorEntregarDeTransportista(String dni) throws SQLException {
+		PreparedStatement pst = null;
+		ResultSet rs = null;
+		List<String[]> result = new ArrayList<String[]>();
+		try {
+			getConnection();
+			pst = con.prepareStatement("select id, receptordni, lugarenvio from envios where estado='En Transporte' and TRANSPORTISTADNI = ?");
+			pst.setString(1, dni);
+			rs = pst.executeQuery();
+			while (rs.next()) {
+				Integer id = rs.getInt(1);
+				String dniR = rs.getString(2);
+				String lugarEnvio = rs.getString(3);
+				String[] in = {String.valueOf(id), dniR, lugarEnvio};
+				result.add(in);
+			}
+			return result;
+		}catch(SQLException e) {
+			throw new SQLException(e);
+		}finally {
+			pst.close();
+		}
+	}
+
+	public static void añadirRegistro(RegistroMovimiento registroMovimiento) throws SQLException {
+		PreparedStatement pst = null;
+		try {
+			getConnection();
+			pst = con.prepareStatement("insert into registros values (?, ?, ?, ?, ?)");
+			pst.setString(1, registroMovimiento.getDniTransportista());
+			pst.setString(2, registroMovimiento.getVehiculo());
+			pst.setInt(3, registroMovimiento.getIdEnvio());
+			pst.setString(4, registroMovimiento.getEstadoActual());
+			DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+			Date date = new Date();
+			java.sql.Date sqlDate = new java.sql.Date(date.getTime());
+			pst.setDate(5, sqlDate);
+			pst.execute();
+		} catch(SQLException e) {
+			throw new SQLException(e);
+		}finally {
+//			pst.close();
+		}
+		
+	}
+
+	public static List<String[]> getEnviosEntreProvincias() throws SQLException {
+		PreparedStatement pst = null;
+		ResultSet rs = null;
+		List<String[]> result = new ArrayList<String[]>();
+		try {
+			getConnection();
+			pst = con.prepareStatement("select id, provinciaorigen, provinciadestino from envios where provinciaorigen<>provinciadestino and estado='En Oficina' or "
+					+ "provinciaorigen!=provinciadestino and estado='En Almacen'");
+			rs = pst.executeQuery();
+			while (rs.next()) {
+				Integer id = rs.getInt(1);
+				String provinciaEmisor = rs.getString(2);
+				String provinciaReceptor = rs.getString(3);
+				String[] in = {String.valueOf(id), provinciaEmisor, provinciaReceptor};
+				result.add(in);
+			}
+			return result;
+		}catch(SQLException e) {
+			throw new SQLException(e);
+		}finally {
+//			pst.close();
+		}
 	}
 }
 	
