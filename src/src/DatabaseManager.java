@@ -315,7 +315,7 @@ public class DatabaseManager {
 	public static void modifyEnvioById(String envioADomicilio, String lugarEnvio, Integer id) throws SQLException {
 		PreparedStatement pst = null;
 		getConnection();
-		pst = con.prepareStatement("update envios set envioadomicilio = ?, lugarenvio = ? from envios where id = ?");
+		pst = con.prepareStatement("update envios set envioadomicilio = ?, lugarenvio = ? where id = ?");
 		pst.setString(1, envioADomicilio);
 		pst.setString(2, lugarEnvio);
 		pst.setInt(3, id);
@@ -325,7 +325,7 @@ public class DatabaseManager {
 	public static void updatePrecioEnvio(Integer id, Double precioNuevo) throws SQLException {
 		PreparedStatement pst = null;
 		getConnection();
-		pst = con.prepareStatement("update envios set precio = ? from envios where id = ?");
+		pst = con.prepareStatement("update envios set precio = ? where id = ?");
 		pst.setDouble(1, precioNuevo);
 		pst.setInt(2, id);
 		pst.execute();		
@@ -632,12 +632,27 @@ public class DatabaseManager {
 	public static void addFallo(Fallo f) throws SQLException {
 		PreparedStatement pst = null;
 		getConnection();
-		pst = con.prepareStatement("insert into fallosentregas values(?, ?, ?, ?, ?)");
+		pst = con.prepareStatement("insert into fallosentregas values(?, ?, ?, ?, ?, ?, ?)");
 		pst.setInt(1, f.getId());
 		pst.setString(2, f.getReceptorDni());
 		pst.setString(3, f.getLugarEntrega());
 		pst.setString(4, f.getRazon());
 		pst.setString(5, f.getDniTransportista());
+		pst.setInt(6, f.getNumeroFallos());
+		pst.setDate(7, f.getProximaEntrega());
+		pst.execute();
+	}
+	
+	public static void updateFallo(Fallo f) throws SQLException {
+		PreparedStatement pst = null;
+		getConnection();
+		pst = con.prepareStatement("update fallosentregas set lugarentrega=?, "
+				+ "razon = ?, numerofallos= ?, fechaproximaentrega = ? where id = ?");
+		pst.setString(1, f.getLugarEntrega());
+		pst.setString(2, f.getRazon());
+		pst.setInt(3, f.getNumeroFallos());
+		pst.setDate(4, f.getProximaEntrega());
+		pst.setInt(5, f.getId());
 		pst.execute();
 	}
 	
@@ -654,59 +669,14 @@ public class DatabaseManager {
 		return sol;
 	}
 	
-	public static List<String[]> getFallos() throws SQLException{
-		PreparedStatement pst = null;
-		getConnection();
-		List<String[]> sol = new ArrayList<String[]>();
-		pst = con.prepareStatement("select id, receptordni, estado from fallosentregas");
-		ResultSet rs = pst.executeQuery();
-		while(rs.next()) {
-			String[] s = {Integer.toString(rs.getInt(1)), rs.getString(2), rs.getString(3)};
-			sol.add(s);
-		}
-		return sol;
-	}
-
-	public static List<String[]> getEnviosFallidosDeCliente(String dni) throws SQLException {
-		PreparedStatement pstE = null; //pst cliente emisor
-		PreparedStatement pstR = null; //pst cliente receptor
-		getConnection();
-		List<String[]> sol = new ArrayList<String[]>();
-		pstE = con.prepareStatement("select id, emisordni, receptordni, estado, lugarrecogida from envios where emisordni = ?");
-		pstE.setString(1, dni);
-		pstR = con.prepareStatement("select id, emisordni, receptordni, estado, lugarrecogida from envios where receptordni = ?");
-		pstR.setString(1, dni);
-		ResultSet rs = null;
-		rs = pstE.executeQuery();
-		while (rs.next()) {
-			int numfallos = 0;
-			int idEnvio = rs.getInt(1);
-			String estado = rs.getString(4);
-			PreparedStatement pstFallos = con.prepareStatement("select count(id) from fallosentregas where id = ?");
-			pstFallos.setInt(1, idEnvio);
-			ResultSet rst = pstFallos.executeQuery();
-			if(rst.next()) {
-				numfallos = rst.getInt(1);
-			}
-			if(numfallos>0) {
-				if(estado.equals("En Oficina") || estado.equals("En Almacen")) {
-					numfallos++;
-				}
-				String[] x = {String.valueOf(idEnvio), rs.getString(2), rs.getString(3), String.valueOf(numfallos), estado, rs.getString(5)};
-				sol.add(x);
-			}
-		}
-		return sol;
-	}
-	
 	public static List<String[]> getEnviosARecoger() throws SQLException {
 		PreparedStatement pst = null;
 		ResultSet rs = null;
 		List<String[]> result = new ArrayList<String[]>();
 		try {
 			getConnection();
-			pst = con.prepareStatement("select id, receptordni from envios where estado = 'En Oficina' and transportistadni = '' and envioadomicilio='No' "
-					+ "or estado = 'En Almacen' and transportistadni = '' and envioadomicilio='No'");
+			pst = con.prepareStatement("select id, receptordni from envios where estado = 'En Oficina' and transportistadni = '' "
+					+ "or estado = 'En Almacen' and transportistadni = ''");
 			rs = pst.executeQuery();
 			while (rs.next()) {
 				Integer id = rs.getInt(1);
@@ -776,6 +746,8 @@ public class DatabaseManager {
 			pst = con.prepareStatement("select id, receptordni, lugarenvio from envios where estado='Recogida a domicilio' and TRANSPORTISTADNI = ? or estado = 'En Oficina' and TRANSPORTISTADNI = ?"
 					+ " or estado = 'En Almacen' and TRANSPORTISTADNI = ?");
 			pst.setString(1, dni);
+			pst.setString(2, dni);
+			pst.setString(3, dni);
 			rs = pst.executeQuery();
 			while (rs.next()) {
 				Integer id = rs.getInt(1);
@@ -868,7 +840,7 @@ public class DatabaseManager {
 		List<String[]> sol = new ArrayList<String[]>();
 		pst = con.prepareStatement("select idenvio, transportistadni, vehiculomatricula, ubicacionactual, fecha from registros");
 		ResultSet rs = pst.executeQuery();
-		DateFormat df = new SimpleDateFormat("yyyy-mm-dd");
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 		while(rs.next()) {
 			String[] s = {Integer.toString(rs.getInt(1)), rs.getString(2), rs.getString(3), rs.getString(4), df.format(rs.getDate(5))};
 			sol.add(s);
@@ -880,7 +852,7 @@ public class DatabaseManager {
 		PreparedStatement pst = null;
 		getConnection();
 		pst = con.prepareStatement("select id, receptordni, lugarentrega, razon, dnitransportista, numerofallos, fechaproximaentrega "
-				+ "from fallosentregas where id = ?1");
+				+ "from fallosentregas where id = ?");
 		pst.setInt(1, idEntero);
 		ResultSet rs = pst.executeQuery();
 		Fallo e = null;
@@ -890,5 +862,81 @@ public class DatabaseManager {
 		}
 		return e;
 	}
+	
+	public static List<String[]> getFallos(String cliente) throws SQLException{
+		PreparedStatement pst = null;
+		getConnection();
+		List<String[]> sol = new ArrayList<String[]>();
+		pst = con.prepareStatement("select id ,lugarentrega, razon, numerofallos, fechaProximaEntrega from fallosentregas");
+		ResultSet rs = pst.executeQuery();
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+		while(rs.next()) {
+			PreparedStatement pst2 = con.prepareStatement("select emisordni from envios where id = ?");
+			int id = rs.getInt(1);
+			pst2.setInt(1, id);
+			ResultSet rs2 = pst2.executeQuery();
+			while(rs2.next()) {
+				if(rs2.getString(1).equals(cliente)) {
+					String[] s = {rs.getString(2), rs.getString(3), Integer.toString(rs.getInt(4)), df.format(rs.getDate(5))};
+					sol.add(s);
+				}
+			}
+		}
+		return sol;
+	}
+
+	public static List<String[]> getFallosWithConditions(String dni) throws SQLException {
+		PreparedStatement pst = null;
+		getConnection();
+		List<String[]> sol = new ArrayList<String[]>();
+		pst = con.prepareStatement("select id, receptordni, lugarentrega, razon, numerofallos, fechaProximaEntrega from fallosentregas "
+				+ "where dnitransportista = ?");
+		pst.setString(1, dni);
+		ResultSet rs = pst.executeQuery();
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+		Date x = java.util.Calendar.getInstance().getTime();
+		java.sql.Date sqlDate = new java.sql.Date(x.getTime());
+		while(rs.next()) {
+			Envio e = getEnvioById(rs.getInt(1));
+			if(rs.getInt(5)!=4 && (sqlDate.compareTo(rs.getDate(6))==-1 || sqlDate.toString().equals(rs.getDate(6).toString())) && (!e.getEstado().equals("Entregado al Cliente") ||
+					!e.getEstado().equals("Recogido-Cliente") || !e.getLugarEnvio().equals(e.getUbicacionActual()))) {
+				String[] s = {Integer.toString(rs.getInt(1)), rs.getString(2), rs.getString(3), df.format(rs.getDate(6)), rs.getString(5)};
+				sol.add(s);
+			}
+		}
+		return sol;
+	}
+	
+//	public static List<String[]> getEnviosFallidosDeCliente(String dni) throws SQLException {
+//		PreparedStatement pstE = null; //pst cliente emisor
+//		PreparedStatement pstR = null; //pst cliente receptor
+//		getConnection();
+//		List<String[]> sol = new ArrayList<String[]>();
+//		pstE = con.prepareStatement("select id, emisordni, receptordni, estado, lugarrecogida from envios where emisordni = ?");
+//		pstE.setString(1, dni);
+//		pstR = con.prepareStatement("select id, emisordni, receptordni, estado, lugarrecogida from envios where receptordni = ?");
+//		pstR.setString(1, dni);
+//		ResultSet rs = null;
+//		rs = pstE.executeQuery();
+//		while (rs.next()) {
+//			int numfallos = 0;
+//			int idEnvio = rs.getInt(1);
+//			String estado = rs.getString(4);
+//			PreparedStatement pstFallos = con.prepareStatement("select count(id) from fallosentregas where id = ?");
+//			pstFallos.setInt(1, idEnvio);
+//			ResultSet rst = pstFallos.executeQuery();
+//			if(rst.next()) {
+//				numfallos = rst.getInt(1);
+//			}
+//			if(numfallos>0) {
+//				if(estado.equals("En Oficina") || estado.equals("En Almacen")) {
+//					numfallos++;
+//				}
+//				String[] x = {String.valueOf(idEnvio), rs.getString(2), rs.getString(3), String.valueOf(numfallos), estado, rs.getString(5)};
+//				sol.add(x);
+//			}
+//		}
+//		return sol;
+//	}
 }
 	

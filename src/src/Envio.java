@@ -163,4 +163,8 @@ public class Envio {
 	public void setLugarEntrega(String lugarEntrega) {
 		this.lugarEnvio = lugarEntrega;
 	}
+	public void setLugarRecogida(String string) {
+		this.lugarRecogida = string;
+		
+	}
 }
