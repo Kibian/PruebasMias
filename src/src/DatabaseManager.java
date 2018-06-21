@@ -632,10 +632,12 @@ public class DatabaseManager {
 	public static void addFallo(Fallo f) throws SQLException {
 		PreparedStatement pst = null;
 		getConnection();
-		pst = con.prepareStatement("insert into fallosentregas values(?, ?, ?)");
+		pst = con.prepareStatement("insert into fallosentregas values(?, ?, ?, ?, ?)");
 		pst.setInt(1, f.getId());
 		pst.setString(2, f.getReceptorDni());
-		pst.setString(3, f.getEstado());
+		pst.setString(3, f.getLugarEntrega());
+		pst.setString(4, f.getRazon());
+		pst.setString(5, f.getDniTransportista());
 		pst.execute();
 	}
 	
@@ -823,7 +825,6 @@ public class DatabaseManager {
 			pst.setString(2, registroMovimiento.getVehiculo());
 			pst.setInt(3, registroMovimiento.getIdEnvio());
 			pst.setString(4, registroMovimiento.getUbicacionActual());
-			DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
 			Date date = new Date();
 			java.sql.Date sqlDate = new java.sql.Date(date.getTime());
 			pst.setDate(5, sqlDate);
@@ -873,6 +874,21 @@ public class DatabaseManager {
 			sol.add(s);
 		}
 		return sol;
+	}
+
+	public static Fallo getFalloById(int idEntero) throws SQLException {
+		PreparedStatement pst = null;
+		getConnection();
+		pst = con.prepareStatement("select id, receptordni, lugarentrega, razon, dnitransportista, numerofallos, fechaproximaentrega "
+				+ "from fallosentregas where id = ?1");
+		pst.setInt(1, idEntero);
+		ResultSet rs = pst.executeQuery();
+		Fallo e = null;
+		while(rs.next()) {
+			e = new Fallo(rs.getInt(1), rs.getString(2), rs.getString(3),
+					rs.getString(4), rs.getString(5), rs.getDate(7), rs.getInt(6));
+		}
+		return e;
 	}
 }
 	

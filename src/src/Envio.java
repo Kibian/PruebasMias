@@ -160,4 +160,7 @@ public class Envio {
 	public void setUbicacionActual(String ubicacionActual) {
 		this.ubicacionActual = ubicacionActual;
 	}
+	public void setLugarEntrega(String lugarEntrega) {
+		this.lugarEnvio = lugarEntrega;
+	}
 }

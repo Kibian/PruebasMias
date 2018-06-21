@@ -32,7 +32,14 @@ import javax.swing.JTextField;
 import javax.swing.JComboBox;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.sql.Date;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
@@ -430,6 +437,29 @@ public class VentanaPrincipal extends JFrame {
 	private JPanel panel_127;
 	private JLabel label_83;
 	private JButton btnVolver_12;
+	private JPanel panelRegistroFallo;
+	private JLabel label_84;
+	private JPanel panel_128;
+	private JLabel lblRegistroDeFallos;
+	private JPanel panel_129;
+	private JPanel panel_130;
+	private JPanel panel_131;
+	private JLabel lblIdDelEnvo;
+	private JLabel lblMotivoDelFallo;
+	private JTextField textField_18;
+	private JTextField textField_19;
+	private JButton btnConfirmar_1;
+	private JLabel label_85;
+	private JLabel label_86;
+	private JPanel panel_132;
+	private JLabel label_87;
+	private JLabel label_88;
+	private JPanel panel_133;
+	private JLabel label_89;
+	private JLabel label_90;
+	private JButton btnVolver_13;
+	private JLabel label_91;
+	private JButton btnRegistrarFallo;
 
 	/**
 	 * Launch the application.
@@ -476,6 +506,7 @@ public class VentanaPrincipal extends JFrame {
 		contentPane.add(getPanelRecogidaPaqueteEnOficina(), "panelRecogidaPaqueteEnOficina");
 		contentPane.add(getPanelRegistroDejadaYRecogidaPaquetes(), "panelRegistroDejadaYRecogidaPaquetes");
 		contentPane.add(getPanelEnvioProvinciaReceptor(), "panelEnvioProvinciaReceptor");
+		contentPane.add(getPanelRegistroFallo(), "panelRegistroFallo");
 	}
 	private JLabel getLblAplicacinDeEntrega() {
 		if (lblAplicacinDeEntrega == null) {
@@ -2011,6 +2042,8 @@ public class VentanaPrincipal extends JFrame {
 			panel_43 = new JPanel();
 			panel_43.setBackground(Color.WHITE);
 			panel_43.setLayout(new GridLayout(0, 3, 0, 0));
+			panel_43.add(getLabel_91());
+			panel_43.add(getBtnRegistrarFallo());
 		}
 		return panel_43;
 	}
@@ -4932,5 +4965,271 @@ public class VentanaPrincipal extends JFrame {
 			});
 		}
 		return btnVolver_12;
+	}
+	private JPanel getPanelRegistroFallo() {
+		if (panelRegistroFallo == null) {
+			panelRegistroFallo = new JPanel();
+			panelRegistroFallo.setLayout(new GridLayout(0, 3, 0, 0));
+			panelRegistroFallo.add(getLabel_84());
+			panelRegistroFallo.add(getPanel_128());
+		}
+		return panelRegistroFallo;
+	}
+	private JLabel getLabel_84() {
+		if (label_84 == null) {
+			label_84 = new JLabel("");
+		}
+		return label_84;
+	}
+	private JPanel getPanel_128() {
+		if (panel_128 == null) {
+			panel_128 = new JPanel();
+			panel_128.setLayout(new GridLayout(7, 0, 0, 0));
+			panel_128.add(getLblRegistroDeFallos());
+			panel_128.add(getPanel_129());
+			panel_128.add(getPanel_130());
+			panel_128.add(getPanel_131());
+			panel_128.add(getLabel_85());
+			panel_128.add(getLabel_86());
+			panel_128.add(getPanel_132());
+		}
+		return panel_128;
+	}
+	private JLabel getLblRegistroDeFallos() {
+		if (lblRegistroDeFallos == null) {
+			lblRegistroDeFallos = new JLabel("Registro de fallos en entregas");
+			lblRegistroDeFallos.setFont(new Font("Tahoma", Font.ITALIC, 18));
+		}
+		return lblRegistroDeFallos;
+	}
+	private JPanel getPanel_129() {
+		if (panel_129 == null) {
+			panel_129 = new JPanel();
+			panel_129.setLayout(null);
+			panel_129.add(getLblIdDelEnvo());
+			panel_129.add(getTextField_18());
+		}
+		return panel_129;
+	}
+	private JPanel getPanel_130() {
+		if (panel_130 == null) {
+			panel_130 = new JPanel();
+			panel_130.setLayout(null);
+			panel_130.add(getLblMotivoDelFallo());
+			panel_130.add(getTextField_19());
+		}
+		return panel_130;
+	}
+	private JPanel getPanel_131() {
+		if (panel_131 == null) {
+			panel_131 = new JPanel();
+			panel_131.setLayout(null);
+			panel_131.add(getBtnConfirmar_1());
+		}
+		return panel_131;
+	}
+	private JLabel getLblIdDelEnvo() {
+		if (lblIdDelEnvo == null) {
+			lblIdDelEnvo = new JLabel("Id del env\u00EDo:");
+			lblIdDelEnvo.setFont(new Font("Tahoma", Font.ITALIC, 14));
+			lblIdDelEnvo.setBounds(10, 11, 85, 54);
+		}
+		return lblIdDelEnvo;
+	}
+	private JLabel getLblMotivoDelFallo() {
+		if (lblMotivoDelFallo == null) {
+			lblMotivoDelFallo = new JLabel("Motivo del fallo:");
+			lblMotivoDelFallo.setFont(new Font("Tahoma", Font.ITALIC, 14));
+			lblMotivoDelFallo.setBounds(10, 11, 115, 54);
+		}
+		return lblMotivoDelFallo;
+	}
+	private JTextField getTextField_18() {
+		if (textField_18 == null) {
+			textField_18 = new JTextField();
+			textField_18.setBounds(123, 30, 186, 20);
+			textField_18.setColumns(10);
+		}
+		return textField_18;
+	}
+	private JTextField getTextField_19() {
+		if (textField_19 == null) {
+			textField_19 = new JTextField();
+			textField_19.setBounds(123, 30, 186, 20);
+			textField_19.setColumns(10);
+		}
+		return textField_19;
+	}
+	private JButton getBtnConfirmar_1() {
+		if (btnConfirmar_1 == null) {
+			btnConfirmar_1 = new JButton("Confirmar");
+			btnConfirmar_1.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					String id = textField_18.getText();
+					String razon = textField_19.getText();
+					boolean idValido = true;
+					for(char x : id.toCharArray()) {
+						if(Character.isLetter(x)) {
+							idValido=false;
+						}
+					}
+					if(!idValido) {
+						JOptionPane.showMessageDialog(null,
+								"Debe introducir una id válida.");
+					}
+					else {
+						int idEntero = Integer.parseInt(id);
+						Envio envio;
+						try {
+							envio = DatabaseManager.getEnvioById(idEntero);
+							if(envio==null) {
+								JOptionPane.showMessageDialog(null,
+										"No existe un envío con ese id.");
+							} else {
+								if(envio.getTransportista().equals(transportistaActual.getDNI())) {
+									JOptionPane.showMessageDialog(null,
+											"Solo puede añadir fallos de los envíos que le estan asignados.");
+								} 
+								else if(!envio.getEstado().equals("En Transporte")) {
+									JOptionPane.showMessageDialog(null,
+											"Este envío se encuentra entregado al cliente o en un edificio.");
+								}
+								else {
+									Fallo falloExistente = DatabaseManager.getFalloById(idEntero);
+									if(falloExistente==null) {
+										java.util.Date date = new java.util.Date();
+										Calendar c = Calendar.getInstance(); 
+										c.setTime(date); 
+										c.add(Calendar.DATE, 1);
+										date = c.getTime();
+										
+										//asi establecemos la proxima entrega para mañana
+										
+										Date sqlDate = new java.sql.Date(date.getTime());
+										Fallo f = new Fallo(idEntero, 
+												envio.getReceptor(),
+												envio.getLugarEnvio(),
+												razon, transportistaActual.getDNI(), sqlDate, 1);
+										DatabaseManager.addFallo(f);
+									}
+									else {
+										if(falloExistente.getNumeroFallos()==3) {
+											falloExistente.setNumeroFallos(falloExistente.getNumeroFallos()+1);
+											//se debe asignar un edificio de la provincia para depositar alli el pedido
+											List<Edificio> lista = DatabaseManager.getEdificiosByProvincia(envio.getProvinciaDestino());
+											int posRandom = ThreadLocalRandom.current().nextInt(0, lista.size());
+											Edificio edificioSeleccionado = lista.get(posRandom);
+											envio.setLugarEntrega(edificioSeleccionado.getTipo()+"-"+edificioSeleccionado.getNombre()+"-"+edificioSeleccionado.getProvinciaLocalizacion());
+										}
+										else if(falloExistente.getNumeroFallos()==4) {
+											JOptionPane.showMessageDialog(null,
+													"Este envío ya consta del máximo número de fallos y su entrega se encuentra establecida en un edificio.");
+										}
+										else {
+											falloExistente.setNumeroFallos(falloExistente.getNumeroFallos()+1);
+											java.util.Date date = new java.util.Date();
+											Calendar c = Calendar.getInstance(); 
+											c.setTime(date); 
+											c.add(Calendar.DATE, 1);
+											date = c.getTime();
+											Date sqlDate = new java.sql.Date(date.getTime());
+											falloExistente.setProximaEntrega(sqlDate);
+										}
+									}
+								}
+							
+							}
+							
+						} catch (SQLException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						
+					}
+				}
+			});
+			btnConfirmar_1.setBounds(118, 28, 89, 23);
+		}
+		return btnConfirmar_1;
+	}
+	private JLabel getLabel_85() {
+		if (label_85 == null) {
+			label_85 = new JLabel("");
+		}
+		return label_85;
+	}
+	private JLabel getLabel_86() {
+		if (label_86 == null) {
+			label_86 = new JLabel("");
+		}
+		return label_86;
+	}
+	private JPanel getPanel_132() {
+		if (panel_132 == null) {
+			panel_132 = new JPanel();
+			panel_132.setLayout(new GridLayout(3, 0, 0, 0));
+			panel_132.add(getLabel_88());
+			panel_132.add(getLabel_87());
+			panel_132.add(getPanel_133());
+		}
+		return panel_132;
+	}
+	private JLabel getLabel_87() {
+		if (label_87 == null) {
+			label_87 = new JLabel("");
+		}
+		return label_87;
+	}
+	private JLabel getLabel_88() {
+		if (label_88 == null) {
+			label_88 = new JLabel("");
+		}
+		return label_88;
+	}
+	private JPanel getPanel_133() {
+		if (panel_133 == null) {
+			panel_133 = new JPanel();
+			panel_133.setLayout(new GridLayout(0, 3, 0, 0));
+			panel_133.add(getLabel_89());
+			panel_133.add(getLabel_90());
+			panel_133.add(getBtnVolver_13());
+		}
+		return panel_133;
+	}
+	private JLabel getLabel_89() {
+		if (label_89 == null) {
+			label_89 = new JLabel("");
+		}
+		return label_89;
+	}
+	private JLabel getLabel_90() {
+		if (label_90 == null) {
+			label_90 = new JLabel("");
+		}
+		return label_90;
+	}
+	private JButton getBtnVolver_13() {
+		if (btnVolver_13 == null) {
+			btnVolver_13 = new JButton("Volver");
+		}
+		return btnVolver_13;
+	}
+	private JLabel getLabel_91() {
+		if (label_91 == null) {
+			label_91 = new JLabel("");
+		}
+		return label_91;
+	}
+	private JButton getBtnRegistrarFallo() {
+		if (btnRegistrarFallo == null) {
+			btnRegistrarFallo = new JButton("Registrar fallo");
+			btnRegistrarFallo.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					CardLayout card = (CardLayout) contentPane.getLayout();
+					card.show(contentPane, "panelRegistroFallo");
+				}
+			});
+		}
+		return btnRegistrarFallo;
 	}
 }
